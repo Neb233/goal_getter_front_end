@@ -3,7 +3,7 @@ import { TouchableOpacity,
 import React, {useState, useEffect} from 'react'
 import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword,  onAuthStateChanged } from '@firebase/auth';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import {  useNavigation } from '@react-navigation/native';
 
 const RegisterScreen = () => {
 
@@ -126,3 +126,5 @@ const styles = StyleSheet.create({
  }
  
  })
+
+//  hello
