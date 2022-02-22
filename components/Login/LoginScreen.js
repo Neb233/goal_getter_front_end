@@ -1,7 +1,7 @@
 import { TouchableOpacity,
     KeyboardAvoidingView, StyleSheet, Text, View, TextInput } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import { auth } from '../../../firebase'
+import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from '@firebase/auth';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
@@ -18,7 +18,7 @@ const navigation = useNavigation()
    useEffect(() => {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            navigation.navigate('Home')
+            navigation.navigate('Feed')
         }
     })
 
@@ -38,6 +38,7 @@ const navigation = useNavigation()
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user
+            navigation.navigate('Feed')
             console.log('Logged in with:', user.email)
         })
         .catch((error) => {
@@ -94,7 +95,9 @@ const navigation = useNavigation()
     <View style={styles.registerText}>
         <Text>Want to be a GoalGetter?</Text>
             <TouchableOpacity onPress={handleRegister}
-            style={[styles.button, styles.buttonOutline]}>Register Here</TouchableOpacity>
+            style={[styles.button, styles.buttonOutline]}>
+            <Text>Register Here </Text>    
+                </TouchableOpacity>
     </View>
 
 
