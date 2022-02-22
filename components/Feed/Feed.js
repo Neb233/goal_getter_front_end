@@ -33,12 +33,12 @@ export default Feed = () => {
 
           <View>
             <Social
-              text={"Michael Higgins: Make countdown app"}
-              progress={0.9}
+              text={"Michael Higgins"}
+              upload={'Just smashed out a double marathon'}
               />
-            <Social text={"Andrew Browne: Practice golf"} progress={0.1} />
-            <Social text={"Ben Bartram: Make navbar"} progress={0} />
-            <Social text={"Joe Valentine: Eat less burritos"} progress={0.5} />
+            <Social text={"Andrew Browne"} upload={'Man golf is not going well, but Im trying'} />
+            <Social text={"Ben Bartram"} upload={'Started making the nav bar!'} />
+            <Social text={"Joe Valentine"} upload={'Burritos'} />
           </View>
         </View>
       {/* </View> */}
@@ -48,7 +48,7 @@ export default Feed = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#efbcd9",
+    backgroundColor: "#abbabe",
   },
   personalWrapper: {
     height: 220,
@@ -82,7 +82,7 @@ elevation: 5,
   status: {
     height: 100,
     width: '100%',
-    backgroundColor: '#afca51',
+    backgroundColor: '#abbabe',
     borderRadius: 5,
     marginTop: 5,
     
@@ -90,7 +90,7 @@ elevation: 5,
   takeToCalendar: {
     height: 50,
     width: '100%',
-    backgroundColor: '#de70af',
+    backgroundColor: '#587274',
     marginTop: 10,
     borderRadius: 5,
     alignItems: 'center',
