@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ScrollView } from "react-native";
 import Goals from "../Goals/Goals";
 import Social from '../Social/Social';
 
-export default Feed = () => {
+const Feed = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.personalWrapper}>
@@ -28,6 +28,8 @@ export default Feed = () => {
     </ScrollView>
   );
 };
+
+export default Feed
 
 const styles = StyleSheet.create({
     container: {
