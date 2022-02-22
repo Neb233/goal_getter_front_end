@@ -21,7 +21,7 @@ const navigation = useNavigation()
    useEffect(() => {
    let unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
-            navigation.navigate('Home')
+            navigation.navigate('Feed')
         }
     })
 
@@ -34,6 +34,7 @@ const navigation = useNavigation()
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user
+            navigation.navigate('Feed')
             console.log('Logged in with:', user.email)
         })
         .catch((error) => {
@@ -85,7 +86,9 @@ const navigation = useNavigation()
     <View style={styles.registerText}>
         <Text>Want to be a GoalGetter?</Text>
             <TouchableOpacity onPress={handleRegister}
-            style={[styles.button, styles.buttonOutline]}>Register Here</TouchableOpacity>
+            style={[styles.button, styles.buttonOutline]}>
+            <Text>Register Here </Text>    
+                </TouchableOpacity>
     </View>
 
 
