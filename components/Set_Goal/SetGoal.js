@@ -12,11 +12,11 @@ import {
   Keyboard,
 } from "react-native";
 import React, { useState } from "react";
-import Card from "../../../shared/card";
+import Card from "../../shared/card";
 import MaterialIcon, { colorPalette } from "material-icons-react";
 import SubGoalForm from "./SubGoalForm";
 
-const Qualitative = ({ navigation }) => {
+const SetGoal = ({ navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [subGoals, setSubGoals] = useState([
     {
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Qualitative;
+export default SetGoal;
