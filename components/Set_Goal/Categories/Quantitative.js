@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
-import SubGoalForm from "./SubGoalForm";
+import SubGoalForm from "../SubGoalForm";
 
 const Quantitative = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
