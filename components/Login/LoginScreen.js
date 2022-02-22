@@ -1,8 +1,11 @@
 import { TouchableOpacity,
     KeyboardAvoidingView, StyleSheet, Text, View, TextInput } from 'react-native'
 import React, {useState, useEffect} from 'react'
+
 import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from '@firebase/auth';
+
+
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 
@@ -16,23 +19,16 @@ const LoginScreen = () => {
 const navigation = useNavigation()
 
    useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+   let unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
             navigation.navigate('Feed')
         }
     })
 
-  
+  unsubscribe;
    }, [])
 
-//    const handleSignup = () => {
-//        createUserWithEmailAndPassword(auth, email, password)
-//        .then(userCredentials  => {
-//            const user = userCredentials.user;
-//            console.log('Signed up with:', user.email)
-//        })
-//        .catch(error => alert(error.message))
-//     }
+
 
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
@@ -84,12 +80,7 @@ const navigation = useNavigation()
             <Text style={styles.buttonText}>Login</Text>
 
         </TouchableOpacity>
-        {/* <TouchableOpacity
-        onPress={handleSignup} 
-        style={[styles.button, styles.buttonOutline]}>
-            <Text style={styles.buttonOutlineText}>Register</Text>
-
-        </TouchableOpacity> */}
+       
     </View>
 
     <View style={styles.registerText}>
