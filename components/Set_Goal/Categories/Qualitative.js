@@ -13,7 +13,7 @@ const [subGoals, setSubGoals] = useState([{title: "Learn F Major Chord", objecti
       onPress={() => navigation.navigate("SetGoal")}></Button>
       <Modal visible={modalOpen}
       animationType="slide">
-<View>
+<View style={styles.modalContainer}>
 <Pressable
        onPress={() => {setModalOpen(false)}}><MaterialIcon
       icon="close"
@@ -37,10 +37,11 @@ const [subGoals, setSubGoals] = useState([{title: "Learn F Major Chord", objecti
       )}
       />
       <Pressable
-       onPress={() => {setModalOpen(true)}}><MaterialIcon
+       onPress={() => {setModalOpen(true)}}
+       style={styles.modalToggle}><Text>Add Subgoal</Text><MaterialIcon
       icon="add"
       size={24}
-      style={styles.modalToggle}
+     
       /></Pressable>
       
 
@@ -56,7 +57,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#f2f2f2",
     borderRadius: 10,
-    alignSelf:"center"
+    flex: 1,
+    flexDirection: "row"
+  },
+  modalContainer: {
+flex:1
   }
 })
 
