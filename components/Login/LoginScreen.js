@@ -21,7 +21,7 @@ const navigation = useNavigation()
    useEffect(() => {
    let unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
-            navigation.navigate('Feed')
+            navigation.navigate("Feed")
         }
     })
 

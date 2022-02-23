@@ -5,7 +5,7 @@ import Social from "../Social/Social";
 import PatchGoals from "../PatchGoals/PatchGoals";
 import { TouchableOpacity } from "react-native";
 
-export default Feed = () => {
+const Feed = () => {
   return (
     <ScrollView style={styles.container}>
       
@@ -45,6 +45,8 @@ export default Feed = () => {
     </ScrollView>
   );
 };
+
+export default Feed
 
 const styles = StyleSheet.create({
   container: {
