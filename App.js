@@ -1,4 +1,3 @@
-
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -7,9 +6,8 @@ import LoginScreen from "./components/Login/LoginScreen";
 import RegisterScreen from "./components/Login/RegisterScreen";
 import SetGoal from "./components/Set_Goal/SetGoal";
 import SubGoalForm from "./components/Set_Goal/SubGoalForm";
-import Feed from './components/Feed/Feed';
-
-
+import Feed from "./components/Feed/Feed";
+import GoalCalendar from "./components/Calendar/GoalCalendar";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,23 +20,21 @@ export default function App() {
           name="Login"
           component={LoginScreen}
         />
-         <Stack.Screen name="Feed" component={Feed} />
+        <Stack.Screen name="Feed" component={Feed} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="SetGoal" component={SetGoal} />
         <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
-       
+        <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#efbcd9',
-    alignItems: 'center',
-    justifyContent: 'center',
-
+    backgroundColor: "#efbcd9",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
