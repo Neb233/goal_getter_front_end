@@ -5,7 +5,8 @@ import Feed from '../Feed/Feed';
 import SetGoal from '../Set_Goal/SetGoal';
 import Social from '../Social/Social';
 import Calender from '../Calender/Calender';
-
+import Profile from '../Profile/Profile';
+import LoginScreen from '../Login/LoginScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,8 +18,9 @@ const Nav = ({navigation}) => {
              
             <Tab.Screen name='Feed' component={Feed} />
            <Tab.Screen name='SetGoal' component={SetGoal} />
-           <Tab.Screen name='Social' component={Social} />
+           <Tab.Screen name='Profile' component={Profile} />
            <Tab.Screen name='Calender' component={Calender} />
+           <Tab.Screen name='Login' component={LoginScreen} />
           </Tab.Navigator>
             )
           }  

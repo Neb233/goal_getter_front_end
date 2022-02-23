@@ -10,6 +10,7 @@ import SubGoalForm from "./components/Set_Goal/SubGoalForm";
 import Feed from './components/Feed/Feed';
 import Social from "./components/Social/Social";
 import Nav from "./components/Nav/Nav";
+import Profile from "./components/Profile/Profile";
 
 
 
@@ -31,6 +32,7 @@ export default function App({navigation}) {
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen}/>
         <Stack.Screen name="SetGoal" component={SetGoal} />
         <Stack.Screen name="SubGoalForm" component={SubGoalForm} /> 
+        <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
   </NavigationContainer>
  

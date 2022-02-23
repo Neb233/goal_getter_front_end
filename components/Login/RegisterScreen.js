@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword,  onAuthStateChanged, sendSignInLinkToEm
 import {  useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker'
 import {getStorage, ref, uploadBytes} from 'firebase/storage'
+import { updateProfile } from 'firebase/auth';
 
 
 import {  Formik} from 'formik'
@@ -89,7 +90,8 @@ const RegisterScreen = () => {
             createUserWithEmailAndPassword(auth, values.email, values.password)
             .then(userCredentials => {
                 const user = userCredentials.user;
-                user.photoURL = image
+               updateProfile(user, {displayName: values.username})
+                
                 console.log(user)
              })
            
