@@ -7,7 +7,8 @@ import { createUserWithEmailAndPassword,  onAuthStateChanged, sendSignInLinkToEm
 import {  useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker'
 import {getStorage, ref, uploadBytes} from 'firebase/storage'
-import { updateProfile } from 'firebase/auth';
+import axios from 'axios';
+import { updateProfile } from 'firebase/auth'
 
 
 import {  Formik} from 'formik'
@@ -27,32 +28,32 @@ const RegisterScreen = () => {
    
     
 
-  const pickImage = async () => {
+  // const pickImage = async () => {
  
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    console.log(result);
+  //   console.log(result);
 
-    if (!result.cancelled) {
-
-
-      setImage(result.uri);
-      const storage = getStorage();
-      const refo = ref(storage, `${id}`)
-
-      const img = await fetch(result.uri);
-    const bytes = await img.blob();
-
-        await uploadBytes(refo, bytes)
+  //   if (!result.cancelled) {
 
 
-    }
-  };
+  //     setImage(result.uri);
+  //     const storage = getStorage();
+  //     const refo = ref(storage, `${id}`)
+
+  //     const img = await fetch(result.uri);
+  //   const bytes = await img.blob();
+
+  //       await uploadBytes(refo, bytes)
+
+
+  //   }
+  // };
 
 
 
@@ -74,7 +75,9 @@ const RegisterScreen = () => {
         .matches(/\w*[a-z]\w*/,  "Password must have a small letter")
         .matches(/\w*[A-Z]\w*/,  "Password must have a capital letter")
         .matches(/\d/, "Password must have a number")
-        .required()
+        .required(),
+        profile: Yup.string()
+        .required('Please enter some text')
     })
 
   
@@ -82,6 +85,7 @@ const RegisterScreen = () => {
       return (
           <View style={styles.inputContainer}>
         <Formik  initialValues={{firstName: '',
+        profile: '',
         username: '',
         password: '',
         email: ''}}
@@ -90,6 +94,30 @@ const RegisterScreen = () => {
             createUserWithEmailAndPassword(auth, values.email, values.password)
             .then(userCredentials => {
                 const user = userCredentials.user;
+
+                user.photoURL = image
+                console.log(user.email)
+              updateProfile(user, {displayName: values.username})
+
+                var body = {username: values.username,
+                profile: values.profile}
+
+            axios({
+              method: 'post',
+              url: 'https://goalgetter-backend.herokuapp.com/api/users',
+              data: body
+            })
+            .then(function(response) {
+              console.log(response)
+            })
+            .catch(function(error) {
+              console.log(error)
+            })
+
+       })
+          .catch(error => alert(error.message))
+
+        
                updateProfile(user, {displayName: values.username})
                 
                 console.log(user)
@@ -135,6 +163,16 @@ const RegisterScreen = () => {
              <Text>
                     {touched.username && errors.username}
                 </Text>
+                <TextInput 
+                id='profile'
+                name='profile'
+                placeholder='profile'
+                value={values.profile}
+                onChange={handleChange('profile')}
+                style={styles.input}
+                >
+
+                </TextInput>
              <TextInput
                 id='password'
                 name='password'
@@ -173,7 +211,7 @@ const RegisterScreen = () => {
              )}
         </Formik>
 
-        <View >
+        {/* <View >
       <Button title="Pick an image from camera roll" onPress={pickImage} />
       <TextInput placeholder='give image a title'
        onChangeText={text=> setId(text)}
@@ -181,7 +219,7 @@ const RegisterScreen = () => {
     value={id} />
      
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-    </View>
+    </View> */}
 
 
        
