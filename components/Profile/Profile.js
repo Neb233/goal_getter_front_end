@@ -12,13 +12,13 @@ const Profile = () => {
     const [details, Setdetails] = useState({})
 
     const user = auth.currentUser;
-    const displayName = 'RW'
+    const displayName = user.displayName
 
     useEffect(() => {
       getUser(displayName).then((res) => {
-        console.log(res)
+        Setdetails(res[0])
       })
-    })
+    }, [])
     
    
    
@@ -29,12 +29,18 @@ const Profile = () => {
     
     return (
         <View>
-          <Text>Hello</Text>
-         {   console.log(displayName) }
+          <Text style={styles.titleText}>{details.username}</Text>
+        
     </View>
   )
 }
 
 export default Profile
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 20,
+    textAlign: 'center',
+    
+  }
+})

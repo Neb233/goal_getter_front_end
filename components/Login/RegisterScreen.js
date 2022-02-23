@@ -118,14 +118,11 @@ const RegisterScreen = () => {
           .catch(error => alert(error.message))
 
         
-               updateProfile(user, {displayName: values.username})
+      }    
                 
-                console.log(user)
-             })
+             
            
-            .catch(error => alert(error.message))
-            
-     }
+      
      
         >
              {({values, handleChange, handleSubmit, errors, touched}) => (
