@@ -4,12 +4,22 @@ import Goals from "../Goals/Goals";
 import Social from "../Social/Social";
 import PatchGoals from "../PatchGoals/PatchGoals";
 import { TouchableOpacity } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SetGoal from "../Set_Goal/SetGoal";
+import Nav from "../Nav/Nav";
+
+
+
 
 const Feed = () => {
   return (
     <ScrollView style={styles.container}>
       
+   
+    
       
+     
      <PatchGoals></PatchGoals>
      
       <View style={styles.personalWrapper}>
@@ -42,6 +52,7 @@ const Feed = () => {
           </View>
         </View>
       {/* </View> */}
+     
     </ScrollView>
   );
 };
