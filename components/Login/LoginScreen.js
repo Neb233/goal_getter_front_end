@@ -17,7 +17,6 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigation = useNavigation();
 
 
 const navigation = useNavigation()
@@ -84,7 +83,7 @@ const navigation = useNavigation()
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 
-
+</View>
       <View style={styles.registerText}>
         <Text>Want to be a GoalGetter?</Text>
 
