@@ -7,7 +7,7 @@ import HomeScreen from "./components/Login/HomeScreen";
 import RegisterScreen from "./components/Login/RegisterScreen";
 import SetGoal from "./components/Set_Goal/SetGoal";
 import SubGoalForm from "./components/Set_Goal/SubGoalForm";
-import SubGoalDetails from "./components/Set_Goal/SubGoalDetails";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -20,11 +20,11 @@ export default function App() {
           name="Login"
           component={LoginScreen}
         />
-        <Stack.Screen name="Home" component={HomeScreen} />
+         <Stack.Screen name="Feed" component={Feed} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="SetGoal" component={SetGoal} />
         <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
-        {/* <Stack.Screen name="SubGoalDetails" component={SubGoalDetails} /> */}
+       
       </Stack.Navigator>
     </NavigationContainer>
   );
