@@ -8,7 +8,9 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthState
 
 
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { Formik } from 'formik';
 
+import * as Yup from 'yup';
 
 
 
@@ -22,39 +24,68 @@ const LoginScreen = () => {
 const navigation = useNavigation()
 
    useEffect(() => {
-   let unsubscribe = onAuthStateChanged(auth, (user) => {
+     onAuthStateChanged(auth, (user) => {
         if (user) {
             navigation.navigate("Feed")
         }
     })
 
-  unsubscribe;
+ 
    }, [])
 
 
 
-    const handleSignIn = () => {
-        signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            const user = userCredential.user
-            navigation.navigate('Feed')
-            console.log('Logged in with:', user.email)
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-        })
-    }
+    // const handleSignIn = () => {
+    //     signInWithEmailAndPassword(auth, email, password)
+    //     .then((userCredential) => {
+    //         const user = userCredential.user
+    //         navigation.navigate('Feed')
+    //         console.log('Logged in with:', user.email)
+    //     })
+    //     .catch((error) => {
+    //         const errorCode = error.code;
+    //         const errorMessage = error.message;
+    //     })
+    // }
 
     const handleRegister = () => {
         navigation.navigate('Register')
     }
+
+    const valSchema = Yup.object({
+     
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string()
+        .min(4, "Password shoudl be more than 4 chars")
+        .max(10, "Password should not exceed 10 chars")
+        .matches(/\w*[a-z]\w*/, "Password must have a small letter")
+        .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
+        .matches(/\d/, "Password must have a number")
+        .required(),
+    
+    });
          
       
 
 
  return (
-     
+   <View style={styles.inputContainer}>
+     <Formik 
+      initialValues={{
+        email: '',
+        password: '',
+      }}
+      validationSchema={valSchema}
+      onSubmit={(values) => 
+        signInWithEmailAndPassword(auth, values.email, values.password)
+        .then((userCredentials) => {
+          const user = userCredentials.user
+          return user
+        })
+      }
+     >
+       {({values, handleChange, handleSubmit, errors, touched}) => (
+
    <KeyboardAvoidingView
        style={styles.container}
        behaviour='padding'
@@ -63,23 +94,29 @@ const navigation = useNavigation()
     <Text >GoalGetter?</Text>
     </View>
     <View style={styles.inputContainer}>
-        <TextInput placeholder='email'
-        value={email}
-        onChangeText={text => setEmail(text)}
-        style={styles.input}
-
-        />
         <TextInput
+        id='email'
+        name='email'
+         placeholder='email'
+        value={values.email}
+        onChange={handleChange('email')}
+        style={styles.input}
+ />
+ <Text>{touched.email && errors.email}</Text>
+        <TextInput
+          id='password'
+          name='password'
           placeholder="password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
+          value={values.password}
+          onChange={handleChange('password')}
           style={styles.input}
           secureTextEntry
         />
+        <Text>{touched.password && touched.email}</Text>
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleSignIn} style={styles.button}>
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 
@@ -95,6 +132,10 @@ const navigation = useNavigation()
 
 
    </KeyboardAvoidingView>
+   )}
+   </Formik>
+   </View>
+     
  )
 }
 

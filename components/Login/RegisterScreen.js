@@ -13,7 +13,7 @@ import { auth } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  sendSignInLinkToEmail,
+  sendSignInLinkToEmail, 
 } from "@firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
@@ -123,7 +123,7 @@ const RegisterScreen = () => {
               <Text>{touched.email && errors.email}</Text>
             </View>
 
-            <View style={styles.inputContainer}>
+            <View>
               <TextInput
                 id="username"
                 name="username"
