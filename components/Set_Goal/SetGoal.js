@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Card from "../../shared/card";
-import MaterialIcon, { colorPalette } from "material-icons-react";
+// import MaterialIcon, { colorPalette } from "material-icons-react";
 import SubGoalForm from "./SubGoalForm";
 
 const SetGoal = ({ navigation }) => {
@@ -60,7 +60,7 @@ const SetGoal = ({ navigation }) => {
               setModalOpen(false);
             }}
           >
-            <MaterialIcon icon="close" size={24} />
+            {/* <MaterialIcon icon="close" size={24} /> */}
           </Pressable>
           <SubGoalForm addSubGoal={addSubGoal} />
         </View>
@@ -85,7 +85,7 @@ const SetGoal = ({ navigation }) => {
         style={styles.modalToggle}
       >
         <Text>Add Subgoal</Text>
-        <MaterialIcon icon="add" size={24} />
+        {/* <MaterialIcon icon="add" size={24} /> */}
       </Pressable>
     </SafeAreaView>
   );

@@ -1,32 +1,34 @@
 import React from "react";
 import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
-import { FlatList } from "react-native-web";
-import Goals from "../Goals/Goals";
-import { useState } from "react";
-import { useEffect } from "react";
-
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getGoalsByUser } from "../../utils/api";
 
 const PatchGoals = () => {
-    const [goals, setGoals] = useState([]);
+  const [goals, setGoals] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState("jeff");
+  const { owner } = useParams();
 
-     useEffect(() => {});
+  useEffect(() => {
+    getGoalsByUser("jeff").then((res) => {
+      setGoals(res);
+    });
+  }, [loggedInUser]);
+
+  //  console.warn(goals)
 
   return (
     <View style={styles.cont}>
       <Text style={styles.text}>Current goals:</Text>
       <ScrollView horizontal={true} pagingEnabled={true}>
-        <View style={styles.page}>
-          <Text style={styles.pageText}>Goal 1</Text>
-        </View>
-        <View style={styles.page}>
-          <Text style={styles.pageText}>Goal 2</Text>
-        </View>
-        <View style={styles.page}>
-          <Text style={styles.pageText}>Goal 3</Text>
-        </View>
-        <View style={styles.page}>
-          <Text style={styles.pageText}>Goal 4</Text>
-        </View>
+        {goals.map((goal) => {
+          return (
+            <View style={styles.page}>
+              <Text style={styles.pageText}>{goal.objective}</Text>
+              <Text style={styles.pageText}>{goal.description}</Text>
+            </View>
+          );
+        })}
       </ScrollView>
     </View>
   );
