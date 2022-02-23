@@ -1,3 +1,4 @@
+
 import { TouchableOpacity,
     KeyboardAvoidingView, StyleSheet, Text, View, TextInput, Button, Image } from 'react-native'
 import React, {useState, useEffect} from 'react'
@@ -16,6 +17,9 @@ import * as Yup from 'yup'
 
 
 const RegisterScreen = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
 
     const [image, setImage] = useState(null)
     const [id, setId] = useState('')
@@ -246,3 +250,4 @@ const RegisterScreen = () => {
       
       })
       
+
