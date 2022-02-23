@@ -15,7 +15,12 @@ import React, { useState } from "react";
 import Card from "../../shared/card";
 import SubGoalForm from "./SubGoalForm";
 
+
+
+
+
 const SetGoal = ({ navigation }) => {
+
   const [modalOpen, setModalOpen] = useState(false);
   const [subGoals, setSubGoals] = useState([
     {
@@ -46,48 +51,55 @@ const SetGoal = ({ navigation }) => {
     setModalOpen(false);
   };
 
+
+
   return (
     <SafeAreaView>
-      <Button
-        title="Return"
-        onPress={() => navigation.navigate("SetGoal")}
-      ></Button>
       <Modal visible={modalOpen} animationType="slide">
         <View style={styles.modalContainer}>
-          <Pressable
+          <Button
+          title="Close"
             onPress={() => {
               setModalOpen(false);
             }}
           >
-           <Text>Close</Text>
-          </Pressable>
+          
+          </Button>
           <SubGoalForm addSubGoal={addSubGoal} />
         </View>
       </Modal>
 
-      <Text>Qualitative</Text>
+     
       <Text>Subgoals:</Text>
+      <View>
       <FlatList
         data={subGoals}
         renderItem={({ item }) => (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("SubGoalDetails", item)}>
             <Card>
               <Text>{item.title}</Text>
             </Card>
           </TouchableOpacity>
         )}
       />
-      <Pressable
+      </View>
+      <View>
+      <Button
+      title="Add SubGoal"
         onPress={() => {
           setModalOpen(true);
         }}
-        style={styles.modalToggle}
+        
       >
-        <Text>Add Subgoal</Text>
+     
 
-      </Pressable>
+      </Button>
+      </View>
+      
     </SafeAreaView>
   );
+
+  
 };
 
 const styles = StyleSheet.create({
