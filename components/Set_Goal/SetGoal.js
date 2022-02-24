@@ -63,8 +63,6 @@ const SetGoal = ({ navigation }) => {
               setModalOpen(false);
             }}
           >
-          
-          </Button>
           <SubGoalForm addSubGoal={addSubGoal} />
         </View>
       </Modal>

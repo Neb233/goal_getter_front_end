@@ -56,6 +56,7 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.inputContainer}>
+
       <Formik
         initialValues={{
           email: "",
@@ -121,6 +122,7 @@ const LoginScreen = () => {
           </KeyboardAvoidingView>
         )}
       </Formik>
+
     </View>
   );
 };
