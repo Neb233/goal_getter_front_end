@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const goalgetterApi = axios.create({
-  baseURL: "",
+  baseURL: "https://goalgetter-backend.herokuapp.com/api",
 });
 
 /*
@@ -10,13 +10,15 @@ Drafted endpoints may not match back end so change where needed
 
 export const getGoals = () => {
   return goalgetterApi.get("/goals").then(({ data }) => {
+    
     return data.goals;
+   
   });
 };
 
-export const getUsers = () => {
-  return goalgetterApi.get("/users").then(({ data }) => {
-    return data.users;
+export const getGoalsByUser = (username) => {
+  return goalgetterApi.get(`/users/${username}/goals`).then(({ data }) => {
+    return data.goals;
   });
 };
 
