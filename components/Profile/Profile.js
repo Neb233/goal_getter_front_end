@@ -69,10 +69,10 @@ const Profile = () => {
 
         await uploadBytes(refo, bytes)
     }
-    updateProfile(user, {photoURL: `${displayName}: Profile Picture`} )
+    await  updateProfile(user, {photoURL: `${displayName}: Profile Picture`} )
   };
 
-  getDownloadURL(ref(storage, `${displayName}: Profile Picture`))
+ getDownloadURL(ref(storage, `${displayName}: Profile Picture`))
     .then((url) => {
       setprofPic(url)
      })
@@ -94,7 +94,7 @@ const Profile = () => {
       <TouchableOpacity onPress={handleSignOut} style={[styles.button, styles.signOutButton]}>
         <Text>Sign out</Text>
       </TouchableOpacity>
-      </View>
+      </View> 
    
        <View style={styles.buttonContainer}>
       <TouchableOpacity title="Update Profile Picture" onPress={pickImage} style={[styles.button, styles.buttonOutline]}>
