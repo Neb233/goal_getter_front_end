@@ -5,12 +5,15 @@ import Social from "../Social/Social";
 import Subgoals from "../PatchGoals/Subgoals";
 import { TouchableOpacity } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SetGoal from "../Set_Goal/SetGoal";
+import Nav from "../Nav/Nav";
+
 
 const Feed = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <Subgoals />
-
       <View style={styles.personalWrapper}>
         <Text style={styles.sectionTitle}>Goal Status:</Text>
 

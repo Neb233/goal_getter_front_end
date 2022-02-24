@@ -13,10 +13,14 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Card from "../../shared/card";
-// import MaterialIcon, { colorPalette } from "material-icons-react";
 import SubGoalForm from "./SubGoalForm";
 
+
+
+
+
 const SetGoal = ({ navigation }) => {
+
   const [modalOpen, setModalOpen] = useState(false);
   const [subGoals, setSubGoals] = useState([
     {
@@ -47,48 +51,53 @@ const SetGoal = ({ navigation }) => {
     setModalOpen(false);
   };
 
+
+
   return (
     <SafeAreaView>
-      <Button
-        title="Return"
-        onPress={() => navigation.navigate("SetGoal")}
-      ></Button>
       <Modal visible={modalOpen} animationType="slide">
         <View style={styles.modalContainer}>
-          <Pressable
+          <Button
+          title="Close"
             onPress={() => {
               setModalOpen(false);
             }}
           >
-            {/* <MaterialIcon icon="close" size={24} /> */}
-          </Pressable>
           <SubGoalForm addSubGoal={addSubGoal} />
         </View>
       </Modal>
 
-      <Text>Qualitative</Text>
+     
       <Text>Subgoals:</Text>
+      <View>
       <FlatList
         data={subGoals}
         renderItem={({ item }) => (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("SubGoalDetails", item)}>
             <Card>
               <Text>{item.title}</Text>
             </Card>
           </TouchableOpacity>
         )}
       />
-      <Pressable
+      </View>
+      <View>
+      <Button
+      title="Add SubGoal"
         onPress={() => {
           setModalOpen(true);
         }}
-        style={styles.modalToggle}
+        
       >
-        <Text>Add Subgoal</Text>
-        {/* <MaterialIcon icon="add" size={24} /> */}
-      </Pressable>
+     
+
+      </Button>
+      </View>
+      
     </SafeAreaView>
   );
+
+  
 };
 
 const styles = StyleSheet.create({
