@@ -126,6 +126,7 @@ const navigation = useNavigation()
         <TouchableOpacity onPress={handleSubmit} style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
+      </View>
 
 </View>
       <View style={styles.registerText}>
