@@ -16,8 +16,6 @@ import SetGoalIntro from "./components/Set_Goal/SetGoalIntro";
 const Stack = createNativeStackNavigator();
 
 export default function App({ navigation }) {
-  const [constructedGoal, setConstructedGoal] = useState({});
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -32,11 +30,8 @@ export default function App({ navigation }) {
           name="Login"
           component={LoginScreen}
         />
-        <Stack.Screen
-          name="SetGoalIntro"
-          component={SetGoalIntro}
-          setConstructedGoal={setConstructedGoal}
-        />
+        <Stack.Screen name="Feed" component={Feed} />
+        <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
         <Stack.Screen name="SetGoal" component={SetGoal} />
         <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
         <Stack.Screen name="Profile" component={Profile} />

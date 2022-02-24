@@ -15,8 +15,8 @@ export const getGoals = () => {
 };
 
 export const getUser = (user) => {
-  return goalgetterApi.get(`/api/users/${user}`).then(({data}) => {
-    return data.user
+  return goalgetterApi.get(`/api/users/${user}`).then(({ data }) => {
+    return data.user;
   });
 };
 
@@ -42,4 +42,17 @@ export const deleteSocialMediaPost = (post_id) => {
   return goalgetterApi.delete(`/post/${post_id}`).then(({ data }) => {
     return data;
   });
+};
+
+export const postGoal = (goalProperties, owner = "jeff") => {
+  goalProperties.owner = owner;
+  goalProperties.start_date = new Date(goalProperties.start_date);
+  goalProperties.end_date = new Date(goalProperties.end_date);
+  console.log(goalProperties);
+  return goalgetterApi
+    .post("/api/goals", { goalProperties })
+    .then(({ data }) => {
+      console.log(data);
+      return data;
+    });
 };

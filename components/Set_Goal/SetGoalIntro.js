@@ -16,13 +16,23 @@ import React, { useState } from "react";
 import SetGoalGuide from "./SetGoalGuide";
 import { Formik } from "formik";
 import * as yup from "yup";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { HideableView } from "../../shared/HideableView";
 
-const ReviewSchema = yup.object({
+const GoalSchema = yup.object({
   objective: yup.string().required(),
+  description: yup.string(),
+  target_value: yup.number(),
+  unit: yup.string(),
 });
 
-const SetGoalIntro = ({ navigation, setConstructedGoal }) => {
+const SetGoalIntro = ({ navigation, route }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [hideProgressOptions, setHideProgressOptions] = useState(true);
+
+  const handleCheckboxCheck = (isChecked) => {
+    setHideProgressOptions(!isChecked);
+  };
 
   return (
     <SafeAreaView>
@@ -64,18 +74,25 @@ const SetGoalIntro = ({ navigation, setConstructedGoal }) => {
         ></Button>
         <Formik
           initialValues={{
-            objective: "",
-            description: "",
-            start_date: "",
-            end_date: "",
-            target_value: "",
-            unit: "",
+            objective: route.params
+              ? route.params.goalProperties.objective
+              : "",
+            description: route.params
+              ? route.params.goalProperties.description
+              : "",
+            target_value: route.params
+              ? route.params.goalProperties.target_value
+              : "",
+            unit: route.params ? route.params.goalProperties.unit : "",
           }}
           onSubmit={(values) => {
-            setConstructedGoal(values);
-            navigation.navigate("SetGoal");
+            values.start_date = new Date(2022, 0, 1);
+            values.end_date = new Date(2022, 11, 31);
+            navigation.navigate("SetGoal", {
+              goalProperties: values,
+            });
           }}
-          validationSchema={ReviewSchema}
+          validationSchema={GoalSchema}
         >
           {(props) => (
             <View>
@@ -87,10 +104,51 @@ const SetGoalIntro = ({ navigation, setConstructedGoal }) => {
                   onChangeText={props.handleChange("objective")}
                   value={props.values.objective}
                 />
+                <TextInput
+                  style={styles.input}
+                  multiline
+                  placeholder="Description"
+                  onChangeText={props.handleChange("description")}
+                  value={props.values.description}
+                />
+                <Text>
+                  If your final goal has a numeric target value attached to it,
+                  that you plan to contribute to gradually (e.g. saving money,
+                  or running a total distance over a long period), then check
+                  the box below. This will help us give you a wider range of
+                  tools to track and keep on top of your goals, such as graphing
+                  progress, and making smaller milestones.
+                </Text>
+                <BouncyCheckbox
+                  onPress={(isChecked) => {
+                    handleCheckboxCheck(isChecked);
+                  }}
+                />
+                <HideableView hidden={hideProgressOptions}>
+                  <TextInput
+                    style={styles.input}
+                    multiline
+                    placeholder="Target Value"
+                    onChangeText={props.handleChange("target_value")}
+                    value={props.values.target_value}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    multiline
+                    placeholder="Units"
+                    onChangeText={props.handleChange("unit")}
+                    value={props.values.unit}
+                  />
+                </HideableView>
               </View>
               <Text style={styles.errorText}>
                 {props.touched.title && props.errors.title}
               </Text>
+              <Button
+                title="Add SubGoals"
+                color="maroon"
+                onPress={props.handleSubmit}
+              />
             </View>
           )}
         </Formik>
