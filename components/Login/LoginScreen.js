@@ -10,11 +10,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../context/user";
 
 import { auth } from "../../firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-} from "@firebase/auth";
+import { signInWithEmailAndPassword} from "@firebase/auth";
 
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
@@ -22,22 +18,11 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 const LoginScreen = () => {
-  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+  
 
   const navigation = useNavigation();
-
-  // const handleSignIn = () => {
-  //     signInWithEmailAndPassword(auth, email, password)
-  //     .then((userCredential) => {
-  //         const user = userCredential.user
-  //         navigation.navigate('Feed')
-  //         console.log('Logged in with:', user.email)
-  //     })
-  //     .catch((error) => {
-  //         const errorCode = error.code;
-  //         const errorMessage = error.message;
-  //     })
-  // }
+const { loggedInUser, setLoggedInUser } = useContext(UserContext);  
+  
 
   const handleRegister = () => {
     navigation.navigate("Register");
@@ -131,9 +116,10 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    margin: 100,
   },
   titleText: {
     padding: 20,
