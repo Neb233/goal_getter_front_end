@@ -1,7 +1,9 @@
 
 import { TouchableOpacity,
     KeyboardAvoidingView, StyleSheet, Text, View, TextInput } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
+import { UserContext } from '../../context/user';
+
 
 import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from '@firebase/auth';
@@ -15,23 +17,19 @@ import * as Yup from 'yup';
 
 
 
+
 const LoginScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  
+  const {loggedInUser, setLoggedInUser} = useContext(UserContext)
+  
+ 
 
 
 
 const navigation = useNavigation()
 
-   useEffect(() => {
-     onAuthStateChanged(auth, (user) => {
-        if (user) {
-            navigation.navigate("Feed")
-        }
-    })
-
  
-   }, [])
+
 
 
 
@@ -78,10 +76,19 @@ const navigation = useNavigation()
       validationSchema={valSchema}
       onSubmit={(values) => 
         signInWithEmailAndPassword(auth, values.email, values.password)
-        .then((userCredentials) => {
-          const user = userCredentials.user
-          return user
+        .then((userCredential) => {
+            const user = userCredential.user
+         
+           navigation.navigate('Nav', {screen: 'Feed'})
+           return user
+
         })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage= error.message
+        })
+        
+      
       }
      >
        {({values, handleChange, handleSubmit, errors, touched}) => (
