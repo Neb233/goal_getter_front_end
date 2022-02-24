@@ -2,14 +2,14 @@ import React from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import Goals from "../Goals/Goals";
 import Social from "../Social/Social";
-import PatchGoals from "../PatchGoals/PatchGoals";
+import Subgoals from "../PatchGoals/Subgoals";
 import { TouchableOpacity } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 
 const Feed = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
-      <PatchGoals></PatchGoals>
+      <Subgoals />
 
       <View style={styles.personalWrapper}>
         <Text style={styles.sectionTitle}>Goal Status:</Text>
