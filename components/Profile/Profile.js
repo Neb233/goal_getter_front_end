@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Button, TextInput, Image } fr
 import React, { useState, useEffect } from "react";
 import { auth } from "../../firebase";
 import axios from "axios";
-import { getUser } from "../../utils/api";
+import { getUser } from '../../utils/api'
 import {signOut} from 'firebase/auth'
 import * as ImagePicker from 'expo-image-picker'
 import {updateProfile} from 'firebase/auth'
@@ -18,6 +18,8 @@ const Profile = () => {
 
   const user = auth.currentUser;
   const displayName = user.displayName;
+
+  console.log(details)
 
 
   const storage = getStorage();
@@ -54,8 +56,6 @@ const Profile = () => {
       quality: 1,
     });
 
-    
-
     if (!result.cancelled) {
       
       setImage(result.uri);
@@ -69,7 +69,7 @@ const Profile = () => {
 
         await uploadBytes(refo, bytes)
     }
-    await  updateProfile(user, {photoURL: `${displayName}: Profile Picture`} )
+      updateProfile(user, {photoURL: `${displayName}: Profile Picture`} )
   };
 
  getDownloadURL(ref(storage, `${displayName}: Profile Picture`))
@@ -163,7 +163,7 @@ buttonOutline: {
   borderColor: "#0782F9",
   borderWidth: 2,
 },
-signOutButton: {
-  postion: 'bottom',
-}
-});
+// signOutButton: {
+//   postion: 'bottom',
+// }
+}); 

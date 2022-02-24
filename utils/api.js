@@ -21,4 +21,10 @@ export const patchSubGoalbyId = (subgoal_id) => {
   })
 }
 
+export const getUser = (username) => {
+  return goalgetterApi.get(`/users/${username}`).then(({data}) => {
+    return data.user
+  })
+}
+
 
