@@ -101,9 +101,7 @@ const SetGoal = ({ navigation }) => {
             onPress={() => {
               setAddSubGoalModalOpen(false);
             }}
-          >
-          
-          </Button>
+          />
           <SubGoalForm addSubGoal={addSubGoal} />
         </View>
       </Modal>
