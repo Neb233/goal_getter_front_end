@@ -19,67 +19,70 @@ import { postGoal } from "../../utils/api";
 import SubGoalDetails from "./SubGoalDetails";
 
 const SetGoal = ({ navigation, route }) => {
-  
+  if (!route.params) {
+    route.params = { goalProperties: {} };
+  }
+
   const [modalOpen, setModalOpen] = useState(false);
   const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
-  const [subGoalDetailModalOpen, setSubGoalDetailModalOpen] = useState(false)
+  const [subGoalDetailModalOpen, setSubGoalDetailModalOpen] = useState(false);
   const [subGoals, setSubGoals] = useState([
     {
-      "subgoal_id": 5,
-      "goal_id": 2,
-      "objective": "Finish Act 1 of novella",
-      "start_date": null,
-      "end_date": "2022-02-11T00:00:00.000Z",
-      "type": "boolean",
-      "status": "completed",
-      "owner": "jeff",
-      "target_value": null,
-      "unit": null,
-      "progress": null,
-      "finish_date": "2022-02-10T00:00:00.000Z"
+      subgoal_id: 5,
+      goal_id: 2,
+      objective: "Finish Act 1 of novella",
+      start_date: null,
+      end_date: "2022-02-11T00:00:00.000Z",
+      type: "boolean",
+      status: "completed",
+      owner: "jeff",
+      target_value: null,
+      unit: null,
+      progress: null,
+      finish_date: "2022-02-10T00:00:00.000Z",
     },
     {
-      "subgoal_id": 6,
-      "goal_id": 2,
-      "objective": "Finish Act 2 of novella",
-      "start_date": null,
-      "end_date": "2022-02-21T00:00:00.000Z",
-      "type": "boolean",
-      "status": "active",
-      "owner": "jeff",
-      "target_value": null,
-      "unit": null,
-      "progress": null,
-      "finish_date": null
+      subgoal_id: 6,
+      goal_id: 2,
+      objective: "Finish Act 2 of novella",
+      start_date: null,
+      end_date: "2022-02-21T00:00:00.000Z",
+      type: "boolean",
+      status: "active",
+      owner: "jeff",
+      target_value: null,
+      unit: null,
+      progress: null,
+      finish_date: null,
     },
     {
-      "subgoal_id": 7,
-      "goal_id": 2,
-      "objective": "Finish Act 3 of novella",
-      "start_date": null,
-      "end_date": "2022-03-01T00:00:00.000Z",
-      "type": "boolean",
-      "status": "active",
-      "owner": "jeff",
-      "target_value": null,
-      "unit": null,
-      "progress": null,
-      "finish_date": null
+      subgoal_id: 7,
+      goal_id: 2,
+      objective: "Finish Act 3 of novella",
+      start_date: null,
+      end_date: "2022-03-01T00:00:00.000Z",
+      type: "boolean",
+      status: "active",
+      owner: "jeff",
+      target_value: null,
+      unit: null,
+      progress: null,
+      finish_date: null,
     },
     {
-      "subgoal_id": 8,
-      "goal_id": 2,
-      "objective": "Proof-read novella",
-      "start_date": null,
-      "end_date": "2022-03-04T00:00:00.000Z",
-      "type": "boolean",
-      "status": "active",
-      "owner": "jeff",
-      "target_value": null,
-      "unit": null,
-      "progress": null,
-      "finish_date": null
-    }
+      subgoal_id: 8,
+      goal_id: 2,
+      objective: "Proof-read novella",
+      start_date: null,
+      end_date: "2022-03-04T00:00:00.000Z",
+      type: "boolean",
+      status: "active",
+      owner: "jeff",
+      target_value: null,
+      unit: null,
+      progress: null,
+      finish_date: null,
+    },
   ]);
 
   const { goalProperties } = route.params;
@@ -141,45 +144,46 @@ const SetGoal = ({ navigation, route }) => {
       ></Button>
       <Text>Subgoals:</Text>
       <View>
-      <FlatList
-        data={subGoals}
-        renderItem={({ item }) => (
-          
-          <TouchableOpacity onPress={() => {setSubGoalDetailModalOpen(true)}}>
-            <Modal visible={subGoalDetailModalOpen} animationType="fade">
-              <View>
-                
-              <Button
-          title="Close"
-            onPress={() => {
-              setSubGoalDetailModalOpen(false);
-            }}
-          ></Button>
-         <SubGoalDetails 
-         setSubGoals={setSubGoals}
-         setSubGoalDetailModalOpen={setSubGoalDetailModalOpen}
-         subGoals={subGoals}
-         item={item}/>
-          </View>
-          </Modal>
-            <Card>
-              <Text style={styles.text}>{item.objective}</Text>
-            </Card>
-          </TouchableOpacity>
-        )}
-      />
+        <FlatList
+          data={subGoals}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => {
+                setSubGoalDetailModalOpen(true);
+              }}
+            >
+              <Modal visible={subGoalDetailModalOpen} animationType="fade">
+                <View>
+                  <Button
+                    title="Close"
+                    onPress={() => {
+                      setSubGoalDetailModalOpen(false);
+                    }}
+                  ></Button>
+                  <SubGoalDetails
+                    setSubGoals={setSubGoals}
+                    setSubGoalDetailModalOpen={setSubGoalDetailModalOpen}
+                    subGoals={subGoals}
+                    item={item}
+                  />
+                </View>
+              </Modal>
+              <Card>
+                <Text style={styles.text}>{item.objective}</Text>
+              </Card>
+            </TouchableOpacity>
+          )}
+        />
       </View>
       <View>
-      <Button
-      title="Add SubGoal"
-        onPress={() => {
-          setAddSubGoalModalOpen(true);
-        }}
-        
-      >
-      </Button>
-      
-              <Button
+        <Button
+          title="Add SubGoal"
+          onPress={() => {
+            setAddSubGoalModalOpen(true);
+          }}
+        ></Button>
+
+        <Button
           title="Add Goal"
           onPress={() => {
             handleAddGoal();
@@ -201,11 +205,11 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    padding: 10
+    padding: 10,
   },
   text: {
-    fontWeight: "bold"
-  }
+    fontWeight: "bold",
+  },
 });
 
 export default SetGoal;
