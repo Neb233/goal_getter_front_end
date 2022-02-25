@@ -1,17 +1,24 @@
 import React from "react";
-import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getSubGoalsByUser } from "../../utils/api";
 import PatchSubGoal from "./PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import PostStatus from "../PostStatus/PostStatus";
 
 const Subgoals = () => {
   const [goals, setGoals] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState("jeff");
   const { owner } = useParams();
   const [isChecked, setIsChecked] = useState(false);
-  
 
   useEffect(() => {
     getSubGoalsByUser("jeff").then((res) => {
@@ -19,41 +26,55 @@ const Subgoals = () => {
     });
   }, [loggedInUser]);
 
-
   return (
     <View style={styles.cont}>
       <Text style={styles.text}>Current subgoals:</Text>
       <View style={styles.page}>
-              {/* pagingEnabled={true} */}
-      <ScrollView horizontal={true} >
-    {goals.map((goal) => {
-        const type = goal.type === 'progress'
-      return (
-          <View style={styles.subGoal}>
-          <View style={styles.pageContent}>
-          {type ? <View style={styles.pageContent}>
-          <Text style={styles.goalObj}>{goal.objective}</Text>
-          <View style={styles.progress}>
-            <Text style={styles.unit}>Made progress?</Text>
-            <PatchSubGoal goals={goals} setGoals={setGoals} goal={goal}/>
-            <Text style={styles.unit}>{goal.unit}</Text>
-            </View>
-          </View> : <View style={styles.progress}>
-            {/* <Text>Complete?</Text> */}
-            <BouncyCheckbox
-            text={goal.objective}
-            textStyle={{color: 'white', fontSize: 24, fontWeight: 'bold'}}
-            style={styles.checkBox}
-            onPress={() => setIsChecked(currVal => !currVal)}
-            />
-          </View>}
-          {/* <TouchableOpacity style={styles.update}><Text style={styles.updateText}>Submit progress</Text></TouchableOpacity> */}
-          </View>
-    </View>
-      );
-    })}
-  </ScrollView>
-    </View>
+        {/* pagingEnabled={true} */}
+        <ScrollView horizontal={true}>
+          {goals.map((goal) => {
+            const type = goal.type === 'progress';
+            return (
+              <View style={styles.subGoal}>
+                <View style={styles.pageContent}>
+                  { type ? (
+                    <View style={styles.pageContent}>
+                      <Text style={styles.goalObj}>{goal.objective}</Text>
+                      <View style={styles.progress}>
+                        <Text style={styles.unit}>Made progress?</Text>
+                        <PatchSubGoal
+                          goals={goals}
+                          setGoals={setGoals}
+                          goal={goal}
+                          goalUnit={goal.unit}
+                        />
+                        <Text style={styles.unit}>{goal.unit}</Text>
+                      </View>
+                    </View>
+                  ) : (
+                    <View style={styles.progress}>
+                      {/* <Text>Complete?</Text> */}
+                      <BouncyCheckbox
+                        text={goal.objective}
+                        textStyle={{
+                          color: "white",
+                          fontSize: 24,
+                          fontWeight: "bold",
+                        }}
+                        style={styles.checkBox}
+                        onPress={() => setIsChecked((currVal) => !currVal)}
+                      />
+
+                      
+                    </View>
+                  )}
+                 
+                </View>
+              </View>
+            );
+          })}
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -92,75 +113,75 @@ const styles = StyleSheet.create({
   },
   subGoal: {
     height: 200,
-maxWidth: 400,
-minWidth: 330,
-marginLeft: 10,
-marginRight: 5,
-backgroundColor: "#abbabe",
-borderRadius: 5,
-},
-// page: {
-//     height: 170,
-//     width: 200,
-//     margin: 10
-// },
-update: {
-backgroundColor: "#4892b7",
-borderRadius: 8,
-padding: 5,
-margin: 40,
-alignItems: 'center',
-justifyContent: 'center',
-position: 'relative'
-},
-updateText: {
-padding: 2,
-alignItems: 'center',
-justifyContent: 'center',
-color: 'white'
-},
-pageContent: {
-marginTop: 10,
-flexDirection: 'column',
-justifyContent: 'center',
-alignItems: 'center',
-},
-goalObj: {
-flexDirection: 'column',
-fontSize: 24,
-fontWeight: "bold",
-color: "white",
-alignItems: 'center',
-justifyContent: 'center'
-},
-goalDescription: {
-flexDirection: 'column',
-padding: 10,
-fontSize: 24,
-color: "white",
-},
+    maxWidth: 400,
+    minWidth: 330,
+    marginLeft: 10,
+    marginRight: 5,
+    backgroundColor: "#abbabe",
+    borderRadius: 5,
+  },
+  // page: {
+  //     height: 170,
+  //     width: 200,
+  //     margin: 10
+  // },
+  update: {
+    backgroundColor: "#4892b7",
+    borderRadius: 8,
+    padding: 5,
+    margin: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+  updateText: {
+    padding: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white",
+  },
+  pageContent: {
+    marginTop: 10,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  goalObj: {
+    flexDirection: "column",
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  goalDescription: {
+    flexDirection: "column",
+    padding: 10,
+    fontSize: 24,
+    color: "white",
+  },
 
-updateText: {
-padding: 2,
-alignItems: 'center',
-justifyContent: 'center',
-color: 'white'
-},
-progress: {
-flexDirection: 'row',
-margin: 20,
-},
-input: {
-backgroundColor: 'white',
-flexDirection: 'column',
-marginLeft: 5,
-borderRadius: 10,
-padding: 3
-},
-unit: {
-marginLeft: 5,
-padding: 3,
-fontWeight: 'bold',
-color: 'green'
-},
+  updateText: {
+    padding: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white",
+  },
+  progress: {
+    flexDirection: "row",
+    margin: 20,
+  },
+  input: {
+    backgroundColor: "white",
+    flexDirection: "column",
+    marginLeft: 5,
+    borderRadius: 10,
+    padding: 3,
+  },
+  unit: {
+    marginLeft: 5,
+    padding: 3,
+    fontWeight: "bold",
+    color: "green",
+  },
 });

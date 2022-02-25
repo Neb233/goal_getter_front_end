@@ -10,8 +10,9 @@ import {
 import { useState } from "react";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { patchSubGoalbyId } from "../../utils/api";
+import PostStatus from "../PostStatus/PostStatus";
 
-const PatchSubGoal = ({ goal, goals }) => {
+const PatchSubGoal = ({ goal, goals, goalUnit }) => {
   const [progress, setProgress] = useState(0);
 
 
@@ -46,6 +47,8 @@ const PatchSubGoal = ({ goal, goals }) => {
         >
           <Text style={styles.updateText}>Submit progress</Text>
         </TouchableOpacity>
+
+          <PostStatus goal={goal} progress={progress} subgoal={goal.subgoal_id} ownerP={goal.owner} goalUnit={goalUnit} />
       </View>
     </View>
   );
