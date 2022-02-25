@@ -20,11 +20,11 @@ const GoalCalendar = () => {
       .then((subgoals) => {
         const formattedSubgoals = formatSubgoalsForCalendar(subgoals);
         setItems(formattedSubgoals);
-        getGoalsByUser("jeff");
+        return getGoalsByUser("jeff");
         // console.warn(formattedSubgoals)
       })
       .then((goals) => {
-        const formattedGoals = formatGoalsForCalendar(goals);
+
         setItems((formattedSubgoals) => {
           const combinedGoalsObject = { ...formattedSubgoals };
           const formattedGoalsDates = Object.keys(formattedGoals);
@@ -35,6 +35,7 @@ const GoalCalendar = () => {
               combinedGoalsObject[date] = formattedGoals[date];
             }
           });
+
           return combinedGoalsObject;
         });
       });
