@@ -16,27 +16,70 @@ import Card from "../../shared/card";
 import SubGoalForm from "./SubGoalForm";
 import { HideableView } from "../../shared/HideableView";
 import { postGoal } from "../../utils/api";
+import SubGoalDetails from "./SubGoalDetails";
 
 const SetGoal = ({ navigation, route }) => {
+  
   const [modalOpen, setModalOpen] = useState(false);
+  const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
+  const [subGoalDetailModalOpen, setSubGoalDetailModalOpen] = useState(false)
   const [subGoals, setSubGoals] = useState([
     {
-      title: "Learn F Major Chord",
-      objective: "Learn where to put fingers on fretbaord",
-      start_date: "12/04/2022",
-      end_date: "13/04/2022",
-      type: "music",
-      status: "in progress",
-      owner: "Bob",
+      "subgoal_id": 5,
+      "goal_id": 2,
+      "objective": "Finish Act 1 of novella",
+      "start_date": null,
+      "end_date": "2022-02-11T00:00:00.000Z",
+      "type": "boolean",
+      "status": "completed",
+      "owner": "jeff",
+      "target_value": null,
+      "unit": null,
+      "progress": null,
+      "finish_date": "2022-02-10T00:00:00.000Z"
     },
     {
-      title: "Learn C Major",
-      start_date: "12/04/2022",
-      end_date: "13/04/2022",
-      type: "music",
-      status: "in progress",
-      owner: "Bob",
+      "subgoal_id": 6,
+      "goal_id": 2,
+      "objective": "Finish Act 2 of novella",
+      "start_date": null,
+      "end_date": "2022-02-21T00:00:00.000Z",
+      "type": "boolean",
+      "status": "active",
+      "owner": "jeff",
+      "target_value": null,
+      "unit": null,
+      "progress": null,
+      "finish_date": null
     },
+    {
+      "subgoal_id": 7,
+      "goal_id": 2,
+      "objective": "Finish Act 3 of novella",
+      "start_date": null,
+      "end_date": "2022-03-01T00:00:00.000Z",
+      "type": "boolean",
+      "status": "active",
+      "owner": "jeff",
+      "target_value": null,
+      "unit": null,
+      "progress": null,
+      "finish_date": null
+    },
+    {
+      "subgoal_id": 8,
+      "goal_id": 2,
+      "objective": "Proof-read novella",
+      "start_date": null,
+      "end_date": "2022-03-04T00:00:00.000Z",
+      "type": "boolean",
+      "status": "active",
+      "owner": "jeff",
+      "target_value": null,
+      "unit": null,
+      "progress": null,
+      "finish_date": null
+    }
   ]);
 
   const { goalProperties } = route.params;
@@ -45,7 +88,7 @@ const SetGoal = ({ navigation, route }) => {
     setSubGoals((currentSubGoals) => {
       return [...currentSubGoals, subGoal];
     });
-    setModalOpen(false);
+    setAddSubGoalModalOpen(false);
   };
 
   const handleAddGoal = () => {
@@ -55,14 +98,14 @@ const SetGoal = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
-      <Modal visible={modalOpen} animationType="slide">
+      <Modal visible={addSubGoalModalOpen} animationType="slide">
         <View style={styles.modalContainer}>
           <Button
             title="Close"
             onPress={() => {
-              setModalOpen(false);
+              setAddSubGoalModalOpen(false);
             }}
-          ></Button>
+          />
           <SubGoalForm addSubGoal={addSubGoal} />
         </View>
       </Modal>
@@ -98,27 +141,45 @@ const SetGoal = ({ navigation, route }) => {
       ></Button>
       <Text>Subgoals:</Text>
       <View>
-        <FlatList
-          data={subGoals}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("SubGoalDetails", item)}
-            >
-              <Card>
-                <Text>{item.title}</Text>
-              </Card>
-            </TouchableOpacity>
-          )}
-        />
+      <FlatList
+        data={subGoals}
+        renderItem={({ item }) => (
+          
+          <TouchableOpacity onPress={() => {setSubGoalDetailModalOpen(true)}}>
+            <Modal visible={subGoalDetailModalOpen} animationType="fade">
+              <View>
+                
+              <Button
+          title="Close"
+            onPress={() => {
+              setSubGoalDetailModalOpen(false);
+            }}
+          ></Button>
+         <SubGoalDetails 
+         setSubGoals={setSubGoals}
+         setSubGoalDetailModalOpen={setSubGoalDetailModalOpen}
+         subGoals={subGoals}
+         item={item}/>
+          </View>
+          </Modal>
+            <Card>
+              <Text style={styles.text}>{item.objective}</Text>
+            </Card>
+          </TouchableOpacity>
+        )}
+      />
       </View>
       <View>
-        <Button
-          title="Add Subgoal"
-          onPress={() => {
-            setModalOpen(true);
-          }}
-        ></Button>
-        <Button
+      <Button
+      title="Add SubGoal"
+        onPress={() => {
+          setAddSubGoalModalOpen(true);
+        }}
+        
+      >
+      </Button>
+      
+              <Button
           title="Add Goal"
           onPress={() => {
             handleAddGoal();
@@ -140,7 +201,11 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
+    padding: 10
   },
+  text: {
+    fontWeight: "bold"
+  }
 });
 
 export default SetGoal;

@@ -8,53 +8,28 @@ import {
   Button,
   Image,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { auth } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  sendSignInLinkToEmail, 
+  sendSignInLinkToEmail,
 } from "@firebase/auth";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import axios from "axios";
 import { updateProfile } from "firebase/auth";
+import { UserContext } from "../../context/user";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
+import Feed from "../Feed/Feed";
 
 const RegisterScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigation = useNavigation();
 
-  const [image, setImage] = useState(null);
-  const [id, setId] = useState("");
-
-  // const pickImage = async () => {
-
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   console.log(result);
-
-  //   if (!result.cancelled) {
-
-  //     setImage(result.uri);
-  //     const storage = getStorage();
-  //     const refo = ref(storage, `${id}`)
-
-  //     const img = await fetch(result.uri);
-  //   const bytes = await img.blob();
-
-  //       await uploadBytes(refo, bytes)
-
-  //   }
-  // };
+  const { setLoggedInUser, loggedInUser } = useContext(UserContext);
 
   const valSchema = Yup.object({
     username: Yup.string()
@@ -88,11 +63,10 @@ const RegisterScreen = () => {
             .then((userCredentials) => {
               const user = userCredentials.user;
 
-              user.photoURL = image;
-              console.log(user.email);
               updateProfile(user, { displayName: values.username });
 
               var body = { username: values.username, profile: values.profile };
+            
 
               axios({
                 method: "post",
@@ -102,10 +76,14 @@ const RegisterScreen = () => {
                 .then(function (response) {
                   console.log(response);
                 })
+
                 .catch(function (error) {
                   console.log(error);
                 });
+              navigation.navigate("Nav", { screen: "Feed" });
+              return user;
             })
+
             .catch((error) => alert(error.message))
         }
       >
@@ -169,16 +147,6 @@ const RegisterScreen = () => {
           </KeyboardAvoidingView>
         )}
       </Formik>
-
-      {/* <View >
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      <TextInput placeholder='give image a title'
-       onChangeText={text=> setId(text)}
-    style={styles.buttonOutline}
-    value={id} />
-     
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-    </View> */}
     </View>
   );
 };
@@ -186,11 +154,7 @@ const RegisterScreen = () => {
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  container: {},
   titleText: {
     padding: 20,
   },
