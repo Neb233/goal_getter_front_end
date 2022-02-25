@@ -29,7 +29,7 @@ import Feed from "../Feed/Feed";
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
-  const { setLoggedInUser, loggedInUser } = useContext(UserContext);
+  // const { setLoggedInUser, loggedInUser } = useContext(UserContext);
 
   const valSchema = Yup.object({
     username: Yup.string()
@@ -58,28 +58,25 @@ const RegisterScreen = () => {
           email: "",
         }}
         validationSchema={valSchema}
-        onSubmit={(values) =>
-          createUserWithEmailAndPassword(auth, values.email, values.password)
-            .then((userCredentials) => {
+        onSubmit={ (values) =>
+         createUserWithEmailAndPassword(auth, values.email, values.password)
+            .then( async (userCredentials) => {
               const user = userCredentials.user;
 
-              updateProfile(user, { displayName: values.username });
+            await  updateProfile(user, { displayName: values.username });
 
               var body = { username: values.username, profile: values.profile };
             
 
-              axios({
+             await axios({
                 method: "post",
                 url: "https://goalgetter-backend.herokuapp.com/api/users",
                 data: body,
               })
-                .then(function (response) {
-                  console.log(response);
-                })
-
-                .catch(function (error) {
+            .catch(function (error) {
                   console.log(error);
                 });
+
               navigation.navigate("Nav", { screen: "Feed" });
               return user;
             })
