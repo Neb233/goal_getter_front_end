@@ -38,12 +38,12 @@ const SetGoal = ({ navigation, route }) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
-  const [showSubGoalDetails, setShowSubGoalDetails] = useState([
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [showSubGoalDetails, setShowSubGoalDetails] = useState(
+    subGoals.map(() => {
+      return false;
+    })
+  );
+
   const [subGoals, setSubGoals] = useState([
     {
       objective: "Finish Act 1 of novella",
@@ -144,9 +144,6 @@ const SetGoal = ({ navigation, route }) => {
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => {
-                console.log(setShowSubGoalDetails);
-                console.log(showSubGoalDetails);
-
                 setShowSubGoalDetails((showSubGoalDetails) => {
                   const newState = showSubGoalDetails.map((boolean, index) => {
                     return subGoals.indexOf(item) === index;
@@ -174,6 +171,7 @@ const SetGoal = ({ navigation, route }) => {
                   <SubGoalDetails
                     setSubGoals={setSubGoals}
                     setShowSubGoalDetails={setShowSubGoalDetails}
+                    showSubGoalDetails={showSubGoalDetails}
                     subGoals={subGoals}
                     item={item}
                   />
