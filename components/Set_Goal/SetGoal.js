@@ -150,12 +150,12 @@ const SetGoal = ({ navigation, route }) => {
         renderItem={({ item }) => (
           
           <TouchableOpacity onPress={() => {
-    
+
          setShowSubGoalDetails((showSubGoalDetails) => {
-          const newState = showSubGoalDetails.map((boolean, index) => {
-            return subGoals.indexOf(item) === index
-          })
-          return newState
+           for(let i=0; i< showSubGoalDetails.length; i++){
+             showSubGoalDetails[subGoals.indexOf(item)] = true
+           }
+          return showSubGoalDetails
      
             })
             }}>
@@ -165,12 +165,18 @@ const SetGoal = ({ navigation, route }) => {
               <Button
           title="Close"
             onPress={() => {
-              setShowSubGoalDetails(false);
+              setShowSubGoalDetails((showSubGoalDetails) => {
+                const newState = showSubGoalDetails.map(() => {
+                  return false;
+                });
+                return newState;
+              });
             }}
           ></Button>
          <SubGoalDetails 
          setSubGoals={setSubGoals}
          setShowSubGoalDetails={setShowSubGoalDetails}
+         showSubGoalDetails={showSubGoalDetails}
          subGoals={subGoals}
          item={item}/>
           </View>
