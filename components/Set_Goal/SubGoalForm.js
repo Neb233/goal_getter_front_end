@@ -1,9 +1,10 @@
-import React from "react";
-import { StyleSheet, Button, TextInput, View, Text } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Button, TextInput, View, Text, Switch, KeyboardAvoidingView } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
 import DatePicker from "../../shared/DatePicker";
 import { prodErrorMap } from "firebase/auth";
+import { HideableView } from "../../shared/HideableView";
 
 
 const ReviewSchema = yup.object({
@@ -14,15 +15,22 @@ const ReviewSchema = yup.object({
 });
 
 const SubGoalForm = ({ addSubGoal }) => {
+  const [hideProgressOptions, setHideProgressOptions] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () =>{
+     setIsEnabled(previousState => !previousState)
+isEnabled ? setHideProgressOptions(true) : setHideProgressOptions(false)
+};
   return (
     
-    <View>
+    <KeyboardAvoidingView behavior="padding">
       <Formik
         initialValues={{
           title: "",
           objective: "",
           start_date: "",
-          end_date: ""
+          end_date: "",
+
         }}
         onSubmit={(values) => {
           addSubGoal(values);
@@ -72,6 +80,36 @@ const SubGoalForm = ({ addSubGoal }) => {
 
             <DatePicker
              name="end_date" />
+{/* <View style={styles.switchcontainer}> */}
+  {/* <Text>Set Numerical Values</Text> */}
+<Switch
+        trackColor={{ false: "#767577", true: "#81b0ff" }}
+        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isEnabled}
+        
+      />
+      {/* </View> */}
+
+             <HideableView hidden={hideProgressOptions}>
+            
+             <TextInput
+                    style={styles.input}
+                    multiline
+                    placeholder="Target Value"
+                    onChangeText={props.handleChange("target_value")}
+                    value={props.values.target_value}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    multiline
+                    placeholder="Units"
+                    onChangeText={props.handleChange("unit")}
+                    value={props.values.unit}
+                  />
+               
+             </HideableView>
 
             <Button
               title="Add SubGoal"
@@ -83,7 +121,7 @@ const SubGoalForm = ({ addSubGoal }) => {
       </Formik>
 
      
-    </View>
+    </KeyboardAvoidingView>
    
  
   );
@@ -104,6 +142,10 @@ const styles = StyleSheet.create({
     
 borderColor: "black",
 borderRadius:10
+  },
+  switchcontainer: {
+    flex: 1,
+    flexDirection: "column"
   }
 });
 
