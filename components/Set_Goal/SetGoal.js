@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedBack,
   Keyboard,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../../shared/card";
 import SubGoalForm from "./SubGoalForm";
 import { HideableView } from "../../shared/HideableView";
@@ -38,11 +38,6 @@ const SetGoal = ({ navigation, route }) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
-  const [showSubGoalDetails, setShowSubGoalDetails] = useState(
-    subGoals.map(() => {
-      return false;
-    })
-  );
 
   const [subGoals, setSubGoals] = useState([
     {
@@ -74,6 +69,17 @@ const SetGoal = ({ navigation, route }) => {
       unit: null,
     },
   ]);
+  const [showSubGoalDetails, setShowSubGoalDetails] = useState(
+    subGoals.map(() => {
+      return false;
+    })
+  );
+
+  useEffect(() => {
+    subGoals.map(() => {
+      return false;
+    });
+  }, [subGoals]);
 
   const { goalProperties } = route.params;
 
