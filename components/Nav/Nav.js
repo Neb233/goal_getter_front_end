@@ -1,3 +1,4 @@
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationHelpersContext } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-web";
@@ -8,10 +9,15 @@ import Social from "../Social/Social";
 import Profile from "../Profile/Profile";
 import LoginScreen from "../Login/LoginScreen";
 import SetGoalIntro from "../Set_Goal/SetGoalIntro";
+import { useContext } from 'react';
+import { UserContext, UserProvider } from '../../context/user';
+
 
 const Tab = createBottomTabNavigator();
 
 const Nav = ({ navigation }) => {
+  
+    const loggedInUser = useContext(UserContext)
   return (
     <Tab.Navigator initialRouteName="Feed" options={{ headerShown: false }}>
       <Tab.Screen name="Feed" component={Feed} />
@@ -23,5 +29,4 @@ const Nav = ({ navigation }) => {
     </Tab.Navigator>
   );
 };
-
 export default Nav;
