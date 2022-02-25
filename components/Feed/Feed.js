@@ -8,16 +8,21 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SetGoal from "../Set_Goal/SetGoal";
 import Nav from "../Nav/Nav";
+import GoalStatus from "../GoalStatus/GoalStatus";
 
 
 const Feed = ({ navigation }) => {
+
+
   return (
     <ScrollView style={styles.container}>
       <Subgoals />
       <View style={styles.personalWrapper}>
         <Text style={styles.sectionTitle}>Goal Status:</Text>
 
-        <View style={styles.status}></View>
+        <View style={styles.status}>
+         <GoalStatus />
+        </View>
         <View>
           <TouchableOpacity
             style={styles.takeToCalendar}
@@ -85,7 +90,7 @@ const styles = StyleSheet.create({
   status: {
     height: 100,
     width: "100%",
-    backgroundColor: "#abbabe",
+    backgroundColor: "#4892b7",
     borderRadius: 5,
     marginTop: 5,
   },

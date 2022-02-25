@@ -40,6 +40,17 @@ export const getUser = (username) => {
   });
 };
 
+export const postStatus = (body) => {
+  return goalgetterApi.post(`/posts`, body).then(({data}) => {
+    return data
+  })
+}
+
+export const getCurrentStatus = (owner) => {
+  return goalgetterApi.get(`/posts/${owner}`).then(({data}) => {
+    return data.posts
+  })
+}
 
 export const searchUsers = (userSearch) => {
   return goalgetterApi.get(`/users?search=${userSearch}`).then(({ data }) => {
