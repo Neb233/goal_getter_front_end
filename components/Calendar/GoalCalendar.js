@@ -3,26 +3,42 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { useState, useEffect } from "react";
 import { Card } from "react-native-paper";
-import { getSubGoalsByUser } from "../../utils/api";
-import { formatSubgoalsForCalendar } from "../../utils/format";
 
-// const dateToString = (time) => {
-//   const date = new Date(time);
-//   return date.toISOString().split("T")[0];
-// };
+import { getGoalsByUser, getSubGoalsByUser } from "../../utils/api";
+import {
+  formatGoalsForCalendar,
+  formatSubgoalsForCalendar,
+} from "../../utils/FormatDates";
 
 const GoalCalendar = () => {
-  const [items, setItems] = useState({ "2022-02-25": [{ name: "objective" }] });
+  const [items, setItems] = useState({});
 
-  const [subgoals, setSubgoals] = useState({});
+  const [goals, setGoals] = useState({});
 
   useEffect(() => {
-    getSubGoalsByUser("jeff").then((subgoals) => {
-      const formattedSubgoals = formatSubgoalsForCalendar(subgoals);
-      setItems(formattedSubgoals);
-      console.log(formattedSubgoals);
-    });
-  }, ["jeff"]);
+    getSubGoalsByUser("jeff")
+      .then((subgoals) => {
+        const formattedSubgoals = formatSubgoalsForCalendar(subgoals);
+        setItems(formattedSubgoals);
+        getGoalsByUser("jeff");
+        // console.warn(formattedSubgoals)
+      })
+      .then((goals) => {
+        const formattedGoals = formatGoalsForCalendar(goals);
+        setItems((formattedSubgoals) => {
+          const combinedGoalsObject = { ...formattedSubgoals };
+          const formattedGoalsDates = Object.keys(formattedGoals);
+          formattedGoalsDates.forEach((date) => {
+            if (combinedGoalsObject.hasOwnProperty(date)) {
+              combinedGoalsObject[date].push(...formattedGoals[date]);
+            } else {
+              combinedGoalsObject[date] = formattedGoals[date];
+            }
+          });
+          return combinedGoalsObject;
+        });
+      });
+  }, []);
 
   const renderItem = (items) => {
     return (
@@ -31,6 +47,12 @@ const GoalCalendar = () => {
       </View>
     );
   };
+
+  // const renderGoal = (goals) => {
+  //   <View style={{ margin: 50 }}>
+  //       <Text>{goals.name}</Text>
+  //     </View>
+  // }
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
       <Agenda selected={"2022-02-25"} items={items} renderItem={renderItem} />
