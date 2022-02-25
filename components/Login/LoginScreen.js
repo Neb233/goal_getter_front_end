@@ -21,10 +21,9 @@ const LoginScreen = () => {
   
 
   const navigation = useNavigation();
-const { loggedInUser, setLoggedInUser } = useContext(UserContext);  
-  
 
-  const handleRegister = () => {
+
+    const handleRegister = () => {
     navigation.navigate("Register");
   };
 
@@ -51,15 +50,17 @@ const { loggedInUser, setLoggedInUser } = useContext(UserContext);
         onSubmit={(values) =>
           signInWithEmailAndPassword(auth, values.email, values.password)
             .then((userCredential) => {
-              const user = userCredential.user;
-
-              navigation.navigate("Nav", { screen: "Feed" });
-              return user;
+              
+              const user = userCredential.user
+              navigation.navigate('Nav', {screen: 'Feed'})
+              return user
+             
             })
             .catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
             })
+           
         }
       >
         {({ values, handleChange, handleSubmit, errors, touched }) => (
