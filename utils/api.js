@@ -9,6 +9,21 @@ const goalgetterApi = axios.create({
 Drafted endpoints may not match back end so change where needed
 */
 
+
+export const getGoals = () => {
+  return goalgetterApi.get("/goals").then(({ data }) => {
+    
+    return data.goals;
+   
+  });
+};
+
+export const getGoalsByUser = (username) => {
+  return goalgetterApi.get(`/users/${username}/goals`).then(({ data }) => {
+    return data.goals;
+  });
+};
+
 export const getSubGoalsByUser = (username) => {
   return goalgetterApi.get(`/users/${username}/subgoals`).then(({ data }) => {
     return data.subgoals;
@@ -20,6 +35,7 @@ export const patchSubGoalbyId = (subgoal_id) => {
     return data
   })
 }
+
 
 export const getUser = (username) => {
   return goalgetterApi.get(`/users/${username}`).then(({data}) => {
