@@ -24,7 +24,7 @@ const GoalCalendar = () => {
         // console.warn(formattedSubgoals)
       })
       .then((goals) => {
-
+        const formattedGoals = formatGoalsForCalendar(goals);
         setItems((formattedSubgoals) => {
           const combinedGoalsObject = { ...formattedSubgoals };
           const formattedGoalsDates = Object.keys(formattedGoals);

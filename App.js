@@ -36,6 +36,8 @@ export default function App({ navigation }) {
               options={{ headerShown: false }}
             />
 
+            <Stack.Screen name="Feed" component={Feed} />
+            <Stack.Screen name="Social" component={Social} />
             <Stack.Screen name="SetGoal" component={SetGoal} />
             <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
             <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
