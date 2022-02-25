@@ -41,16 +41,16 @@ export const getUser = (username) => {
 };
 
 export const postStatus = (body) => {
-  return goalgetterApi.post(`/posts`, body).then(({data}) => {
-    return data
-  })
-}
+  return goalgetterApi.post(`/posts`, body).then(({ data }) => {
+    return data;
+  });
+};
 
 export const getCurrentStatus = (owner) => {
-  return goalgetterApi.get(`/posts/${owner}`).then(({data}) => {
-    return data.posts
-  })
-}
+  return goalgetterApi.get(`/posts/${owner}`).then(({ data }) => {
+    return data.posts;
+  });
+};
 
 export const searchUsers = (userSearch) => {
   return goalgetterApi.get(`/users?search=${userSearch}`).then(({ data }) => {
@@ -78,6 +78,7 @@ export const getFriends = (user) => {
     });
     return friends;
   });
+};
 
 export const deleteSocialMediaPost = (post_id) => {
   return goalgetterApi.delete(`/post/${post_id}`).then(({ data }) => {
