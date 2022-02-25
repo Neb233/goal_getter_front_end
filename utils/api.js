@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const goalgetterApi = axios.create({
-
   baseURL: "https://goalgetter-backend.herokuapp.com/api",
 });
 
@@ -16,15 +15,21 @@ export const getSubGoalsByUser = (username) => {
 };
 
 export const patchSubGoalbyId = (subgoal_id) => {
-  return goalgetterApi.patch(`/subgoals/${subgoal_id}/progress`).then(({ data }) => {
-    return data
-  })
-}
+  return goalgetterApi
+    .patch(`/subgoals/${subgoal_id}/progress`)
+    .then(({ data }) => {
+      return data;
+    });
+};
 
 export const getUser = (username) => {
-  return goalgetterApi.get(`/users/${username}`).then(({data}) => {
-    return data.user
-  })
-}
+  return goalgetterApi.get(`/users/${username}`).then(({ data }) => {
+    return data.user;
+  });
+};
 
-
+export const searchUsers = (userSearch) => {
+  return goalgetterApi.get(`/users?search=${userSearch}`).then(({ data }) => {
+    return data.user;
+  });
+};
