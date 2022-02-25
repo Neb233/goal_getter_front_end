@@ -52,9 +52,25 @@ export const postGoal = (goalProperties, owner = "jeff") => {
   goalProperties.end_date = new Date(goalProperties.end_date);
   console.log(goalProperties);
   return goalgetterApi
-    .post("/goals", { goalProperties })
+    .post("/goals", goalProperties)
     .then(({ data }) => {
-      console.log(data);
+      return data.goal.goal_id;
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+};
+
+export const postSubgoal = (subgoal, goal_id, owner = "jeff") => {
+  subgoal.owner = owner;
+  if (subgoal.start_date) {
+    subgoal.start_date = new Date(subgoal.start_date);
+  }
+  subgoal.end_date = new Date(subgoal.end_date);
+  console.log(subgoal);
+  return goalgetterApi
+    .post(`/goals/${goal_id}/subgoals`, subgoal)
+    .then(({ data }) => {
       return data;
     })
     .catch((err) => {

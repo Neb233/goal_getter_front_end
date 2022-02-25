@@ -15,73 +15,63 @@ import React, { useState } from "react";
 import Card from "../../shared/card";
 import SubGoalForm from "./SubGoalForm";
 import { HideableView } from "../../shared/HideableView";
-import { postGoal } from "../../utils/api";
+import { postGoal, postSubgoal } from "../../utils/api";
 import SubGoalDetails from "./SubGoalDetails";
 
 const SetGoal = ({ navigation, route }) => {
   if (!route.params) {
     route.params = { goalProperties: {} };
+  } else {
+    route.params.goalProperties.start_date = new Date(2022, 0, 1);
+    route.params.goalProperties.end_date = new Date(2022, 11, 31);
+    if (route.params.goalProperties.target_value === "") {
+      route.params.goalProperties.target_value = null;
+    } else {
+      route.params.goalProperties.target_value = parseFloat(
+        route.params.goalProperties.target_value
+      );
+    }
+    if (route.params.goalProperties.unit === "") {
+      route.params.goalProperties.unit = null;
+    }
   }
 
   const [modalOpen, setModalOpen] = useState(false);
   const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
-  const [subGoalDetailModalOpen, setSubGoalDetailModalOpen] = useState(false);
+  const [showSubGoalDetails, setShowSubGoalDetails] = useState([
+    false,
+    false,
+    false,
+    false,
+  ]);
   const [subGoals, setSubGoals] = useState([
     {
-      subgoal_id: 5,
-      goal_id: 2,
       objective: "Finish Act 1 of novella",
       start_date: null,
       end_date: "2022-02-11T00:00:00.000Z",
-      type: "boolean",
-      status: "completed",
-      owner: "jeff",
       target_value: null,
       unit: null,
-      progress: null,
-      finish_date: "2022-02-10T00:00:00.000Z",
     },
     {
-      subgoal_id: 6,
-      goal_id: 2,
       objective: "Finish Act 2 of novella",
       start_date: null,
       end_date: "2022-02-21T00:00:00.000Z",
-      type: "boolean",
-      status: "active",
-      owner: "jeff",
       target_value: null,
       unit: null,
-      progress: null,
-      finish_date: null,
     },
     {
-      subgoal_id: 7,
-      goal_id: 2,
       objective: "Finish Act 3 of novella",
       start_date: null,
       end_date: "2022-03-01T00:00:00.000Z",
-      type: "boolean",
-      status: "active",
-      owner: "jeff",
       target_value: null,
       unit: null,
-      progress: null,
-      finish_date: null,
     },
     {
-      subgoal_id: 8,
-      goal_id: 2,
       objective: "Proof-read novella",
       start_date: null,
       end_date: "2022-03-04T00:00:00.000Z",
-      type: "boolean",
-      status: "active",
-      owner: "jeff",
       target_value: null,
       unit: null,
-      progress: null,
-      finish_date: null,
     },
   ]);
 
@@ -95,7 +85,12 @@ const SetGoal = ({ navigation, route }) => {
   };
 
   const handleAddGoal = () => {
-    postGoal(goalProperties);
+    postGoal(goalProperties).then((goal_id) => {
+      subGoals.forEach((subgoal) => {
+        postSubgoal(subgoal, goal_id);
+      });
+    });
+
     navigation.navigate("Feed");
   };
 
@@ -128,7 +123,7 @@ const SetGoal = ({ navigation, route }) => {
           new Date(goalProperties.end_date).getMonth() + 1
         }-${new Date(goalProperties.end_date).getDate()}`}
       </Text>
-      <HideableView hidden={goalProperties.target_value === ""}>
+      <HideableView hidden={goalProperties.target_value === null}>
         <Text>Target Value - {goalProperties.target_value}</Text>
         <Text>
           Unit - {goalProperties.unit ? goalProperties.unit : "None specified"}
@@ -149,20 +144,36 @@ const SetGoal = ({ navigation, route }) => {
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => {
-                setSubGoalDetailModalOpen(true);
+                console.log(setShowSubGoalDetails);
+                console.log(showSubGoalDetails);
+
+                setShowSubGoalDetails((showSubGoalDetails) => {
+                  const newState = showSubGoalDetails.map((boolean, index) => {
+                    return subGoals.indexOf(item) === index;
+                  });
+                  return newState;
+                });
               }}
             >
-              <Modal visible={subGoalDetailModalOpen} animationType="fade">
+              <Modal
+                visible={showSubGoalDetails[subGoals.indexOf(item)] === true}
+                animationType="fade"
+              >
                 <View>
                   <Button
                     title="Close"
                     onPress={() => {
-                      setSubGoalDetailModalOpen(false);
+                      setShowSubGoalDetails((showSubGoalDetails) => {
+                        const newState = showSubGoalDetails.map(() => {
+                          return false;
+                        });
+                        return newState;
+                      });
                     }}
                   ></Button>
                   <SubGoalDetails
                     setSubGoals={setSubGoals}
-                    setSubGoalDetailModalOpen={setSubGoalDetailModalOpen}
+                    setShowSubGoalDetails={setShowSubGoalDetails}
                     subGoals={subGoals}
                     item={item}
                   />
