@@ -17,6 +17,7 @@ import SubGoalForm from "./SubGoalForm";
 import { HideableView } from "../../shared/HideableView";
 import { postGoal, postSubgoal } from "../../utils/api";
 import SubGoalDetails from "./SubGoalDetails";
+import { KeyboardAvoidingView } from "react-native-web";
 
 const SetGoal = ({ navigation, route }) => {
   if (!route.params) {
@@ -102,6 +103,7 @@ const SetGoal = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
+    
       <Modal visible={addSubGoalModalOpen} animationType="slide">
         <View style={styles.modalContainer}>
           <Button
@@ -113,6 +115,7 @@ const SetGoal = ({ navigation, route }) => {
           <SubGoalForm addSubGoal={addSubGoal} />
         </View>
       </Modal>
+      
 
       <Text>Goal Details</Text>
       <Text>Objective - {goalProperties.objective}</Text>

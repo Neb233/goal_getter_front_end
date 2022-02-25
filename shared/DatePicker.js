@@ -10,32 +10,34 @@ const DatePicker = ({...props}) => {
     const [field] = useField(props)
     const [date, setDate] = useState(new Date())
   const [startDate, setStartDate] = useState(new Date())
-  const [showStartDate, setShowStartDate] = useState(false)
+  const [show, setShow] = useState(false)
 
 const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date
+
   
-    setShowStartDate(Platform.OS === "ios")
+    setShow(Platform.OS === "ios")
     setStartDate(currentDate)
     setDate(currentDate)
 setFieldValue(field.name, currentDate)
   }
   
-//   const showStartDatePicker = (event) => {
+  const showDatePicker = (event) => {
   
-//     setShowStartDate(true);
+    setShow(true);
   
-//   }
+  }
 
 
 
   return (
 
 <View>
-      {/* <View style={{margin:20}}>
-        <Button title={`Set ${mode} Date`} onPress={showStartDatePicker}/>
-      </View> */}
-      {/* {showStartDate && ( */}
+      <View style={{margin:20}}>
+        <Button title={`Set Date`} onPress={showDatePicker}/>
+      </View>
+
+      {show && (
         <DateTimePicker
         {...field}
         {...props}
@@ -47,14 +49,14 @@ setFieldValue(field.name, currentDate)
         onChange={(event, selectedDate) => {
             const currentDate = selectedDate || date
   
-            setShowStartDate(Platform.OS === "ios")
+            setShow(Platform.OS === "ios")
             setStartDate(currentDate)
             setDate(currentDate)
         setFieldValue(field.name, currentDate)
        
         }}
         />
-      {/* )} */}
+       )} 
       </View>
 
       

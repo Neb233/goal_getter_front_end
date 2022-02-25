@@ -18,6 +18,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { HideableView } from "../../shared/HideableView";
+import DatePicker from "../../shared/DatePicker";
 
 const GoalSchema = yup.object({
   objective: yup.string().required(),
@@ -35,6 +36,7 @@ const SetGoalIntro = ({ navigation, route }) => {
   };
 
   return (
+ 
     <SafeAreaView>
       <Modal visible={modalOpen} animationType="slide">
         <View style={styles.modalContainer}>
@@ -84,8 +86,13 @@ const SetGoalIntro = ({ navigation, route }) => {
               ? route.params.goalProperties.target_value
               : "",
             unit: route.params ? route.params.goalProperties.unit : "",
+            start_date: route.params ? route.params.goalProperties.start_date : "",
+            end_date: route.params ? route.params.goalProperties.end_date : "",
           }}
           onSubmit={(values) => {
+            console.warn(values)
+            // values.start_date = new Date(2022, 0, 1);
+            // values.end_date = new Date(2022, 11, 31);
             navigation.navigate("SetGoal", {
               goalProperties: values,
             });
@@ -109,6 +116,12 @@ const SetGoalIntro = ({ navigation, route }) => {
                   onChangeText={props.handleChange("description")}
                   value={props.values.description}
                 />
+                <DatePicker 
+            name="start_date"
+            type={"Start"}/>
+             <DatePicker 
+            name="end_date"
+            type={"End"}/>
                 <Text>
                   If your final goal has a numeric target value attached to it,
                   that you plan to contribute to gradually (e.g. saving money,
@@ -152,6 +165,7 @@ const SetGoalIntro = ({ navigation, route }) => {
         </Formik>
       </View>
     </SafeAreaView>
+   
   );
 };
 
