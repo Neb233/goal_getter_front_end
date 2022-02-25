@@ -31,19 +31,13 @@ export default function App({navigation}) {
   const loggedInUser = useContext(UserContext)
  
   
-
-
-
-
   return (
 
     
-    <UserProvider> 
-
 
    
    <NavigationContainer>
-  
+ 
    
       <Stack.Navigator>
         <Stack.Screen name="Nav" component={Nav}  options={{ headerShown: false}}/>
@@ -53,20 +47,19 @@ export default function App({navigation}) {
         <Stack.Screen name="SubGoalForm" component={SubGoalForm} /> 
         <Stack.Screen name="Profile" component={Profile} />
     
-  
-  
-       
-         {/* <Stack.Screen name="Nav" component={Nav} options={{headerShown: false}} /> */}
+ 
+{/*        
+        <Stack.Screen name="Nav" component={Nav} options={{headerShown: false}} /> */}
        <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen}/>
       <Stack.Screen name="Register" component={RegisterScreen} />
       
       </Stack.Navigator>
-      
+  
  
   </NavigationContainer>
 
 
-  </UserProvider>
+ 
 
     
   );
