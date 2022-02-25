@@ -1,68 +1,39 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Agenda } from "react-native-calendars";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "react-native-paper";
+import { getSubGoalsByUser } from "../../utils/api";
+import { formatSubgoalsForCalendar } from "../../utils/format";
 
-const dateToString = (time) => {
-  const date = new Date(time);
-  return date.toISOString().split("T")[0];
-};
-
+// const dateToString = (time) => {
+//   const date = new Date(time);
+//   return date.toISOString().split("T")[0];
+// };
 
 const GoalCalendar = () => {
-  const [items, setItems] = useState({});
+  const [items, setItems] = useState({ "2022-02-25": [{ name: "objective" }] });
 
-  const loadItems = (day) => {
-    // setTimeout(() => {
-    for (let i = -15; i < 85; i++) {
-      const date = day.timestamp + i * 24 * 60 * 60 * 1000;
+  const [subgoals, setSubgoals] = useState({});
 
-      const strDate = dateToString(date);
-
-      if (!items[strDate]) {
-        items[strDate] = [];
-
-        items[strDate].push({
-          name: "Item for " + strDate,
-        });
-      }
-    }
-    const newItems = {};
-    Object.keys(items).forEach((key) => {
-      newItems[key] = items[key];
+  useEffect(() => {
+    getSubGoalsByUser("jeff").then((subgoals) => {
+      const formattedSubgoals = formatSubgoalsForCalendar(subgoals);
+      setItems(formattedSubgoals);
+      console.log(formattedSubgoals);
     });
+  }, ["jeff"]);
 
-    setItems(newItems);
-    // }, 1000);
-  };
-
-  const renderItem = (item) => {
+  const renderItem = (items) => {
     return (
-      <TouchableOpacity style={{ marginTop: 35, width: 300 }}>
-        <Card>
-          <Card.Content>
-            <View>
-              <Text>{item.name}</Text>
-            </View>
-          </Card.Content>
-        </Card>
-      </TouchableOpacity>
+      <View style={{ margin: 50 }}>
+        <Text>{items.name}</Text>
+      </View>
     );
   };
-
   return (
-    <View style={{ flex: 1 }}>
-      <Agenda
-        items={items}
-        loadItemsForMonth={loadItems}
-        selected={"2022-02-16"}
-        renderItem={renderItem}
-        //   renderItem={this.renderItem}
-        //   renderEmptyDate={this.renderEmptyDate}
-        //   rowHasChanged={this.rowHasChanged}
-        //   showClosingKnob={true}
-      />
+    <View style={{ flex: 1, marginTop: 0 }}>
+      <Agenda selected={"2022-02-25"} items={items} renderItem={renderItem} />
     </View>
   );
 };
@@ -90,24 +61,3 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
-
-//   <Calendar
-//     style={styles.calendar}
-//     // minDate={'2022-02-22'}
-//     onDayPress={(day) => {
-//       console.warn("selected day", day);
-//       setExpandSubGoal(true);
-//     }}
-//     hideExtraDays={true}
-//     enableSwipeMonths={true}
-//     markingType="multi-period"
-//     markedDates={subGoalDates}
-//   />
-// </View>
-// <View>
-//   {expandSubGoal ? (
-//     <View style={styles.subGoalDetails}>
-//       {/*Here will display subGoal component of click of the active subgoals on the pressed calendar day */}
-//       <Text>SubGoal details</Text>
-//     </View>
-//   ) : null}

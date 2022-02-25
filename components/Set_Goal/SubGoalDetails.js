@@ -1,23 +1,30 @@
 import { StyleSheet, Text, View, Button } from 'react-native'
 import React from 'react'
 
-const SubGoalDetails = ({ subGoals, setSubGoals, item, setSubGoalDetailModalOpen }) => {
+const SubGoalDetails = ({ subGoals, setSubGoals, item, setShowSubGoalDetails, showSubGoalDetails }) => {
 
-    const deleteSubGoal = (subgoal_id) => {
+    const deleteSubGoal = (objective) => {
 const newSubGoals = subGoals.map((subgoal) => {
     return { ...subgoal }
 })
+
 setSubGoals(newSubGoals.filter((subgoal) => {
-    return subgoal.subgoal_id != subgoal_id
+    return subgoal.objective != objective
 }))
-setSubGoalDetailModalOpen(false)
+setShowSubGoalDetails((showSubGoalDetails) => {
+    const newState = showSubGoalDetails.map(() => {
+      return false;
+    });
+    return newState;
+  });
     }
+    
   return (
     <View>
       <Text>{item.objective}</Text>
       <View>
           <Button title="Delete SubGoal"
-          onPress={()=>{deleteSubGoal(item.subgoal_id)}}></Button>
+          onPress={()=>{deleteSubGoal(item.objective)}}></Button>
       </View>
     </View>
     

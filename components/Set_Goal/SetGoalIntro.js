@@ -86,8 +86,6 @@ const SetGoalIntro = ({ navigation, route }) => {
             unit: route.params ? route.params.goalProperties.unit : "",
           }}
           onSubmit={(values) => {
-            values.start_date = new Date(2022, 0, 1);
-            values.end_date = new Date(2022, 11, 31);
             navigation.navigate("SetGoal", {
               goalProperties: values,
             });
