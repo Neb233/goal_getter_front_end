@@ -1,4 +1,3 @@
-
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationHelpersContext } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-web";
@@ -11,6 +10,7 @@ import LoginScreen from "../Login/LoginScreen";
 import SetGoalIntro from "../Set_Goal/SetGoalIntro";
 import { useContext } from 'react';
 import { UserContext, UserProvider } from '../../context/user';
+import SearchUsers from "../Social/SearchUsers";
 
 
 const Tab = createBottomTabNavigator();
@@ -26,6 +26,7 @@ const Nav = ({ navigation }) => {
       {/* <Tab.Screen name='Calender' component={Calender} /> */}
       <Tab.Screen name="Login" component={LoginScreen} />
       <Tab.Screen name="SGIntro" component={SetGoalIntro} />
+      <Tab.Screen name="SearchUsers" component={SearchUsers} />
     </Tab.Navigator>
   );
 };

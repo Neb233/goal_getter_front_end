@@ -40,6 +40,34 @@ export const getUser = (username) => {
   });
 };
 
+
+export const searchUsers = (userSearch) => {
+  return goalgetterApi.get(`/users?search=${userSearch}`).then(({ data }) => {
+    return data.users;
+  });
+};
+
+export const addFriend = (loggedInUser, userToAdd) => {
+  return goalgetterApi
+    .post(`/friendships`, { user_1: loggedInUser, user_2: userToAdd })
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    });
+};
+
+export const getFriends = (user) => {
+  return goalgetterApi.get(`/users/${user}/friendships`).then((res) => {
+    const { friendships } = res.data;
+    const friends = friendships.map((friendship) => {
+      if (friendship.user_1 === user) {
+        return friendship.user_2;
+      }
+      return friendship.user_1;
+    });
+    return friends;
+  });
+
 export const deleteSocialMediaPost = (post_id) => {
   return goalgetterApi.delete(`/post/${post_id}`).then(({ data }) => {
     return data;
