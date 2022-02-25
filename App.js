@@ -9,17 +9,17 @@ import SubGoalForm from "./components/Set_Goal/SubGoalForm";
 import SearchUsers from "./components/Social/SearchUsers";
 
 import Feed from "./components/Feed/Feed";
-import GoalCalendar from "./components/Calendar/GoalCalendar";
 import Social from "./components/Social/Social";
 import Nav from "./components/Nav/Nav";
 import Profile from "./components/Profile/Profile";
+import SetGoalIntro from "./components/Set_Goal/SetGoalIntro";
+import GoalCalendar from "./components/Calendar/GoalCalendar";
 import React, { useEffect, useState, useContext } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { UserContext, UserProvider } from "./context/user";
 
 import { Provider as PaperProvider } from "react-native-paper";
-
 const Stack = createNativeStackNavigator();
 
 export default function App({ navigation }) {
@@ -64,3 +64,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+/* <NavigationContainer independent={true}>
+      <Stack.Navigator>
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Login"
+          component={LoginScreen}
+        />
+         <Stack.Screen name="Feed" component={Feed} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="SetGoal" component={SetGoal} />
+        <Stack.Screen name="SubGoalForm" component={SubGoalForm} /> 
+      </Stack.Navigator>
+      
+   
+             <Tab.Screen name='Feed' component={Feed} />
+            <Tab.Screen name='SetGoal' component={SetGoal} />
+            <Tab.Screen name='Social' component={Social} /> */
