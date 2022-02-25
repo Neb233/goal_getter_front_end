@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View, Button, TextInput, Image } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { auth } from "../../firebase";
 import axios from "axios";
 import { getUser } from '../../utils/api'
@@ -7,22 +7,32 @@ import {signOut} from 'firebase/auth'
 import * as ImagePicker from 'expo-image-picker'
 import {updateProfile} from 'firebase/auth'
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { UserContext, UserProvider } from "../../context/user";
+
+
+
 
 const Profile = () => {
 
 
+  // const  loggedInUser  = useContext(UserContext)
+  
+ 
+ 
+  
 
   const [details, Setdetails] = useState({});
   const [image, setImage] = useState(null);
   const [profPic, setprofPic] = useState('')
 
+  
+  
   const user = auth.currentUser;
   const displayName = user.displayName;
-
-  console.log(details)
-
-
   const storage = getStorage();
+
+
+
 
   useEffect(() => {
     getUser(displayName).then((res) => {
@@ -77,12 +87,16 @@ const Profile = () => {
       setprofPic(url)
      })
 
-
-
-
+    
 
   return (
-    <View style={styles.container}>
+
+ 
+   <UserProvider>
+
+   <View style={styles.container}>
+
+
       <View style={styles.header}>
       <Image source={{uri: profPic}} style={styles.profPic} />
       <View style={styles.body}>
@@ -103,10 +117,17 @@ const Profile = () => {
       </View>
      
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      
       </View>
     </View> 
     </View>
-    </View>
+    </View> 
+
+
+    </UserProvider>
+   
+  
+  
   );
 };
 
