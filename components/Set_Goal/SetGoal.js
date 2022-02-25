@@ -19,10 +19,13 @@ import { postGoal } from "../../utils/api";
 import SubGoalDetails from "./SubGoalDetails";
 
 const SetGoal = ({ navigation, route }) => {
+  if (!route.params) {
+    route.params = { goalProperties: {} };
+  }
   
   const [modalOpen, setModalOpen] = useState(false);
   const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
-  const [subGoalDetailModalOpen, setSubGoalDetailModalOpen] = useState(false)
+  const [showSubGoalDetails, setShowSubGoalDetails] = useState([false,false,false, false])
   const [subGoals, setSubGoals] = useState([
     {
       "subgoal_id": 5,
@@ -143,21 +146,31 @@ const SetGoal = ({ navigation, route }) => {
       <View>
       <FlatList
         data={subGoals}
+        
         renderItem={({ item }) => (
           
-          <TouchableOpacity onPress={() => {setSubGoalDetailModalOpen(true)}}>
-            <Modal visible={subGoalDetailModalOpen} animationType="fade">
+          <TouchableOpacity onPress={() => {
+    
+         setShowSubGoalDetails((showSubGoalDetails) => {
+          const newState = showSubGoalDetails.map((boolean, index) => {
+            return subGoals.indexOf(item) === index
+          })
+          return newState
+     
+            })
+            }}>
+            <Modal visible={showSubGoalDetails[subGoals.indexOf(item)] === true} animationType="fade">
               <View>
                 
               <Button
           title="Close"
             onPress={() => {
-              setSubGoalDetailModalOpen(false);
+              setShowSubGoalDetails(false);
             }}
           ></Button>
          <SubGoalDetails 
          setSubGoals={setSubGoals}
-         setSubGoalDetailModalOpen={setSubGoalDetailModalOpen}
+         setShowSubGoalDetails={setShowSubGoalDetails}
          subGoals={subGoals}
          item={item}/>
           </View>
