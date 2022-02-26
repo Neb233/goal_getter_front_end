@@ -26,35 +26,29 @@ export default function App({ navigation }) {
   const loggedInUser = useContext(UserContext);
 
   return (
-    <UserProvider>
+    
       <PaperProvider>
+
+
         <NavigationContainer>
           <Stack.Navigator>
-            <Stack.Screen
-              name="Nav"
-              component={Nav}
-              options={{ headerShown: false }}
-            />
+            <Stack.Screen name="Nav" component={Nav} options={{ headerShown: false }} />
 
             <Stack.Screen name="Feed" component={Feed} />
             <Stack.Screen name="Social" component={Social} />
             <Stack.Screen name="SetGoal" component={SetGoal} />
-            <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
+            <Stack.Screen name="GoalCalendar" component={GoalCalendar} /> 
             <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="SearchUsers" component={SearchUsers} />
 
-            {/* <Stack.Screen name="Nav" component={Nav} options={{headerShown: false}} /> */}
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Login"
-              component={LoginScreen}
-            />
+            
+            <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
-    </UserProvider>
+   
   );
 }
 
@@ -67,20 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-/* <NavigationContainer independent={true}>
-      <Stack.Navigator>
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={LoginScreen}
-        />
-         <Stack.Screen name="Feed" component={Feed} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="SetGoal" component={SetGoal} />
-        <Stack.Screen name="SubGoalForm" component={SubGoalForm} /> 
-      </Stack.Navigator>
-      
-   
-             <Tab.Screen name='Feed' component={Feed} />
-            <Tab.Screen name='SetGoal' component={SetGoal} />
-            <Tab.Screen name='Social' component={Social} /> */
+
