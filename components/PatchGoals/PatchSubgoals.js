@@ -11,7 +11,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { patchGoalbyId, patchSubGoalbyId } from "../../utils/api";
 import PostStatus from "../PostStatus/PostStatus";
 
-const PatchSubGoal = ({ goal, goals, goalUnit }) => {
+const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
   const [progress, setProgress] = useState(0);
 
   const submitTime = new Date(Date.now());
@@ -62,6 +62,7 @@ const PatchSubGoal = ({ goal, goals, goalUnit }) => {
           subgoal={goal.subgoal_id}
           ownerP={goal.owner}
           goalUnit={goalUnit}
+          setFriendPosts={setFriendPosts}
         />
       </View>
     </View>

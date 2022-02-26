@@ -194,3 +194,13 @@ export const postReaction = (post_id, reactionValue, owner) => {
 export const deleteReaction = (reaction_id) => {
   return goalgetterApi.delete(`/reactions/${reaction_id}`);
 };
+
+export const postComment = (post_id, owner, message) => {
+  const datetime = Date.now();
+  const postObject = { owner, message, datetime };
+  return goalgetterApi
+    .post(`/posts/${post_id}/comments`, postObject)
+    .then(({ data }) => {
+      return data.comment;
+    });
+};

@@ -12,6 +12,7 @@ import {
   getReactionsByPost,
   postReaction,
   deleteReaction,
+  postComment,
 } from "../../utils/api";
 import { formatDate } from "../../utils/format";
 import {
@@ -54,6 +55,7 @@ const getReactionCount = (reactions) => {
 const Social = (props) => {
   const [isShowing, setIsShowing] = useState(false);
   const [comments, setComments] = useState([]);
+  const [currentComment, setCurrentComment] = useState("");
   const [associatedGoal, setAssociatedGoal] = useState({});
   const [reactionCount, setReactionCount] = useState({
     awesome: 0,
@@ -115,6 +117,16 @@ const Social = (props) => {
     setIsShowing((currValue) => {
       return !currValue;
     });
+  };
+
+  const handleAddComment = () => {
+    postComment(post_id, currentUser, currentComment).then((comment) => {
+      setComments((oldComments) => {
+        const newComments = [...oldComments];
+        newComments.push(comment);
+      });
+    });
+    setCurrentComment("");
   };
 
   const handlePostReaction = (value) => {
@@ -226,8 +238,9 @@ const Social = (props) => {
             <TextInput
               style={styles.input}
               placeholder="leave a positive comment"
-              onChangeText={(comment) => setComments(comment)}
-              defaultValue={comments}
+              onChangeText={(comment) => setCurrentComment(comment)}
+              value={currentComment}
+              onSubmitEditing={handleAddComment}
             />
           ) : null}
         </View>

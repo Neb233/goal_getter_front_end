@@ -41,11 +41,11 @@ const Feed = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Subgoals />
+      <Subgoals setFriendPosts={setFriendPosts} />
       <View style={styles.personalWrapper}>
-        <Text style={styles.sectionTitle}>Goal Status:</Text>
+        {/* <Text style={styles.sectionTitle}>Goal Status:</Text>
 
-        <View style={styles.status}>{/* <GoalStatus /> */}</View>
+        <View style={styles.status}><GoalStatus /></View> */}
         <View>
           <TouchableOpacity
             style={styles.takeToCalendar}
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#abbabe",
   },
   personalWrapper: {
-    height: 220,
+    height: "fitContents",
     borderRadius: 10,
     backgroundColor: "white",
     padding: 10,

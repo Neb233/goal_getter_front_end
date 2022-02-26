@@ -10,7 +10,14 @@ import {
 import React, { useState, useEffect } from "react";
 import { postStatus } from "../../utils/api";
 
-const PostStatus = ({ goal, subgoal, ownerP, progress, goalUnit }) => {
+const PostStatus = ({
+  goal,
+  subgoal,
+  ownerP,
+  progress,
+  goalUnit,
+  setFriendPosts,
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -24,7 +31,11 @@ const PostStatus = ({ goal, subgoal, ownerP, progress, goalUnit }) => {
         goal.type === "progress" ? goal.progress.length : undefined,
       message: message,
     }).then((res) => {
-      console.log(res);
+      setFriendPosts((oldFriendPost) => {
+        const newFriendPost = [...oldFriendPost];
+        newFriendPost.unshift(res.post);
+        return newFriendPost;
+      });
     });
 
     setModalVisible(!modalVisible);
