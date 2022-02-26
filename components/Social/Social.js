@@ -10,6 +10,8 @@ import {
   getSubgoalBySubgoalId,
   getGoalByGoalId,
   getReactionsByPost,
+  postReaction,
+  deleteReaction,
 } from "../../utils/api";
 import { formatDate } from "../../utils/format";
 import {
@@ -20,8 +22,9 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 
+const currentUser = "jeff";
+
 const getReactionCount = (reactions) => {
-  const currentUser = "jeff";
   const reactionCount = {
     awesome: 0,
     congrats: 0,
@@ -58,6 +61,7 @@ const Social = (props) => {
     encourage: 0,
     proud: 0,
   });
+  const [currentUserReaction, setCurrentUserReaction] = useState();
 
   const {
     owner,
@@ -66,11 +70,13 @@ const Social = (props) => {
     associated_data_type,
     associated_id,
     post_id,
+    progress_point,
   } = props.postDetails;
 
   useEffect(() => {
     if (associated_data_type === "subgoal") {
       getSubgoalBySubgoalId(associated_id).then((subgoal) => {
+        console.log(subgoal);
         setAssociatedGoal(subgoal);
       });
     } else {
@@ -84,6 +90,24 @@ const Social = (props) => {
     getReactionsByPost(post_id).then((reactions) => {
       const reactionCount = getReactionCount(reactions);
       setReactionCount(reactionCount);
+      reactions.forEach((reaction) => {
+        if (reaction.owner === currentUser) {
+          switch (reaction.reaction) {
+            case "Awesome!":
+              setCurrentUserReaction(["awesome", reaction.reaction_id]);
+              break;
+            case "Congratulations!":
+              setCurrentUserReaction(["congrats", reaction.reaction_id]);
+              break;
+            case "Keep on going":
+              setCurrentUserReaction(["encourage", reaction.reaction_id]);
+              break;
+            case "I'm proud of you":
+              setCurrentUserReaction(["proud", reaction.reaction_id]);
+              break;
+          }
+        }
+      });
     });
   }, []);
 
@@ -95,10 +119,24 @@ const Social = (props) => {
 
   const handlePostReaction = (value) => {
     setReactionCount((oldReactionCount) => {
-      newReactionCount = { ...oldReactionCount };
-      newReactionCount[value]++;
+      const newReactionCount = { ...oldReactionCount };
+      newReactionCount[value] = newReactionCount[value] + 1;
       return newReactionCount;
     });
+    postReaction(post_id, value, currentUser).then((reaction_id) => {
+      setCurrentUserReaction([value, reaction_id]);
+    });
+  };
+
+  const handleUnreact = () => {
+    setReactionCount((oldReactionCount) => {
+      const newReactionCount = { ...oldReactionCount };
+      newReactionCount[currentUserReaction[0]] =
+        newReactionCount[currentUserReaction[0]] - 1;
+      return newReactionCount;
+    });
+    deleteReaction(currentUserReaction[1]);
+    setCurrentUserReaction(undefined);
   };
 
   return (
@@ -109,10 +147,29 @@ const Social = (props) => {
           <Text style={styles.username}>{owner}</Text>
         </View>
         <View style={styles.post}>
-          <View style={styles.goal}>
-            <Text>"{associatedGoal.objective}"</Text>
+          <View style={styles.boxed}>
+            <Text>{associatedGoal.objective}</Text>
+            {progress_point && Object.keys(associatedGoal).length !== 0 ? (
+              <View>
+                <Text>{`Added ${
+                  associatedGoal.progress[
+                    associatedGoal.progress.length - 1
+                  ][1] -
+                  (associatedGoal.progress.length > 1
+                    ? associatedGoal.progress[
+                        associatedGoal.progress.length - 2
+                      ][1]
+                    : 0)
+                } ${associatedGoal.unit} to ${associatedGoal.target_value}  ${
+                  associatedGoal.unit
+                } target`}</Text>
+                <Text>{`Current progress: ${
+                  associatedGoal.progress[associatedGoal.progress.length - 1][1]
+                } ${associatedGoal.unit}`}</Text>
+              </View>
+            ) : null}
           </View>
-          <Text>"{message}"</Text>
+          <Text>{message}</Text>
           <Text>{formatDate(datetime)}</Text>
         </View>
         <View style={styles.flexRow}>
@@ -126,17 +183,34 @@ const Social = (props) => {
           <Text>{reactionCount.proud}</Text>
         </View>
         <View style={styles.interact}>
-          <MenuProvider style={{ flexDirection: "column", padding: 30 }}>
-            <Menu onSelect={handlePostReaction}>
-              <MenuTrigger style={styles.react} text="React" />
-              <MenuOptions>
-                <MenuOption value="awesome" text="Awesome!" />
-                <MenuOption value="congrats" text="Congrats!" />
-                <MenuOption value="encourage" text="Keep on going" />
-                <MenuOption value="proud" text="I'm proud of you" />
-              </MenuOptions>
-            </Menu>
-          </MenuProvider>
+          {currentUserReaction ? (
+            <TouchableOpacity
+              style={styles.unreact}
+              onPress={() => {
+                handleUnreact();
+              }}
+            >
+              <Text style={styles.comment}>Unreact</Text>
+            </TouchableOpacity>
+          ) : (
+            <MenuProvider
+              style={{
+                flexDirection: "column",
+                paddingTop: 30,
+                paddingBottom: 30,
+              }}
+            >
+              <Menu onSelect={handlePostReaction}>
+                <MenuTrigger style={styles.react} text="React" />
+                <MenuOptions>
+                  <MenuOption value="awesome" text="Awesome!" />
+                  <MenuOption value="congrats" text="Congrats!" />
+                  <MenuOption value="encourage" text="Keep on going" />
+                  <MenuOption value="proud" text="I'm proud of you" />
+                </MenuOptions>
+              </Menu>
+            </MenuProvider>
+          )}
           <TouchableOpacity
             style={styles.comButton}
             onPress={() => {
@@ -168,6 +242,7 @@ const Social = (props) => {
                   <Text style={styles.text}>{formatDate(item.datetime)}</Text>
                 </Card>
               )}
+              keyExtractor={(item) => item.comment_id}
             />
           ) : null}
         </View>
@@ -261,6 +336,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "white",
     padding: 2,
+    flex: 1,
+  },
+  unreact: {
+    backgroundColor: "red",
+    borderRadius: 8,
+    marginTop: 40,
+    marginLeft: 10,
+    marginBottom: 30,
+    flex: 1,
   },
   button: {
     backgroundColor: "#468705",
@@ -270,9 +354,10 @@ const styles = StyleSheet.create({
   comButton: {
     backgroundColor: "#4892b7",
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: 40,
     marginLeft: 10,
-    padding: 2,
+    marginBottom: 30,
+    flex: 1,
   },
   flexRow: {
     flexDirection: "row",
@@ -289,6 +374,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "grey",
     borderRadius: 50,
+  },
+  redText: {
+    color: "red",
+  },
+  boxed: {
+    borderWidth: 1,
+    borderColor: "black",
   },
 });
 

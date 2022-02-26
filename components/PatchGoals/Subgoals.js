@@ -33,11 +33,11 @@ const Subgoals = () => {
         {/* pagingEnabled={true} */}
         <ScrollView horizontal={true}>
           {goals.map((goal) => {
-            const type = goal.type === 'progress';
+            const type = goal.type === "progress";
             return (
-              <View style={styles.subGoal}>
+              <View key={goal.subgoal_id} style={styles.subGoal}>
                 <View style={styles.pageContent}>
-                  { type ? (
+                  {type ? (
                     <View style={styles.pageContent}>
                       <Text style={styles.goalObj}>{goal.objective}</Text>
                       <View style={styles.progress}>
@@ -64,11 +64,8 @@ const Subgoals = () => {
                         style={styles.checkBox}
                         onPress={() => setIsChecked((currVal) => !currVal)}
                       />
-
-                      
                     </View>
                   )}
-                 
                 </View>
               </View>
             );

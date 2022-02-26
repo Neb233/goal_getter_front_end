@@ -31,7 +31,9 @@ const Feed = ({ navigation }) => {
           combinedPostArray = [...combinedPostArray, ...userPosts];
         });
         combinedPostArray.sort((a, b) => {
-          new Date(a.datetime).getTime() - new Date(b.datetime).getTime();
+          return (
+            new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
+          );
         });
         setFriendPosts(combinedPostArray);
       });

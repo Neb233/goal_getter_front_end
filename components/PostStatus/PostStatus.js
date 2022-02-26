@@ -12,38 +12,25 @@ import { postStatus } from "../../utils/api";
 
 const PostStatus = ({ goal, subgoal, ownerP, progress, goalUnit }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState("");
 
+  const handleSubmit = () => {
+    postStatus({
+      associated_data_type: "subgoal",
+      associated_id: subgoal,
+      owner: ownerP,
+      datetime: new Date(Date.now()),
+      progress_point:
+        goal.type === "progress" ? goal.progress.length : undefined,
+      message: message,
+    }).then((res) => {
+      console.log(res);
+    });
 
+    setModalVisible(!modalVisible);
+  };
 
-  
-
-  const handleSubmit =  () => {
-      postStatus({
-        associated_data_type: "subgoal",
-        associated_id: subgoal,
-        owner: ownerP,
-        datetime: new Date(Date.now()),
-        message: ` ${ownerP} completed ${progress} ${goalUnit} of his goal: ${goal.objective} 
-        
-        ${message}`
-   })
-   
-   .then((res) => {
-          console.log(res)
-      })
-
-      setModalVisible(!modalVisible)
-      
-  }
-
- 
-
-
-
-//   ${ownerP} completed ${progress} ${goalUnit} of ${subgoal.objective}  ${message}`
-
-  
+  //   ${ownerP} completed ${progress} ${goalUnit} of ${subgoal.objective}  ${message}`
 
   return (
     <View style={styles.centeredView}>
@@ -58,24 +45,23 @@ const PostStatus = ({ goal, subgoal, ownerP, progress, goalUnit }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-              
             <TextInput
               style={styles.modalText}
               placeholder="enter your message here"
               value={message}
               onChangeText={setMessage}
             />
-        <Pressable
+            <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={handleSubmit}
             >
               <Text style={styles.textStyle}>Make Status</Text>
             </Pressable>
             <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
             >
-                <Text style={styles.textStyle}>Cancel Post</Text>
+              <Text style={styles.textStyle}>Cancel Post</Text>
             </Pressable>
           </View>
         </View>
@@ -87,7 +73,6 @@ const PostStatus = ({ goal, subgoal, ownerP, progress, goalUnit }) => {
       >
         <Text style={styles.textStyle}>Submit Progress & Post Status</Text>
       </Pressable>
-      
     </View>
   );
 };
