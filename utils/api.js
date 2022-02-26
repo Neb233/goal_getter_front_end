@@ -101,6 +101,12 @@ export const postGoal = (goalProperties, owner = "jeff") => {
     });
 };
 
+export const getPostsByUser = (user) => {
+  return goalgetterApi.get(`/posts/${user}`).then(({ data }) => {
+    return data.posts;
+  });
+};
+
 export const postSubgoal = (subgoal, goal_id, owner = "jeff") => {
   subgoal.owner = owner;
   if (subgoal.start_date) {
@@ -116,4 +122,28 @@ export const postSubgoal = (subgoal, goal_id, owner = "jeff") => {
     .catch((err) => {
       console.log(err.response);
     });
+};
+
+export const getGoalByGoalId = (goal_id) => {
+  return goalgetterApi.get(`/goals/${goal_id}`).then(({ data }) => {
+    return data.goal;
+  });
+};
+
+export const getSubgoalBySubgoalId = (subgoal_id) => {
+  return goalgetterApi.get(`/subgoals/${subgoal_id}`).then(({ data }) => {
+    return data.subgoal;
+  });
+};
+
+export const getCommentsByPost = (post_id) => {
+  return goalgetterApi.get(`/posts/${post_id}/comments`).then(({ data }) => {
+    return data.comments;
+  });
+};
+
+export const getReactionsByPost = (post_id) => {
+  return goalgetterApi.get(`/posts/${post_id}/reactions`).then(({ data }) => {
+    return data.reactions;
+  });
 };
