@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator();
 const Nav = ({ navigation }) => {
   const loggedInUser = useContext(UserContext);
   return (
-    <Tab.Navigator options={{ headerShown: false }}>
+    <Tab.Navigator  initialRouteName="Feed" options={{ headerShown: false }}>
       <Tab.Screen name="Feed" component={Feed} />
       <Tab.Screen name="SetGoal" component={SetGoal} />
       <Tab.Screen name="Profile" component={Profile} />
