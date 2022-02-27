@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import { TouchableOpacity, FlatList } from "react-native";
-import PostComments from "../PostComments/PostComments";
 import { useState, useEffect } from "react";
 import { KeyboardAvoidingView } from "react-native";
 import Card from "../../shared/card";
@@ -121,9 +120,11 @@ const Social = (props) => {
 
   const handleAddComment = () => {
     postComment(post_id, currentUser, currentComment).then((comment) => {
+      console.log(comment);
       setComments((oldComments) => {
         const newComments = [...oldComments];
         newComments.push(comment);
+        return newComments;
       });
     });
     setCurrentComment("");

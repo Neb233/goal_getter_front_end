@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { getSubGoalsByUser } from "../../utils/api";
 import PatchSubGoal from "./PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import PostStatus from "../PostStatus/PostStatus";
+import PostStatus from "./PostStatus";
 
 const Subgoals = ({ setFriendPosts }) => {
   const [goals, setGoals] = useState([]);

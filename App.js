@@ -9,7 +9,7 @@ import SubGoalForm from "./components/Set_Goal/SubGoalForm";
 import SearchUsers from "./components/Social/SearchUsers";
 
 import Feed from "./components/Feed/Feed";
-import Social from "./components/Social/Social";
+import Social from "./components/Feed/Social";
 import Nav from "./components/Nav/Nav";
 import Profile from "./components/Profile/Profile";
 import SetGoalIntro from "./components/Set_Goal/SetGoalIntro";

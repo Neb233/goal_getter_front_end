@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import Goals from "../Goals/Goals";
-import Social from "../Social/Social";
-import Subgoals from "../PatchGoals/Subgoals";
+import Goals from "../Profile/Goals";
+import Social from "./Social";
+import Subgoals from "./Subgoals";
 import { TouchableOpacity, FlatList } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SetGoal from "../Set_Goal/SetGoal";
 import Nav from "../Nav/Nav";
-import GoalStatus from "../GoalStatus/GoalStatus";
+import GoalStatus from "./GoalStatus";
 import { getFriends, getPostsByUser } from "../../utils/api";
 
 const Feed = ({ navigation }) => {

@@ -196,11 +196,14 @@ export const deleteReaction = (reaction_id) => {
 };
 
 export const postComment = (post_id, owner, message) => {
-  const datetime = Date.now();
+  const datetime = new Date(Date.now());
   const postObject = { owner, message, datetime };
   return goalgetterApi
     .post(`/posts/${post_id}/comments`, postObject)
     .then(({ data }) => {
-      return data.comment;
+      return data.comment[0];
+    })
+    .catch((err) => {
+      console.log(err.response.data);
     });
 };

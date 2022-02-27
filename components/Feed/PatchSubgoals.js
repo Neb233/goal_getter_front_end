@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { patchGoalbyId, patchSubGoalbyId } from "../../utils/api";
-import PostStatus from "../PostStatus/PostStatus";
+import PostStatus from "./PostStatus";
 
 const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
   const [progress, setProgress] = useState(0);
