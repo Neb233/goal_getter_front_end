@@ -20,10 +20,7 @@ import * as Yup from "yup";
 import * as Animatable from "react-native-animatable";
 
 const LoginScreen = () => {
-  
-  
-const navigation = useNavigation();
-
+  const navigation = useNavigation();
 
   const valSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
@@ -35,8 +32,6 @@ const navigation = useNavigation();
       .matches(/\d/, "Password must have a number")
       .required("Required"),
   });
-
-  
 
   return (
     <View style={styles.container}>
@@ -105,7 +100,7 @@ const navigation = useNavigation();
                 </Text>
 
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("RegisterScreen")}
+                  onPress={() => navigation.navigate("Register")}
                   style={styles.button}
                 >
                   <Text style={styles.buttonText}>Register</Text>
