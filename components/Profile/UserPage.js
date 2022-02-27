@@ -69,7 +69,13 @@ const Goals = ({ navigation, route }) => {
             data={goals}
             renderItem={({ item }) => (
               <View style={styles.item}>
-                <TouchableOpacity onPress={navigation.navigate}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("GoalPage", {
+                      goal_id: item.goal_id,
+                    });
+                  }}
+                >
                   <View>
                     <Text style={styles.title}>{item.objective}</Text>
                   </View>

@@ -15,7 +15,7 @@ import {
   deleteReaction,
   postComment,
 } from "../../utils/api";
-import { formatDate } from "../../utils/format";
+import { formatDatetime } from "../../utils/format";
 import {
   Menu,
   MenuProvider,
@@ -120,7 +120,6 @@ const Social = (props) => {
     });
   };
 
-
   const handleAddComment = () => {
     postComment(post_id, currentUser, currentComment).then((comment) => {
       console.log(comment);
@@ -155,7 +154,6 @@ const Social = (props) => {
     setCurrentUserReaction(undefined);
   };
 
-
   return (
     <KeyboardAvoidingView>
       <View style={styles.goalContainer}>
@@ -175,10 +173,24 @@ const Social = (props) => {
         </View>
         <View style={styles.post}>
           <View style={styles.boxed}>
-            <Text>{associatedGoal.objective}</Text>
+            <Text
+              onPress={() => {
+                navigation.navigate("GoalPage", {
+                  goal_id: associatedGoal.goal_id,
+                });
+              }}
+            >
+              {associatedGoal.objective}
+            </Text>
             {progress_point && Object.keys(associatedGoal).length !== 0 ? (
               <View>
-                <Text>{`Added ${
+                <Text
+                  onPress={() => {
+                    navigation.navigate("GoalPage", {
+                      goal_id: associatedGoal.goal_id,
+                    });
+                  }}
+                >{`Added ${
                   associatedGoal.progress[
                     associatedGoal.progress.length - 1
                   ][1] -
@@ -190,14 +202,20 @@ const Social = (props) => {
                 } ${associatedGoal.unit} to ${associatedGoal.target_value}  ${
                   associatedGoal.unit
                 } target`}</Text>
-                <Text>{`Current progress: ${
+                <Text
+                  onPress={() => {
+                    navigation.navigate("GoalPage", {
+                      goal_id: associatedGoal.goal_id,
+                    });
+                  }}
+                >{`Current progress: ${
                   associatedGoal.progress[associatedGoal.progress.length - 1][1]
                 } ${associatedGoal.unit}`}</Text>
               </View>
             ) : null}
           </View>
           <Text>{message}</Text>
-          <Text>{formatDate(datetime)}</Text>
+          <Text>{formatDatetime(datetime)}</Text>
         </View>
         <View style={styles.flexRow}>
           <View style={styles.awesome} />
@@ -254,7 +272,6 @@ const Social = (props) => {
             <TextInput
               style={styles.input}
               placeholder="leave a positive comment"
-
               onChangeText={(comment) => setCurrentComment(comment)}
               value={currentComment}
               onSubmitEditing={handleAddComment}
@@ -278,7 +295,9 @@ const Social = (props) => {
                     {item.owner}
                   </Text>
                   <Text style={styles.text}>{item.message}</Text>
-                  <Text style={styles.text}>{formatDate(item.datetime)}</Text>
+                  <Text style={styles.text}>
+                    {formatDatetime(item.datetime)}
+                  </Text>
                 </Card>
               )}
               keyExtractor={(item) => item.comment_id}
@@ -315,7 +334,6 @@ const styles = StyleSheet.create({
   },
 
   username: {
-
     color: "black",
     marginBottom: 15,
     fontWeight: "bold",
@@ -389,7 +407,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 30,
     flex: 1,
-
   },
   button: {
     backgroundColor: "#468705",
@@ -409,7 +426,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-evenly",
-
   },
   comment: {
     color: "white",
@@ -430,7 +446,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
   },
-
 });
 
 export default Social;

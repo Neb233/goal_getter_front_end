@@ -12,20 +12,21 @@ import SetGoalIntro from "../Set_Goal/SetGoalIntro";
 import { useContext } from "react";
 import { UserContext, UserProvider } from "../../context/user";
 import SearchUsers from "../Social/SearchUsers";
-
+import GoalPage from "../GoalPage/GoalPage";
 
 const Tab = createBottomTabNavigator();
 
 const Nav = ({ navigation }) => {
   const loggedInUser = useContext(UserContext);
   return (
-    <Tab.Navigator options={{ headerShown: false }}>
+    <Tab.Navigator  initialRouteName="Feed" options={{ headerShown: false }}>
       <Tab.Screen name="Feed" component={Feed} />
       <Tab.Screen name="SetGoal" component={SetGoal} />
       <Tab.Screen name="Profile" component={Profile} />
       {/* <Tab.Screen name='Calender' component={Calender} /> */}
       <Tab.Screen name="Login" component={LoginScreen} />
       <Tab.Screen name="UserPage" component={Goals} />
+      <Tab.Screen name="GoalPage" component={GoalPage} />
       <Tab.Screen name="SetGoalIntro" component={SetGoalIntro} />
       <Tab.Screen name="SearchUsers" component={SearchUsers} />
     </Tab.Navigator>

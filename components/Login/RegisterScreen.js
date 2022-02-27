@@ -21,6 +21,7 @@ import { getStorage, ref, uploadBytes } from "firebase/storage";
 import axios from "axios";
 import { updateProfile } from "firebase/auth";
 import { UserContext } from "../../context/user";
+import * as Animatable from 'react-native-animatable'
 
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -48,7 +49,7 @@ const RegisterScreen = () => {
   });
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={styles.container}>
       <Formik
         initialValues={{
           firstName: "",
@@ -83,62 +84,86 @@ const RegisterScreen = () => {
         }
       >
         {({ values, handleChange, handleSubmit, errors, touched }) => (
-          <KeyboardAvoidingView style={styles.container} behaviour="padding">
-            <View>
+          <KeyboardAvoidingView  behaviour="padding">
+            <View style={styles.header}>
+              <Text style={styles.title_text}>Register Your Account</Text>
+            </View>
+            
+
+            <Animatable.View 
+            animation='fadeInUpBig'
+            style={styles.footer}
+            >
+             <View style={styles.action}>
+               <Text style={styles.text_footer}>Email</Text>
               <TextInput
                 id="email"
                 name="email"
-                placeholder="email"
+              
                 value={values.email}
                 onChange={handleChange("email")}
-                style={styles.input}
+                style={styles.textInput}
               />
-              <Text>{touched.email && errors.email}</Text>
+              <Text style={styles.errorMsg}>{touched.email && errors.email}</Text>
             </View>
 
-            <View>
+            <View style={styles.action}>
+              <Text style={styles.text_footer}>Username</Text>
               <TextInput
                 id="username"
                 name="username"
-                placeholder="username"
+               
                 value={values.username}
                 onChange={handleChange("username")}
-                style={styles.input}
+                style={styles.textInput}
               />
-              <Text>{touched.username && errors.username}</Text>
+              <Text style={styles.errorMsg}>{touched.username && errors.username}</Text>
+              </View>
+
+
+              <View style={styles.action}>
+                <Text style={styles.text_footer}>Profile</Text>
               <TextInput
                 id="profile"
                 name="profile"
-                placeholder="profile"
+                
                 value={values.profile}
                 onChange={handleChange("profile")}
-                style={styles.input}
+                style={styles.textInput}
               ></TextInput>
+                </View>
+
+              <View style={styles.action}>
+                <Text style={styles.text_footer}>Password</Text>
               <TextInput
                 id="password"
                 name="password"
-                placeholder="password"
+                
                 value={values.password}
                 onChange={handleChange("password")}
-                style={styles.input}
+                style={styles.textInput}
                 secureTextEntry
               ></TextInput>
+              </View>
+
+
               <Text>
                 {`
-                Password should have: One Capital letter
-                             One Number 
-                             At least 4 characters Login
-                             Maximum 10 characters
+        Password should have:    One Capital letter
+                                 One Number 
+                                At least 4 characters Login
+                                 Maximum 10 characters
                 `}
               </Text>
               <Text>{touched.password && errors.password}</Text>
-            </View>
+           
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                 <Text style={styles.buttonText}>Sign Up</Text>
               </TouchableOpacity>
-            </View>
+          </View>
+            </Animatable.View>
           </KeyboardAvoidingView>
         )}
       </Formik>
@@ -149,52 +174,77 @@ const RegisterScreen = () => {
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
-  container: {},
-  titleText: {
-    padding: 20,
+  container: {
+    flex: 1,
+    backgroundColor: "#009387",
   },
+  
+  header: {
+    justifyContent: 'flex-end',
+    paddingHorizontal: 20,
+    paddingBottom: 50,
+    marginTop: 50,
+  },
+  title_text: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 30,
+  },
+  footer: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    paddingTop: 50,
+ },
 
-  inputContainer: {
-    width: "80%",
-  },
-  input: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
-  },
+ text_header: {
+  color: "#fff",
+  fontWeight: "bold",
+  fontSize: 30,
+},
+text_footer: {
+  color: "#05375a",
+  fontSize: 18,
+},
+action: {
+  flexDirection: "column",
+  marginTop: 10,
+  borderBottomWidth: 1,
+  borderBottomColor: "#f2f2f2",
+  paddingBottom: 5,
+},
 
-  buttonContainer: {
-    width: "60%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  registerText: {
-    padding: 20,
-  },
+textInput: {
+  padding: 5,
+  color: "black",
+  borderWidth: 1,
+  borderRadius: 5,
+},
+errorMsg: {
+  color: "#FF0000",
+  fontSize: 14,
+},
+buttonContainer: {
+  paddingBottom: 400,
+  width: "80%",
+},
+button: {
+  backgroundColor: "#009387",
+  alignItems: "flex-start",
+  marginTop: 40,
+  padding: 15,
+  borderRadius: 10,
+  marginBottom: 60,
+  textAlign: "center",
+},
+buttonText: {
+  color: "white",
+  fontWeight: "700",
+  fontSize: 16,
+},
+register_text: {
+  marginTop: 20,
+},
 });
