@@ -12,6 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import dateFormat, { masks } from "dateformat";
 import { getGoalByGoalId, getSubgoalsByGoalId } from "../../utils/api";
+import ProgressBar from "../../shared/ProgressBar";
 
 const GoalPage = ({ navigation, route }) => {
   const [goal, setGoal] = useState();
@@ -23,6 +24,9 @@ const GoalPage = ({ navigation, route }) => {
       setGoal(goal);
     });
     getSubgoalsByGoalId(goal_id).then((subgoals) => {
+      subgoals.sort((a, b) => {
+        return new Date(a.end_date).getTime() - new Date(b.end_date).getTime();
+      });
       setSubgoals(subgoals);
     });
   }, [goal_id]);
@@ -36,9 +40,40 @@ const GoalPage = ({ navigation, route }) => {
           </View>
           <View>
             {goal ? (
-              <Text style={styles.duedate}>
-                End date: {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
-              </Text>
+              <View>
+                <Text style={styles.duedate}>{goal.description}</Text>
+                <Text style={styles.duedate}>
+                  Start date:{" "}
+                  {dateFormat(goal.start_date, "dddd, mmmm dS, yyyy")}
+                </Text>
+                <Text style={styles.duedate}>
+                  End date: {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
+                </Text>
+                {goal.type === "progress" ? (
+                  <Text style={styles.duedate}>
+                    Current Progress:{" "}
+                    {`${
+                      goal.progress.length === 0
+                        ? 0
+                        : goal.progress[goal.progress.length - 1][1]
+                    } / ${goal.target_value} ${goal.unit}`}
+                  </Text>
+                ) : (
+                  <Text style={styles.duedate}>
+                    Current Progress:{" "}
+                    {`${
+                      subgoals.filter((subgoal) => {
+                        return subgoal.status === "completed";
+                      }).length
+                    } / ${subgoals.length} subgoals achieved`}
+                  </Text>
+                )}
+                <ProgressBar
+                  progress={goal.progress}
+                  target_value={goal.target_value}
+                  subgoals={subgoals}
+                />
+              </View>
             ) : (
               ""
             )}
@@ -55,10 +90,38 @@ const GoalPage = ({ navigation, route }) => {
                 <Text style={styles.title}>{item.objective}</Text>
               </View>
               <View>
-                <Text style={styles.duedate}>
-                  End date: {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
-                </Text>
+                <View>
+                  {item.start_date ? (
+                    <Text style={styles.duedate}>
+                      Start date:{" "}
+                      {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
+                    </Text>
+                  ) : null}
+                  <Text style={styles.duedate}>
+                    End date: {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
+                  </Text>
+                </View>
               </View>
+              {item.type === "progress" ? (
+                <View>
+                  <Text style={styles.duedate}>
+                    Current Progress:{" "}
+                    {`${
+                      item.progress.length === 0
+                        ? 0
+                        : item.progress[item.progress.length - 1][1]
+                    } / ${item.target_value} ${item.unit}`}
+                  </Text>
+                  <ProgressBar
+                    progress={item.progress}
+                    target_value={item.target_value}
+                  />
+                </View>
+              ) : item.status === "completed" ? (
+                <Text style={styles.duedate}>COMPLETED</Text>
+              ) : (
+                <Text style={styles.duedate}>Incomplete</Text>
+              )}
             </View>
           )}
         />
@@ -118,7 +181,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#5df542",
-    height: 100,
+    height: 160,
   },
   profPic: {
     width: 130,

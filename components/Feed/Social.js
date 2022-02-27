@@ -14,6 +14,7 @@ import {
   postReaction,
   deleteReaction,
   postComment,
+  getSubgoalsByGoalId,
 } from "../../utils/api";
 import { formatDatetime } from "../../utils/format";
 import {
@@ -23,6 +24,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
+import ProgressBar from "../../shared/ProgressBar";
 
 const currentUser = "jeff";
 
@@ -66,6 +68,7 @@ const Social = (props) => {
     proud: 0,
   });
   const [currentUserReaction, setCurrentUserReaction] = useState();
+  const [subgoals, setSubgoals] = useState([]);
 
   const {
     owner,
@@ -85,6 +88,9 @@ const Social = (props) => {
     } else {
       getGoalByGoalId(associated_id).then((goal) => {
         setAssociatedGoal(goal);
+      });
+      getSubgoalsByGoalId(associated_id).then((subgoals) => {
+        setSubgoals(subgoals);
       });
     }
     getCommentsByPost(post_id).then((comments) => {
@@ -182,7 +188,8 @@ const Social = (props) => {
             >
               {associatedGoal.objective}
             </Text>
-            {progress_point && Object.keys(associatedGoal).length !== 0 ? (
+            {progress_point !== null &&
+            Object.keys(associatedGoal).length !== 0 ? (
               <View>
                 <Text
                   onPress={() => {
@@ -191,13 +198,9 @@ const Social = (props) => {
                     });
                   }}
                 >{`Added ${
-                  associatedGoal.progress[
-                    associatedGoal.progress.length - 1
-                  ][1] -
+                  associatedGoal.progress[parseInt(progress_point)][1] -
                   (associatedGoal.progress.length > 1
-                    ? associatedGoal.progress[
-                        associatedGoal.progress.length - 2
-                      ][1]
+                    ? associatedGoal.progress[parseInt(progress_point) - 1][1]
                     : 0)
                 } ${associatedGoal.unit} to ${associatedGoal.target_value}  ${
                   associatedGoal.unit
@@ -208,12 +211,24 @@ const Social = (props) => {
                       goal_id: associatedGoal.goal_id,
                     });
                   }}
-                >{`Current progress: ${
-                  associatedGoal.progress[associatedGoal.progress.length - 1][1]
-                } ${associatedGoal.unit}`}</Text>
+                >{`New progress: ${associatedGoal.progress[progress_point][1]} ${associatedGoal.unit}`}</Text>
               </View>
             ) : null}
+            {Object.keys(associatedGoal).length !== 0 &&
+            (!associatedGoal.subgoal_id ||
+              associatedGoal.type !== "boolean") ? (
+              <ProgressBar
+                progress={
+                  associatedGoal.progress
+                    ? associatedGoal.progress.slice(0, progress_point + 1)
+                    : null
+                }
+                target_value={associatedGoal.target_value}
+                subgoals={subgoals}
+              />
+            ) : null}
           </View>
+
           <Text>{message}</Text>
           <Text>{formatDatetime(datetime)}</Text>
         </View>

@@ -10,26 +10,50 @@ import {
   ScrollView,
 } from "react-native";
 import { useState, useEffect } from "react";
-import { getGoalsByUser, getPostsByUser, getUser } from "../../utils/api";
+import {
+  getGoalsByUser,
+  getPostsByUser,
+  getSubgoalsByGoalId,
+  getUser,
+} from "../../utils/api";
 import dateFormat, { masks } from "dateformat";
 import Social from "../Feed/Social";
+import ProgressBar from "../../shared/ProgressBar";
 
 const Goals = ({ navigation, route }) => {
   const [goals, setGoals] = useState([]);
+  const [oldGoals, setOldGoals] = useState();
   const [userDetails, setUserDetails] = useState({ username: "", profile: "" });
   const [userPosts, setUserPosts] = useState([]);
   const [showGoals, setShowGoals] = useState(false);
+  const [subgoals, setSubgoals] = useState({});
   const { user } = route.params;
 
   useEffect(() => {
     getGoalsByUser(user).then((goals) => {
-      goals.filter((goal) => {
-        return (
-          new Date(goal.end_date).getTime() > Date.now() &&
-          new Date(goal.start_date).getTime() < Date.now()
-        );
+      goals.forEach((goal) => {
+        getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
+          setSubgoals((oldSubgoals) => {
+            const newSubgoals = { ...oldSubgoals };
+            newSubgoals[goal.goal_id] = subgoals;
+            return newSubgoals;
+          });
+        });
       });
-      setGoals(goals);
+
+      setGoals(
+        goals.filter((goal) => {
+          return (
+            new Date(goal.end_date).getTime() > Date.now() &&
+            new Date(goal.start_date).getTime() < Date.now()
+          );
+        })
+      );
+      setOldGoals(
+        goals.filter((goal) => {
+          return new Date(goal.end_date).getTime() < Date.now();
+        })
+      );
     });
     getPostsByUser(user).then((posts) => {
       setUserPosts(posts);
@@ -63,32 +87,127 @@ const Goals = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
       {showGoals ? (
-        <View style={styles.goalContainer}>
-          <Text style={styles.currentgoals}>Current Goals:</Text>
-          <FlatList
-            data={goals}
-            renderItem={({ item }) => (
-              <View style={styles.item}>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("GoalPage", {
-                      goal_id: item.goal_id,
-                    });
-                  }}
-                >
-                  <View>
-                    <Text style={styles.title}>{item.objective}</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.duedate}>
-                      End date:{" "}
-                      {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            )}
-          />
+        <View>
+          <View style={styles.goalContainer}>
+            <Text style={styles.currentgoals}>Current Goals:</Text>
+            <FlatList
+              data={goals}
+              renderItem={({ item }) => (
+                <View style={styles.item}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("GoalPage", {
+                        goal_id: item.goal_id,
+                      });
+                    }}
+                  >
+                    <View>
+                      <Text style={styles.title}>{item.objective}</Text>
+                    </View>
+                    <View>
+                      <Text>{item.description}</Text>
+                      <Text style={styles.duedate}>
+                        Start date:{" "}
+                        {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
+                      </Text>
+                      <Text style={styles.duedate}>
+                        End date:{" "}
+                        {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
+                      </Text>
+                      {item.type === "progress" ? (
+                        <Text style={styles.duedate}>
+                          Current Progress:{" "}
+                          {`${
+                            item.progress.length === 0
+                              ? 0
+                              : item.progress[item.progress.length - 1][1]
+                          } / ${item.target_value} ${item.unit}`}
+                        </Text>
+                      ) : (
+                        <Text style={styles.duedate}>
+                          Current Progress:{" "}
+                          {subgoals
+                            ? `${
+                                subgoals[item.goal_id].filter((subgoal) => {
+                                  return subgoal.status === "completed";
+                                }).length
+                              } / ${
+                                subgoals[item.goal_id].length
+                              } subgoals achieved`
+                            : null}
+                        </Text>
+                      )}
+                      <ProgressBar
+                        progress={item.progress}
+                        target_value={item.target_value}
+                        subgoals={subgoals[item.goal_id]}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          </View>
+          <View style={styles.goalContainer}>
+            <Text style={styles.currentgoals}>Past Goals:</Text>
+            <FlatList
+              data={oldGoals}
+              renderItem={({ item }) => (
+                <View style={styles.item}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("GoalPage", {
+                        goal_id: item.goal_id,
+                      });
+                    }}
+                  >
+                    <View>
+                      <Text style={styles.title}>{item.objective}</Text>
+                    </View>
+                    <View>
+                      <Text>{item.description}</Text>
+                      <Text style={styles.duedate}>
+                        Start date:{" "}
+                        {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
+                      </Text>
+                      <Text style={styles.duedate}>
+                        End date:{" "}
+                        {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
+                      </Text>
+                      {item.type === "progress" ? (
+                        <Text style={styles.duedate}>
+                          Current Progress:{" "}
+                          {`${
+                            item.progress.length === 0
+                              ? 0
+                              : item.progress[item.progress.length - 1][1]
+                          } / ${item.target_value} ${item.unit}`}
+                        </Text>
+                      ) : (
+                        <Text style={styles.duedate}>
+                          Current Progress:{" "}
+                          {subgoals
+                            ? `${
+                                subgoals[item.goal_id].filter((subgoal) => {
+                                  return subgoal.status === "completed";
+                                }).length
+                              } / ${
+                                subgoals[item.goal_id].length
+                              } subgoals achieved`
+                            : null}
+                        </Text>
+                      )}
+                      <ProgressBar
+                        progress={item.progress}
+                        target_value={item.target_value}
+                        subgoals={subgoals[item.goal_id]}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          </View>
         </View>
       ) : (
         <View>
@@ -105,7 +224,6 @@ export default Goals;
 
 const styles = StyleSheet.create({
   goalContainer: {
-    flex: 1,
     padding: 10,
     backgroundColor: "white",
     borderRadius: 10,
