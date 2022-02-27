@@ -188,7 +188,8 @@ const Social = (props) => {
             >
               {associatedGoal.objective}
             </Text>
-            {progress_point && Object.keys(associatedGoal).length !== 0 ? (
+            {progress_point !== null &&
+            Object.keys(associatedGoal).length !== 0 ? (
               <View>
                 <Text
                   onPress={() => {
@@ -197,13 +198,9 @@ const Social = (props) => {
                     });
                   }}
                 >{`Added ${
-                  associatedGoal.progress[
-                    associatedGoal.progress.length - 1
-                  ][1] -
+                  associatedGoal.progress[parseInt(progress_point)][1] -
                   (associatedGoal.progress.length > 1
-                    ? associatedGoal.progress[
-                        associatedGoal.progress.length - 2
-                      ][1]
+                    ? associatedGoal.progress[parseInt(progress_point) - 1][1]
                     : 0)
                 } ${associatedGoal.unit} to ${associatedGoal.target_value}  ${
                   associatedGoal.unit
@@ -214,16 +211,14 @@ const Social = (props) => {
                       goal_id: associatedGoal.goal_id,
                     });
                   }}
-                >{`Current progress: ${
-                  associatedGoal.progress[associatedGoal.progress.length - 1][1]
-                } ${associatedGoal.unit}`}</Text>
+                >{`New progress: ${associatedGoal.progress[progress_point][1]} ${associatedGoal.unit}`}</Text>
               </View>
             ) : null}
             {Object.keys(associatedGoal).length !== 0 &&
             (!associatedGoal.subgoal_id ||
               associatedGoal.type !== "boolean") ? (
               <ProgressBar
-                progress={associatedGoal.progress}
+                progress={associatedGoal.progress.slice(0, progress_point + 1)}
                 target_value={associatedGoal.target_value}
                 subgoals={associatedGoal.subgoals}
               />

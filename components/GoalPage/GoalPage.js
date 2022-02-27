@@ -41,6 +41,7 @@ const GoalPage = ({ navigation, route }) => {
           <View>
             {goal ? (
               <View>
+                <Text style={styles.duedate}>{goal.description}</Text>
                 <Text style={styles.duedate}>
                   Start date:{" "}
                   {dateFormat(goal.start_date, "dddd, mmmm dS, yyyy")}
@@ -48,6 +49,25 @@ const GoalPage = ({ navigation, route }) => {
                 <Text style={styles.duedate}>
                   End date: {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
                 </Text>
+                {goal.type === "progress" ? (
+                  <Text style={styles.duedate}>
+                    Current Progress:{" "}
+                    {`${
+                      goal.progress.length === 0
+                        ? 0
+                        : goal.progress[goal.progress.length - 1][1]
+                    } / ${goal.target_value} ${goal.unit}`}
+                  </Text>
+                ) : (
+                  <Text style={styles.duedate}>
+                    Current Progress:{" "}
+                    {`${
+                      subgoals.filter((subgoal) => {
+                        return subgoal.status === "completed";
+                      }).length
+                    } / ${subgoals.length} subgoals achieved`}
+                  </Text>
+                )}
                 <ProgressBar
                   progress={goal.progress}
                   target_value={goal.target_value}
@@ -71,22 +91,36 @@ const GoalPage = ({ navigation, route }) => {
               </View>
               <View>
                 <View>
-                  <Text style={styles.duedate}>
-                    Start date:{" "}
-                    {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
-                  </Text>
+                  {item.start_date ? (
+                    <Text style={styles.duedate}>
+                      Start date:{" "}
+                      {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
+                    </Text>
+                  ) : null}
                   <Text style={styles.duedate}>
                     End date: {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
                   </Text>
                 </View>
               </View>
               {item.type === "progress" ? (
-                <ProgressBar
-                  progress={item.progress}
-                  target_value={item.target_value}
-                />
+                <View>
+                  <Text style={styles.duedate}>
+                    Current Progress:{" "}
+                    {`${
+                      item.progress.length === 0
+                        ? 0
+                        : item.progress[item.progress.length - 1][1]
+                    } / ${item.target_value} ${item.unit}`}
+                  </Text>
+                  <ProgressBar
+                    progress={item.progress}
+                    target_value={item.target_value}
+                  />
+                </View>
+              ) : item.status === "completed" ? (
+                <Text style={styles.duedate}>COMPLETED</Text>
               ) : (
-                ""
+                <Text style={styles.duedate}>Incomplete</Text>
               )}
             </View>
           )}
@@ -147,7 +181,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#5df542",
-    height: 100,
+    height: 160,
   },
   profPic: {
     width: 130,
