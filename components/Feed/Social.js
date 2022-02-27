@@ -79,7 +79,6 @@ const Social = (props) => {
   useEffect(() => {
     if (associated_data_type === "subgoal") {
       getSubgoalBySubgoalId(associated_id).then((subgoal) => {
-        console.log(subgoal);
         setAssociatedGoal(subgoal);
       });
     } else {
@@ -162,7 +161,6 @@ const Social = (props) => {
           <Text
             style={styles.username}
             onPress={() => {
-              console.log("hello");
               navigation.navigate("UserPage", {
                 user: owner,
               });
@@ -263,7 +261,16 @@ const Social = (props) => {
               data={comments}
               renderItem={({ item }) => (
                 <Card>
-                  <Text style={styles.username}>{item.owner}</Text>
+                  <Text
+                    style={styles.username}
+                    onPress={() => {
+                      navigation.navigate("UserPage", {
+                        user: item.owner,
+                      });
+                    }}
+                  >
+                    {item.owner}
+                  </Text>
                   <Text style={styles.text}>{item.message}</Text>
                   <Text style={styles.text}>{formatDate(item.datetime)}</Text>
                 </Card>
