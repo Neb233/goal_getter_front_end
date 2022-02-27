@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
+
 import { TouchableOpacity, FlatList } from "react-native";
 import { useState, useEffect } from "react";
 import { KeyboardAvoidingView } from "react-native";
@@ -119,6 +120,7 @@ const Social = (props) => {
     });
   };
 
+
   const handleAddComment = () => {
     postComment(post_id, currentUser, currentComment).then((comment) => {
       console.log(comment);
@@ -153,11 +155,13 @@ const Social = (props) => {
     setCurrentUserReaction(undefined);
   };
 
+
   return (
     <KeyboardAvoidingView>
       <View style={styles.goalContainer}>
         <View style={styles.userInfo}>
           <View style={styles.profilePic} />
+
           <Text
             style={styles.username}
             onPress={() => {
@@ -234,6 +238,7 @@ const Social = (props) => {
               </Menu>
             </MenuProvider>
           )}
+
           <TouchableOpacity
             style={styles.comButton}
             onPress={() => {
@@ -249,6 +254,7 @@ const Social = (props) => {
             <TextInput
               style={styles.input}
               placeholder="leave a positive comment"
+
               onChangeText={(comment) => setCurrentComment(comment)}
               value={currentComment}
               onSubmitEditing={handleAddComment}
@@ -307,7 +313,9 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
+
   username: {
+
     color: "black",
     marginBottom: 15,
     fontWeight: "bold",
@@ -320,6 +328,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 10,
   },
+
   awesome: {
     height: 30,
     width: 30,
@@ -344,6 +353,7 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
     borderRadius: 15,
   },
+
   profilePic: {
     height: 40,
     width: 40,
@@ -358,6 +368,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 10,
   },
+
   goal: {
     alignItems: "center",
     justifyContent: "center",
@@ -378,6 +389,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 30,
     flex: 1,
+
   },
   button: {
     backgroundColor: "#468705",
@@ -387,6 +399,7 @@ const styles = StyleSheet.create({
   comButton: {
     backgroundColor: "#4892b7",
     borderRadius: 8,
+
     marginTop: 40,
     marginLeft: 10,
     marginBottom: 30,
@@ -396,6 +409,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-evenly",
+
   },
   comment: {
     color: "white",
@@ -408,6 +422,7 @@ const styles = StyleSheet.create({
     borderColor: "grey",
     borderRadius: 50,
   },
+
   redText: {
     color: "red",
   },
@@ -415,6 +430,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
   },
+
 });
 
 export default Social;

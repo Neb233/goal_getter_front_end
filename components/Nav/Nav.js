@@ -12,14 +12,14 @@ import SetGoalIntro from "../Set_Goal/SetGoalIntro";
 import { useContext } from "react";
 import { UserContext, UserProvider } from "../../context/user";
 import SearchUsers from "../Social/SearchUsers";
-import { StackNavigator } from "../../App";
+
 
 const Tab = createBottomTabNavigator();
 
 const Nav = ({ navigation }) => {
   const loggedInUser = useContext(UserContext);
   return (
-    <Tab.Navigator initialRouteName="Feed" options={{ headerShown: false }}>
+    <Tab.Navigator options={{ headerShown: false }}>
       <Tab.Screen name="Feed" component={Feed} />
       <Tab.Screen name="SetGoal" component={SetGoal} />
       <Tab.Screen name="Profile" component={Profile} />
@@ -31,4 +31,5 @@ const Nav = ({ navigation }) => {
     </Tab.Navigator>
   );
 };
+
 export default Nav;

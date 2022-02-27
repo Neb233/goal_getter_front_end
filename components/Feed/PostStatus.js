@@ -27,6 +27,7 @@ const PostStatus = ({
       associated_id: subgoal,
       owner: ownerP,
       datetime: new Date(Date.now()),
+
       progress_point:
         goal.type === "progress" ? goal.progress.length : undefined,
       message: message,
@@ -36,6 +37,7 @@ const PostStatus = ({
         newFriendPost.unshift(res.post);
         return newFriendPost;
       });
+
     });
 
     setModalVisible(!modalVisible);
@@ -50,7 +52,7 @@ const PostStatus = ({
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed");
+
           setModalVisible(!modalVisible);
         }}
       >

@@ -17,19 +17,27 @@ import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UserContext, UserProvider } from "../../context/user";
 
+import { useNavigation } from "@react-navigation/native";
+
 const Profile = () => {
-  // const  loggedInUser  = useContext(UserContext)
+  // const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+
+  // const navigation = useNavigation();
+
 
   const [details, Setdetails] = useState({});
   const [image, setImage] = useState(null);
   const [profPic, setprofPic] = useState("");
 
   const user = auth.currentUser;
-  const displayName = user.displayName;
+
+  console.log(user);
+
+
   const storage = getStorage();
 
   useEffect(() => {
-    getUser(displayName).then((res) => {
+    getUser(user.displayName).then((res) => {
       Setdetails(res[0]);
     });
   }, []);
@@ -65,17 +73,32 @@ const Profile = () => {
     updateProfile(user, { photoURL: `${displayName}: Profile Picture` });
   };
 
-  getDownloadURL(ref(storage, `${displayName}: Profile Picture`)).then(
-    (url) => {
-      setprofPic(url);
+
+  if (user !== null) {
+    if (user.photoURL !== null) {
+      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
+        (url) => {
+          setprofPic(url);
+        }
+      );
+    } else {
+      console.log("testing");
     }
-  );
+  }
 
   return (
-    <UserProvider>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      {user !== null ? (
         <View style={styles.header}>
-          <Image source={{ uri: profPic }} style={styles.profPic} />
+          {user.photoURL === null ? (
+            <Image
+              source={require("./blank_avatar.png")}
+              style={styles.profPic}
+            />
+          ) : (
+            <Image source={{ uri: profPic }} style={styles.profPic} />
+          )}
+
           <View style={styles.body}>
             <View style={styles.bodyContent}>
               <Text style={styles.userName}>{details.username}</Text>
@@ -108,8 +131,13 @@ const Profile = () => {
             </View>
           </View>
         </View>
-      </View>
-    </UserProvider>
+      ) : (
+        <View>
+          <Text>Login</Text>
+        </View>
+      )}
+    </View>
+
   );
 };
 

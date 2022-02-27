@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
+
 import Goals from "../Profile/UserPage";
 import Social from "./Social";
 import Subgoals from "./Subgoals";
@@ -9,6 +10,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SetGoal from "../Set_Goal/SetGoal";
 import Nav from "../Nav/Nav";
 import GoalStatus from "./GoalStatus";
+
 import { getFriends, getPostsByUser } from "../../utils/api";
 
 const Feed = ({ navigation }) => {
@@ -45,8 +47,8 @@ const Feed = ({ navigation }) => {
       <Subgoals setFriendPosts={setFriendPosts} />
       <View style={styles.personalWrapper}>
         {/* <Text style={styles.sectionTitle}>Goal Status:</Text>
-
         <View style={styles.status}><GoalStatus /></View> */}
+
         <View>
           <TouchableOpacity
             style={styles.takeToCalendar}
