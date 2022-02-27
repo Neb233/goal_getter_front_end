@@ -20,26 +20,32 @@ import { UserContext, UserProvider } from "../../context/user";
 import { useNavigation } from "@react-navigation/native";
 
 const Profile = () => {
-  // const { loggedInUser, setLoggedInUser } = useContext(UserContext);
-
-  // const navigation = useNavigation();
+ 
 
 
-  const [details, Setdetails] = useState({});
+  const [details, SetDetails] = useState({});
   const [image, setImage] = useState(null);
-  const [profPic, setprofPic] = useState("");
+  const [profPic, SetProfPic] = useState("");
 
   const user = auth.currentUser;
 
-  console.log(user);
+ 
 
 
   const storage = getStorage();
 
   useEffect(() => {
     getUser(user.displayName).then((res) => {
-      Setdetails(res[0]);
-    });
+      SetDetails(res[0]);
+        
+    })
+    if (user.photoURL !== null) {
+      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
+        (url) => {
+          SetProfPic(url);
+        }
+      );
+    } 
   }, []);
 
   const handleSignOut = () => {
@@ -52,6 +58,8 @@ const Profile = () => {
       });
   };
 
+
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -61,43 +69,38 @@ const Profile = () => {
     });
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      SetProfPic(result.uri);
       const storage = getStorage();
-      const refo = ref(storage, `${displayName}: Profile Picture`);
+      const refo = ref(storage, `${user.displayName}: Profile Picture`);
 
       const img = await fetch(result.uri);
       const bytes = await img.blob();
 
       await uploadBytes(refo, bytes);
     }
-    updateProfile(user, { photoURL: `${displayName}: Profile Picture` });
+    updateProfile(user, { photoURL: `${user.displayName}: Profile Picture` });
+    
   };
 
 
-  if (user !== null) {
-    if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
-        (url) => {
-          setprofPic(url);
-        }
-      );
-    } else {
-      console.log("testing");
-    }
-  }
+
+ 
+ 
+    
+
+
+
+
 
   return (
     <View style={styles.container}>
-      {user !== null ? (
+      
         <View style={styles.header}>
-          {user.photoURL === null ? (
-            <Image
-              source={require("./blank_avatar.png")}
-              style={styles.profPic}
-            />
-          ) : (
+
+
+         
             <Image source={{ uri: profPic }} style={styles.profPic} />
-          )}
+          
 
           <View style={styles.body}>
             <View style={styles.bodyContent}>
@@ -131,11 +134,7 @@ const Profile = () => {
             </View>
           </View>
         </View>
-      ) : (
-        <View>
-          <Text>Login</Text>
-        </View>
-      )}
+    
     </View>
 
   );
