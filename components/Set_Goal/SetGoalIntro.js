@@ -28,7 +28,6 @@ const GoalSchema = yup.object({
 });
 
 const SetGoalIntro = ({ navigation, route }) => {
-  console.log(navigation);
   const [modalOpen, setModalOpen] = useState(false);
   const [hideProgressOptions, setHideProgressOptions] = useState(true);
 

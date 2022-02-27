@@ -81,6 +81,7 @@ const Social = (props) => {
   } = props.postDetails;
 
   useEffect(() => {
+    setAssociatedGoal({});
     if (associated_data_type === "subgoal") {
       getSubgoalBySubgoalId(associated_id).then((subgoal) => {
         setAssociatedGoal(subgoal);
@@ -118,7 +119,7 @@ const Social = (props) => {
         }
       });
     });
-  }, []);
+  }, [owner]);
 
   const handleCommentClick = () => {
     setIsShowing((currValue) => {
@@ -128,7 +129,6 @@ const Social = (props) => {
 
   const handleAddComment = () => {
     postComment(post_id, currentUser, currentComment).then((comment) => {
-      console.log(comment);
       setComments((oldComments) => {
         const newComments = [...oldComments];
         newComments.push(comment);
@@ -197,21 +197,31 @@ const Social = (props) => {
                       goal_id: associatedGoal.goal_id,
                     });
                   }}
-                >{`Added ${
-                  associatedGoal.progress[parseInt(progress_point)][1] -
-                  (associatedGoal.progress.length > 1
-                    ? associatedGoal.progress[parseInt(progress_point) - 1][1]
-                    : 0)
-                } ${associatedGoal.unit} to ${associatedGoal.target_value}  ${
-                  associatedGoal.unit
-                } target`}</Text>
+                >
+                  {associatedGoal.progress
+                    ? `Added ${
+                        associatedGoal.progress[parseInt(progress_point)][1] -
+                        (associatedGoal.progress.length > 1
+                          ? associatedGoal.progress[
+                              parseInt(progress_point) - 1
+                            ][1]
+                          : 0)
+                      } ${associatedGoal.unit} to ${
+                        associatedGoal.target_value
+                      }  ${associatedGoal.unit} target`
+                    : null}
+                </Text>
                 <Text
                   onPress={() => {
                     navigation.navigate("GoalPage", {
                       goal_id: associatedGoal.goal_id,
                     });
                   }}
-                >{`New progress: ${associatedGoal.progress[progress_point][1]} ${associatedGoal.unit}`}</Text>
+                >
+                  {associatedGoal.progress
+                    ? `New progress: ${associatedGoal.progress[progress_point][1]} ${associatedGoal.unit}`
+                    : null}
+                </Text>
               </View>
             ) : null}
             {Object.keys(associatedGoal).length !== 0 &&
