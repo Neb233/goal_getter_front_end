@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -7,12 +7,13 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { patchSubGoalbyId } from "../../utils/api";
+
 import PostStatus from "./PostStatus";
 
-const PatchSubGoal = ({ goal, goals, goalUnit }) => {
+import { patchGoalbyId, patchSubGoalbyId } from "../../utils/api";
+
+const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
   const [progress, setProgress] = useState(0);
 
   const submitTime = new Date(Date.now());
@@ -23,13 +24,21 @@ const PatchSubGoal = ({ goal, goals, goalUnit }) => {
     submitTime.getDate()
   );
 
-  const patchObject = {
+  let patchObject = {
     date: submitDate,
-    value: progress,
+    value: 0,
   };
+
+  useEffect(() => {
+    patchObject = {
+      date: submitDate,
+      value: parseInt(progress),
+    };
+  }, [progress]);
 
   const onSubmit = () => {
     patchSubGoalbyId(goal.subgoal_id, patchObject);
+    patchGoalbyId(goal.goal_id, patchObject);
     console.warn(goal);
   };
 
@@ -55,6 +64,7 @@ const PatchSubGoal = ({ goal, goals, goalUnit }) => {
           subgoal={goal.subgoal_id}
           ownerP={goal.owner}
           goalUnit={goalUnit}
+          setFriendPosts={setFriendPosts}
         />
       </View>
     </View>
