@@ -64,4 +64,4 @@ const formatSubgoalsForCalendar = (subgoals) => {
   return formattedSubgoals;
 };
 
-export { formatSubgoalsForCalendar };
+export { formatSubgoalsForCalendar, formatDate };
