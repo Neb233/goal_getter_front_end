@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import Goals from "../Profile/Goals";
+import Goals from "../Profile/UserPage";
 import Social from "./Social";
 import Subgoals from "./Subgoals";
 import { TouchableOpacity, FlatList } from "react-native";
@@ -12,6 +12,7 @@ import GoalStatus from "./GoalStatus";
 import { getFriends, getPostsByUser } from "../../utils/api";
 
 const Feed = ({ navigation }) => {
+  console.log(navigation);
   const currentUser = "jeff";
 
   const [friendPosts, setFriendPosts] = useState([]);

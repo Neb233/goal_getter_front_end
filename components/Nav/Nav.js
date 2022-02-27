@@ -6,11 +6,13 @@ import SetGoal from "../Set_Goal/SetGoal";
 import Social from "../Feed/Social";
 // import Calender from '../Calender/Calender';
 import Profile from "../Profile/Profile";
+import Goals from "../Profile/UserPage";
 import LoginScreen from "../Login/LoginScreen";
 import SetGoalIntro from "../Set_Goal/SetGoalIntro";
 import { useContext } from "react";
 import { UserContext, UserProvider } from "../../context/user";
 import SearchUsers from "../Social/SearchUsers";
+import { StackNavigator } from "../../App";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,7 +25,8 @@ const Nav = ({ navigation }) => {
       <Tab.Screen name="Profile" component={Profile} />
       {/* <Tab.Screen name='Calender' component={Calender} /> */}
       <Tab.Screen name="Login" component={LoginScreen} />
-      <Tab.Screen name="SGIntro" component={SetGoalIntro} />
+      <Tab.Screen name="UserPage" component={Goals} />
+      <Tab.Screen name="SetGoalIntro" component={SetGoalIntro} />
       <Tab.Screen name="SearchUsers" component={SearchUsers} />
     </Tab.Navigator>
   );
