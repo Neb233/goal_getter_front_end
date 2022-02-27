@@ -14,7 +14,6 @@ import GoalStatus from "./GoalStatus";
 import { getFriends, getPostsByUser } from "../../utils/api";
 
 const Feed = ({ navigation }) => {
-  console.log(navigation);
   const currentUser = "jeff";
 
   const [friendPosts, setFriendPosts] = useState([]);

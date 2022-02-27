@@ -35,6 +35,7 @@ const Goals = ({ navigation, route }) => {
     setGoals([]);
     setFutureGoals([]);
     setOldGoals([]);
+    setShowGoals(false);
     getGoalsByUser(user).then((goals) => {
       goals.forEach((goal) => {
         getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
@@ -136,7 +137,7 @@ const Goals = ({ navigation, route }) => {
                       ) : (
                         <Text style={styles.duedate}>
                           Current Progress:{" "}
-                          {Object.keys(subgoals).length > 0
+                          {subgoals[item.goal_id]
                             ? `${
                                 subgoals[item.goal_id].filter((subgoal) => {
                                   return subgoal.status === "completed";
@@ -147,11 +148,13 @@ const Goals = ({ navigation, route }) => {
                             : null}
                         </Text>
                       )}
-                      <ProgressBar
-                        progress={item.progress}
-                        target_value={item.target_value}
-                        subgoals={subgoals[item.goal_id]}
-                      />
+                      {item.progress || subgoals[item.goal_id] ? (
+                        <ProgressBar
+                          progress={item.progress}
+                          target_value={item.target_value}
+                          subgoals={subgoals[item.goal_id]}
+                        />
+                      ) : null}
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -196,7 +199,7 @@ const Goals = ({ navigation, route }) => {
                       ) : (
                         <Text style={styles.duedate}>
                           Current Progress:{" "}
-                          {subgoals
+                          {subgoals[item.goal_id]
                             ? `${
                                 subgoals[item.goal_id].filter((subgoal) => {
                                   return subgoal.status === "completed";
@@ -207,11 +210,13 @@ const Goals = ({ navigation, route }) => {
                             : null}
                         </Text>
                       )}
-                      <ProgressBar
-                        progress={item.progress}
-                        target_value={item.target_value}
-                        subgoals={subgoals[item.goal_id]}
-                      />
+                      {item.progress || subgoals[item.goal_id] ? (
+                        <ProgressBar
+                          progress={item.progress}
+                          target_value={item.target_value}
+                          subgoals={subgoals[item.goal_id]}
+                        />
+                      ) : null}
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -256,7 +261,7 @@ const Goals = ({ navigation, route }) => {
                       ) : (
                         <Text style={styles.duedate}>
                           Current Progress:{" "}
-                          {subgoals
+                          {subgoals[item.goal_id]
                             ? `${
                                 subgoals[item.goal_id].filter((subgoal) => {
                                   return subgoal.status === "completed";
@@ -267,11 +272,13 @@ const Goals = ({ navigation, route }) => {
                             : null}
                         </Text>
                       )}
-                      <ProgressBar
-                        progress={item.progress}
-                        target_value={item.target_value}
-                        subgoals={subgoals[item.goal_id]}
-                      />
+                      {item.progress || subgoals[item.goal_id] ? (
+                        <ProgressBar
+                          progress={item.progress}
+                          target_value={item.target_value}
+                          subgoals={subgoals[item.goal_id]}
+                        />
+                      ) : null}
                     </View>
                   </TouchableOpacity>
                 </View>
