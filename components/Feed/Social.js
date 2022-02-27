@@ -218,9 +218,13 @@ const Social = (props) => {
             (!associatedGoal.subgoal_id ||
               associatedGoal.type !== "boolean") ? (
               <ProgressBar
-                progress={associatedGoal.progress.slice(0, progress_point + 1)}
+                progress={
+                  associatedGoal.progress
+                    ? associatedGoal.progress.slice(0, progress_point + 1)
+                    : null
+                }
                 target_value={associatedGoal.target_value}
-                subgoals={associatedGoal.subgoals}
+                subgoals={subgoals}
               />
             ) : null}
           </View>
