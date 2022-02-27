@@ -153,6 +153,12 @@ export const getSubgoalBySubgoalId = (subgoal_id) => {
   });
 };
 
+export const getSubgoalsByGoalId = (goal_id) => {
+  return goalgetterApi.get(`/goals/${goal_id}/subgoals`).then(({ data }) => {
+    return data.subgoals;
+  });
+};
+
 export const getCommentsByPost = (post_id) => {
   return goalgetterApi.get(`/posts/${post_id}/comments`).then(({ data }) => {
     return data.comments;
