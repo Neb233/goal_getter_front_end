@@ -1,25 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import Goals from "../Profile/Goals";
+
+import Goals from "../Profile/UserPage";
 import Social from "./Social";
-import Subgoals from "./Subgoals.js";
-import { TouchableOpacity } from "react-native";
+import Subgoals from "./Subgoals";
+import { TouchableOpacity, FlatList } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SetGoal from "../Set_Goal/SetGoal";
 import Nav from "../Nav/Nav";
 import GoalStatus from "./GoalStatus";
 
+import { getFriends, getPostsByUser } from "../../utils/api";
+
 const Feed = ({ navigation }) => {
+  console.log(navigation);
+  const currentUser = "jeff";
+
+  const [friendPosts, setFriendPosts] = useState([]);
+
+  useEffect(() => {
+    getFriends(currentUser)
+      .then((friends) => {
+        friends.push(currentUser);
+        const postPromises = friends.map((friend) => {
+          return getPostsByUser(friend);
+        });
+        return Promise.all(postPromises);
+      })
+      .then((posts) => {
+        let combinedPostArray = [];
+        posts.forEach((userPosts) => {
+          combinedPostArray = [...combinedPostArray, ...userPosts];
+        });
+        combinedPostArray.sort((a, b) => {
+          return (
+            new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
+          );
+        });
+        setFriendPosts(combinedPostArray);
+      });
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
-      <Subgoals />
+      <Subgoals setFriendPosts={setFriendPosts} />
       <View style={styles.personalWrapper}>
-        <Text style={styles.sectionTitle}>Goal Status:</Text>
+        {/* <Text style={styles.sectionTitle}>Goal Status:</Text>
+        <View style={styles.status}><GoalStatus /></View> */}
 
-        <View style={styles.status}>
-          <GoalStatus />
-        </View>
         <View>
           <TouchableOpacity
             style={styles.takeToCalendar}
@@ -33,16 +62,10 @@ const Feed = ({ navigation }) => {
         <Text style={styles.friends}>Friends feed</Text>
 
         <View>
-          <Social
-            text={"Michael Higgins"}
-            upload={"Just smashed out a double marathon"}
+          <FlatList
+            data={friendPosts}
+            renderItem={({ item }) => <Social postDetails={item} />}
           />
-          <Social
-            text={"Andrew Browne"}
-            upload={"Man golf is not going well, but Im trying"}
-          />
-          <Social text={"Ben Bartram"} upload={"Started making the nav bar!"} />
-          <Social text={"Joe Valentine"} upload={"Burritos"} />
         </View>
       </View>
     </ScrollView>
@@ -56,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#abbabe",
   },
   personalWrapper: {
-    height: 220,
+    height: "fitContents",
     borderRadius: 10,
     backgroundColor: "white",
     padding: 10,

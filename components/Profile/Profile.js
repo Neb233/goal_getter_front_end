@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UserContext, UserProvider } from "../../context/user";
+
 import { useNavigation } from "@react-navigation/native";
 
 const Profile = () => {
@@ -23,12 +24,15 @@ const Profile = () => {
 
   // const navigation = useNavigation();
 
+
   const [details, Setdetails] = useState({});
   const [image, setImage] = useState(null);
   const [profPic, setprofPic] = useState("");
 
   const user = auth.currentUser;
+
   console.log(user);
+
 
   const storage = getStorage();
 
@@ -69,6 +73,7 @@ const Profile = () => {
     updateProfile(user, { photoURL: `${displayName}: Profile Picture` });
   };
 
+
   if (user !== null) {
     if (user.photoURL !== null) {
       getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
@@ -93,6 +98,7 @@ const Profile = () => {
           ) : (
             <Image source={{ uri: profPic }} style={styles.profPic} />
           )}
+
           <View style={styles.body}>
             <View style={styles.bodyContent}>
               <Text style={styles.userName}>{details.username}</Text>
@@ -131,6 +137,7 @@ const Profile = () => {
         </View>
       )}
     </View>
+
   );
 };
 

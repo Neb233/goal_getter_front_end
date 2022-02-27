@@ -26,9 +26,26 @@ export const getSubGoalsByUser = (username) => {
   });
 };
 
-export const patchSubGoalbyId = (subgoal_id) => {
+export const patchSubGoalbyId = (subgoal_id, patchObject) => {
+  patchObject.date = new Date(patchObject.date);
+  console.log(subgoal_id);
+  console.log(patchObject);
   return goalgetterApi
-    .patch(`/subgoals/${subgoal_id}/progress`)
+    .patch(`/subgoals/${subgoal_id}/progress`, patchObject)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+};
+
+export const patchGoalbyId = (goal_id, patchObject) => {
+  patchObject.date = new Date(patchObject.date);
+  console.log(goal_id);
+  console.log(patchObject);
+  return goalgetterApi
+    .patch(`/goals/${goal_id}/progress`, patchObject)
     .then(({ data }) => {
       return data;
     });
@@ -101,6 +118,12 @@ export const postGoal = (goalProperties, owner = "jeff") => {
     });
 };
 
+export const getPostsByUser = (user) => {
+  return goalgetterApi.get(`/posts/${user}`).then(({ data }) => {
+    return data.posts;
+  });
+};
+
 export const postSubgoal = (subgoal, goal_id, owner = "jeff") => {
   subgoal.owner = owner;
   if (subgoal.start_date) {
@@ -115,5 +138,72 @@ export const postSubgoal = (subgoal, goal_id, owner = "jeff") => {
     })
     .catch((err) => {
       console.log(err.response);
+    });
+};
+
+export const getGoalByGoalId = (goal_id) => {
+  return goalgetterApi.get(`/goals/${goal_id}`).then(({ data }) => {
+    return data.goal;
+  });
+};
+
+export const getSubgoalBySubgoalId = (subgoal_id) => {
+  return goalgetterApi.get(`/subgoals/${subgoal_id}`).then(({ data }) => {
+    return data.subgoal;
+  });
+};
+
+export const getCommentsByPost = (post_id) => {
+  return goalgetterApi.get(`/posts/${post_id}/comments`).then(({ data }) => {
+    return data.comments;
+  });
+};
+
+export const getReactionsByPost = (post_id) => {
+  return goalgetterApi.get(`/posts/${post_id}/reactions`).then(({ data }) => {
+    return data.reactions;
+  });
+};
+
+export const postReaction = (post_id, reactionValue, owner) => {
+  let reaction = undefined;
+
+  switch (reactionValue) {
+    case "awesome":
+      reaction = "Awesome!";
+      break;
+    case "congrats":
+      reaction = "Congratulations!";
+      break;
+    case "encourage":
+      reaction = "Keep on going";
+      break;
+    case "proud":
+      reaction = "I'm proud of you";
+      break;
+  }
+
+  const postObject = { reaction, owner };
+  return goalgetterApi
+    .post(`/posts/${post_id}/reactions`, postObject)
+    .then(({ data }) => {
+      return data.reaction.reaction_id;
+    });
+};
+
+export const deleteReaction = (reaction_id) => {
+  return goalgetterApi.delete(`/reactions/${reaction_id}`);
+};
+
+export const postComment = (post_id, owner, message) => {
+  const datetime = new Date(Date.now());
+  const postObject = { owner, message, datetime };
+  return goalgetterApi
+    .post(`/posts/${post_id}/comments`, postObject)
+    .then(({ data }) => {
+      return data.comment[0];
+    })
+    .catch((err) => {
+      console.log(err.response.data);
     });
 };

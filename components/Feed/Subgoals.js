@@ -14,7 +14,9 @@ import PatchSubGoal from "./PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import PostStatus from "./PostStatus";
 
-const Subgoals = () => {
+
+const Subgoals = ({ setFriendPosts }) => {
+
   const [goals, setGoals] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState("jeff");
   const { owner } = useParams();
@@ -35,7 +37,9 @@ const Subgoals = () => {
           {goals.map((goal) => {
             const type = goal.type === "progress";
             return (
-              <View style={styles.subGoal}>
+
+              <View key={goal.subgoal_id} style={styles.subGoal}>
+
                 <View style={styles.pageContent}>
                   {type ? (
                     <View style={styles.pageContent}>
@@ -47,6 +51,9 @@ const Subgoals = () => {
                           setGoals={setGoals}
                           goal={goal}
                           goalUnit={goal.unit}
+
+                          setFriendPosts={setFriendPosts}
+
                         />
                         <Text style={styles.unit}>{goal.unit}</Text>
                       </View>
