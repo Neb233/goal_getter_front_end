@@ -1,43 +1,47 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, FlatList, TouchableOpacity } from "react-native";
-import { useState, useEffect} from "react";
-import { getGoalsByUser } from "../../utils/api"
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import { useState, useEffect } from "react";
+import { getGoalsByUser } from "../../utils/api";
 import dateFormat, { masks } from "dateformat";
 
 const Goals = ({ navigation }) => {
-const [goals, setGoals] = useState([]);
-const user = "jeff"
+  const [goals, setGoals] = useState([]);
+  const user = "jeff";
 
-
-useEffect(() => {
-getGoalsByUser(user).then((goals) => {
-  setGoals(goals)
-})
-}, [user]);
-
-
+  useEffect(() => {
+    getGoalsByUser(user).then((goals) => {
+      setGoals(goals);
+    });
+  }, [user]);
 
   return (
-  
-      <View style={styles.goalContainer}>
-        <Text style={styles.currentgoals}>Current Goals:</Text>
+    <View style={styles.goalContainer}>
+      <Text style={styles.currentgoals}>Current Goals:</Text>
       <FlatList
         data={goals}
         renderItem={({ item }) => (
           <View style={styles.item}>
-          <TouchableOpacity onPress={navigation.navigate}>
-            <View>
-              <Text style={styles.title}>{item.objective}</Text>
+            <TouchableOpacity onPress={navigation.navigate}>
+              <View>
+                <Text style={styles.title}>{item.objective}</Text>
               </View>
               <View>
-              <Text style={styles.duedate}>End date: {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}</Text>
+                <Text style={styles.duedate}>
+                  End date: {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
+                </Text>
               </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
           </View>
         )}
       />
-      </View>
-  
+    </View>
   );
 };
 export default Goals;
@@ -49,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     marginTop: 10,
-    marginBottom:10,
+    marginBottom: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -61,10 +65,10 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: "#abbabe",
-borderRadius:5,
+    borderRadius: 5,
     flex: 1,
-    margin:2,
-    marginTop:10,
+    margin: 2,
+    marginTop: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -73,23 +77,21 @@ borderRadius:5,
     shadowOpacity: 0.6,
     shadowRadius: 3.84,
     elevation: 5,
-   
   },
   title: {
     fontWeight: "bold",
     color: "white",
     marginTop: 15,
-    margin: 5
-    
+    margin: 5,
   },
   duedate: {
     color: "white",
     marginLeft: 130,
     marginRight: 5,
-    marginBottom:2
+    marginBottom: 2,
   },
   currentgoals: {
     fontWeight: "bold",
-    margin: 5
-  }
+    margin: 5,
+  },
 });

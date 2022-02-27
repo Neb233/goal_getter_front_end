@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput } from "react-native";
 import { TouchableOpacity, FlatList } from "react-native";
 import { useState, useEffect } from "react";
 import { KeyboardAvoidingView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Card from "../../shared/card";
 import {
   getCommentsByPost,
@@ -52,6 +53,7 @@ const getReactionCount = (reactions) => {
 };
 
 const Social = (props) => {
+  const navigation = useNavigation();
   const [isShowing, setIsShowing] = useState(false);
   const [comments, setComments] = useState([]);
   const [currentComment, setCurrentComment] = useState("");
@@ -157,7 +159,17 @@ const Social = (props) => {
       <View style={styles.goalContainer}>
         <View style={styles.userInfo}>
           <View style={styles.profilePic} />
-          <Text style={styles.username}>{owner}</Text>
+          <Text
+            style={styles.username}
+            onPress={() => {
+              console.log("hello");
+              navigation.navigate("UserPage", {
+                user: owner,
+              });
+            }}
+          >
+            {owner}
+          </Text>
         </View>
         <View style={styles.post}>
           <View style={styles.boxed}>
