@@ -19,13 +19,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { UserContext, UserProvider } from "./context/user";
 import Goals from "./components/Profile/UserPage";
+import GoalPage from "./components/GoalPage/GoalPage";
 
 import { Provider as PaperProvider } from "react-native-paper";
 import RootStack from "./components/RootStack/RootStack";
 const Stack = createNativeStackNavigator();
 
 const App = ({ navigation }) => {
-  const [profile, SetProfile] = useState({});
+  const [profile, SetProfile] = useState({ username: "jeff" });
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -57,7 +58,7 @@ const App = ({ navigation }) => {
             <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
 
             {/* <Stack.Screen name="Nav" component={Nav} options={{headerShown: false}} /> */}
-
+            <Stack.Screen name="GoalPage" component={GoalPage} />
             <Stack.Screen name="Register" component={RegisterScreen} />
           </Stack.Navigator>
         ) : (
