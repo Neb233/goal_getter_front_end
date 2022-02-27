@@ -1,19 +1,16 @@
 import React from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import Goals from "../Goals/Goals";
-import Social from "../Social/Social";
-import Subgoals from "../PatchGoals/Subgoals";
+import Goals from "../Profile/Goals";
+import Social from "./Social";
+import Subgoals from "./Subgoals.js";
 import { TouchableOpacity } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SetGoal from "../Set_Goal/SetGoal";
 import Nav from "../Nav/Nav";
-import GoalStatus from "../GoalStatus/GoalStatus";
-
+import GoalStatus from "./GoalStatus";
 
 const Feed = ({ navigation }) => {
-
-
   return (
     <ScrollView style={styles.container}>
       <Subgoals />
@@ -21,7 +18,7 @@ const Feed = ({ navigation }) => {
         <Text style={styles.sectionTitle}>Goal Status:</Text>
 
         <View style={styles.status}>
-         <GoalStatus />
+          <GoalStatus />
         </View>
         <View>
           <TouchableOpacity

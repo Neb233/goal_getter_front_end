@@ -9,7 +9,7 @@ import SubGoalForm from "./components/Set_Goal/SubGoalForm";
 import SearchUsers from "./components/Social/SearchUsers";
 
 import Feed from "./components/Feed/Feed";
-import Social from "./components/Social/Social";
+import Social from "./components/Feed/Social";
 import Nav from "./components/Nav/Nav";
 import Profile from "./components/Profile/Profile";
 import SetGoalIntro from "./components/Set_Goal/SetGoalIntro";
@@ -20,15 +20,22 @@ import { auth } from "./firebase";
 import { UserContext, UserProvider } from "./context/user";
 
 import { Provider as PaperProvider } from "react-native-paper";
+import RootStack from "./components/RootStack/RootStack";
 const Stack = createNativeStackNavigator();
 
-export default function App({ navigation }) {
-  const loggedInUser = useContext(UserContext);
+const App = ({ navigation }) => {
+  const [profile, SetProfile] = useState({});
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      SetProfile(user);
+    });
+  }, []);
 
   return (
-    <UserProvider>
-      <PaperProvider>
-        <NavigationContainer>
+    <PaperProvider>
+      <NavigationContainer>
+        {profile !== null ? (
           <Stack.Navigator>
             <Stack.Screen
               name="Nav"
@@ -43,20 +50,18 @@ export default function App({ navigation }) {
             <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="SearchUsers" component={SearchUsers} />
-
-            {/* <Stack.Screen name="Nav" component={Nav} options={{headerShown: false}} /> */}
-            <Stack.Screen
-              options={{ headerShown: false }}
-              name="Login"
-              component={LoginScreen}
-            />
+            <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
           </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </UserProvider>
+        ) : (
+          <RootStack />
+        )}
+      </NavigationContainer>
+    </PaperProvider>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
@@ -84,3 +89,14 @@ const styles = StyleSheet.create({
              <Tab.Screen name='Feed' component={Feed} />
             <Tab.Screen name='SetGoal' component={SetGoal} />
             <Tab.Screen name='Social' component={Social} /> */
+
+{
+  /* 
+            {/* <Stack.Screen name="Nav" component={Nav} options={{headerShown: false}} />  */
+}
+// <Stack.Screen
+//   options={{ headerShown: false }}
+//   name="Login"
+//   component={LoginScreen}
+// />
+// <Stack.Screen name="Register" component={RegisterScreen} />

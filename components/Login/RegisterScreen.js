@@ -58,26 +58,24 @@ const RegisterScreen = () => {
           email: "",
         }}
         validationSchema={valSchema}
-        onSubmit={ (values) =>
-         createUserWithEmailAndPassword(auth, values.email, values.password)
-            .then( async (userCredentials) => {
+        onSubmit={(values) =>
+          createUserWithEmailAndPassword(auth, values.email, values.password)
+            .then(async (userCredentials) => {
               const user = userCredentials.user;
 
-            await  updateProfile(user, { displayName: values.username });
+              await updateProfile(user, { displayName: values.username });
 
               var body = { username: values.username, profile: values.profile };
-            
 
-             await axios({
+              await axios({
                 method: "post",
                 url: "https://goalgetter-backend.herokuapp.com/api/users",
                 data: body,
-              })
-            .catch(function (error) {
-                  console.log(error);
-                });
+              }).catch(function (error) {
+                console.log(error);
+              });
 
-              navigation.navigate("Nav", { screen: "Feed" });
+              navigation.navigate("Nav", { screen: "Profile" });
               return user;
             })
 
