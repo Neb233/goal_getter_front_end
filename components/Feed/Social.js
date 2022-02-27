@@ -14,6 +14,7 @@ import {
   postReaction,
   deleteReaction,
   postComment,
+  getSubgoalsByGoalId,
 } from "../../utils/api";
 import { formatDatetime } from "../../utils/format";
 import {
@@ -23,6 +24,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
+import ProgressBar from "../../shared/ProgressBar";
 
 const currentUser = "jeff";
 
@@ -66,6 +68,7 @@ const Social = (props) => {
     proud: 0,
   });
   const [currentUserReaction, setCurrentUserReaction] = useState();
+  const [subgoals, setSubgoals] = useState([]);
 
   const {
     owner,
@@ -85,6 +88,9 @@ const Social = (props) => {
     } else {
       getGoalByGoalId(associated_id).then((goal) => {
         setAssociatedGoal(goal);
+      });
+      getSubgoalsByGoalId(associated_id).then((subgoals) => {
+        setSubgoals(subgoals);
       });
     }
     getCommentsByPost(post_id).then((comments) => {
@@ -213,7 +219,17 @@ const Social = (props) => {
                 } ${associatedGoal.unit}`}</Text>
               </View>
             ) : null}
+            {Object.keys(associatedGoal).length !== 0 &&
+            (!associatedGoal.subgoal_id ||
+              associatedGoal.type !== "boolean") ? (
+              <ProgressBar
+                progress={associatedGoal.progress}
+                target_value={associatedGoal.target_value}
+                subgoals={associatedGoal.subgoals}
+              />
+            ) : null}
           </View>
+
           <Text>{message}</Text>
           <Text>{formatDatetime(datetime)}</Text>
         </View>

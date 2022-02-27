@@ -42,12 +42,14 @@ export const patchSubGoalbyId = (subgoal_id, patchObject) => {
 
 export const patchGoalbyId = (goal_id, patchObject) => {
   patchObject.date = new Date(patchObject.date);
-  console.log(goal_id);
   console.log(patchObject);
   return goalgetterApi
     .patch(`/goals/${goal_id}/progress`, patchObject)
     .then(({ data }) => {
       return data;
+    })
+    .catch((err) => {
+      console.log(err.response);
     });
 };
 

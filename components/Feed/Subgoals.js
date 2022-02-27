@@ -14,6 +14,8 @@ import PatchSubGoal from "./PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import PostStatus from "./PostStatus";
 import { useNavigation } from "@react-navigation/native";
+import ProgressBar from "../../shared/ProgressBar";
+import dateFormat from "dateformat";
 
 const Subgoals = ({ setFriendPosts }) => {
   const navigation = useNavigation();
@@ -52,6 +54,18 @@ const Subgoals = ({ setFriendPosts }) => {
                       >
                         {goal.objective}
                       </Text>
+                      <Text style={styles.duedate}>
+                        Start date:{" "}
+                        {dateFormat(goal.start_date, "dddd, mmmm dS, yyyy")}
+                      </Text>
+                      <Text style={styles.duedate}>
+                        End date:{" "}
+                        {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
+                      </Text>
+                      <ProgressBar
+                        progress={goal.progress}
+                        target_value={goal.target_value}
+                      />
                       <View style={styles.progress}>
                         <Text style={styles.unit}>Made progress?</Text>
                         <PatchSubGoal
@@ -193,5 +207,11 @@ const styles = StyleSheet.create({
     padding: 3,
     fontWeight: "bold",
     color: "green",
+  },
+  duedate: {
+    color: "white",
+    marginLeft: -30,
+    marginRight: 5,
+    marginBottom: 2,
   },
 });

@@ -10,15 +10,22 @@ import {
   ScrollView,
 } from "react-native";
 import { useState, useEffect } from "react";
-import { getGoalsByUser, getPostsByUser, getUser } from "../../utils/api";
+import {
+  getGoalsByUser,
+  getPostsByUser,
+  getSubgoalsByGoalId,
+  getUser,
+} from "../../utils/api";
 import dateFormat, { masks } from "dateformat";
 import Social from "../Feed/Social";
+import ProgressBar from "../../shared/ProgressBar";
 
 const Goals = ({ navigation, route }) => {
   const [goals, setGoals] = useState([]);
   const [userDetails, setUserDetails] = useState({ username: "", profile: "" });
   const [userPosts, setUserPosts] = useState([]);
   const [showGoals, setShowGoals] = useState(false);
+  const [subgoals, setSubgoals] = useState({});
   const { user } = route.params;
 
   useEffect(() => {
@@ -28,6 +35,15 @@ const Goals = ({ navigation, route }) => {
           new Date(goal.end_date).getTime() > Date.now() &&
           new Date(goal.start_date).getTime() < Date.now()
         );
+      });
+      goals.forEach((goal) => {
+        getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
+          setSubgoals((oldSubgoals) => {
+            const newSubgoals = { ...oldSubgoals };
+            newSubgoals[goal.goal_id] = subgoals;
+            return newSubgoals;
+          });
+        });
       });
       setGoals(goals);
     });
@@ -81,9 +97,18 @@ const Goals = ({ navigation, route }) => {
                   </View>
                   <View>
                     <Text style={styles.duedate}>
+                      Start date:{" "}
+                      {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
+                    </Text>
+                    <Text style={styles.duedate}>
                       End date:{" "}
                       {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
                     </Text>
+                    <ProgressBar
+                      progress={item.progress}
+                      target_value={item.target_value}
+                      subgoals={subgoals[item.goal_id]}
+                    />
                   </View>
                 </TouchableOpacity>
               </View>

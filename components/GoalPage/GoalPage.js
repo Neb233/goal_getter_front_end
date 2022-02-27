@@ -12,6 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import dateFormat, { masks } from "dateformat";
 import { getGoalByGoalId, getSubgoalsByGoalId } from "../../utils/api";
+import ProgressBar from "../../shared/ProgressBar";
 
 const GoalPage = ({ navigation, route }) => {
   const [goal, setGoal] = useState();
@@ -23,6 +24,9 @@ const GoalPage = ({ navigation, route }) => {
       setGoal(goal);
     });
     getSubgoalsByGoalId(goal_id).then((subgoals) => {
+      subgoals.sort((a, b) => {
+        return new Date(a.end_date).getTime() - new Date(b.end_date).getTime();
+      });
       setSubgoals(subgoals);
     });
   }, [goal_id]);
@@ -36,9 +40,20 @@ const GoalPage = ({ navigation, route }) => {
           </View>
           <View>
             {goal ? (
-              <Text style={styles.duedate}>
-                End date: {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
-              </Text>
+              <View>
+                <Text style={styles.duedate}>
+                  Start date:{" "}
+                  {dateFormat(goal.start_date, "dddd, mmmm dS, yyyy")}
+                </Text>
+                <Text style={styles.duedate}>
+                  End date: {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
+                </Text>
+                <ProgressBar
+                  progress={goal.progress}
+                  target_value={goal.target_value}
+                  subgoals={subgoals}
+                />
+              </View>
             ) : (
               ""
             )}
@@ -55,10 +70,24 @@ const GoalPage = ({ navigation, route }) => {
                 <Text style={styles.title}>{item.objective}</Text>
               </View>
               <View>
-                <Text style={styles.duedate}>
-                  End date: {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
-                </Text>
+                <View>
+                  <Text style={styles.duedate}>
+                    Start date:{" "}
+                    {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
+                  </Text>
+                  <Text style={styles.duedate}>
+                    End date: {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
+                  </Text>
+                </View>
               </View>
+              {item.type === "progress" ? (
+                <ProgressBar
+                  progress={item.progress}
+                  target_value={item.target_value}
+                />
+              ) : (
+                ""
+              )}
             </View>
           )}
         />
