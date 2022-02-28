@@ -28,8 +28,6 @@ export const getSubGoalsByUser = (username) => {
 
 export const patchSubGoalbyId = (subgoal_id, patchObject) => {
   patchObject.date = new Date(patchObject.date);
-  console.log(subgoal_id);
-  console.log(patchObject);
   return goalgetterApi
     .patch(`/subgoals/${subgoal_id}/progress`, patchObject)
     .then(({ data }) => {
@@ -42,12 +40,13 @@ export const patchSubGoalbyId = (subgoal_id, patchObject) => {
 
 export const patchGoalbyId = (goal_id, patchObject) => {
   patchObject.date = new Date(patchObject.date);
-  console.log(goal_id);
-  console.log(patchObject);
   return goalgetterApi
     .patch(`/goals/${goal_id}/progress`, patchObject)
     .then(({ data }) => {
       return data;
+    })
+    .catch((err) => {
+      console.log(err.response);
     });
 };
 
@@ -79,7 +78,6 @@ export const addFriend = (loggedInUser, userToAdd) => {
   return goalgetterApi
     .post(`/friendships`, { user_1: loggedInUser, user_2: userToAdd })
     .then((res) => {
-      console.log(res.data);
       return res.data;
     });
 };
@@ -107,7 +105,6 @@ export const postGoal = (goalProperties, owner = "jeff") => {
   goalProperties.owner = owner;
   goalProperties.start_date = new Date(goalProperties.start_date);
   goalProperties.end_date = new Date(goalProperties.end_date);
-  console.log(goalProperties);
   return goalgetterApi
     .post("/goals", goalProperties)
     .then(({ data }) => {
@@ -130,7 +127,6 @@ export const postSubgoal = (subgoal, goal_id, owner = "jeff") => {
     subgoal.start_date = new Date(subgoal.start_date);
   }
   subgoal.end_date = new Date(subgoal.end_date);
-  console.log(subgoal);
   return goalgetterApi
     .post(`/goals/${goal_id}/subgoals`, subgoal)
     .then(({ data }) => {
@@ -150,6 +146,12 @@ export const getGoalByGoalId = (goal_id) => {
 export const getSubgoalBySubgoalId = (subgoal_id) => {
   return goalgetterApi.get(`/subgoals/${subgoal_id}`).then(({ data }) => {
     return data.subgoal;
+  });
+};
+
+export const getSubgoalsByGoalId = (goal_id) => {
+  return goalgetterApi.get(`/goals/${goal_id}/subgoals`).then(({ data }) => {
+    return data.subgoals;
   });
 };
 

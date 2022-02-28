@@ -15,28 +15,44 @@ import Profile from "./components/Profile/Profile";
 import SetGoalIntro from "./components/Set_Goal/SetGoalIntro";
 import GoalCalendar from "./components/Calendar/GoalCalendar";
 import React, { useEffect, useState, useContext } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { auth } from "./firebase";
 import { UserContext, UserProvider } from "./context/user";
 import Goals from "./components/Profile/UserPage";
+import GoalPage from "./components/GoalPage/GoalPage";
 
 import { Provider as PaperProvider } from "react-native-paper";
 import RootStack from "./components/RootStack/RootStack";
 const Stack = createNativeStackNavigator();
 
-const App = ({ navigation }) => {
-  const [profile, SetProfile] = useState({});
+const App = () => {
+
+
+  const [profile, SetProfile] = useState(false);
+
 
   useEffect(() => {
+
+
     onAuthStateChanged(auth, (user) => {
-      SetProfile(user);
-    });
-  }, []);
+      if (user) {
+            SetProfile(true)
+      } else {
+        SetProfile(false)
+      }
+       })
+    }, [])
+
+
+
+
+   
+  
 
   return (
-    <PaperProvider>
+   
       <NavigationContainer>
-        {profile !== null ? (
+        { profile === true ? (
           <Stack.Navigator>
             <Stack.Screen
               name="Nav"
@@ -56,15 +72,13 @@ const App = ({ navigation }) => {
             <Stack.Screen name="UserPage" component={Goals} />
             <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
 
-            {/* <Stack.Screen name="Nav" component={Nav} options={{headerShown: false}} /> */}
-
             <Stack.Screen name="Register" component={RegisterScreen} />
           </Stack.Navigator>
         ) : (
           <RootStack />
         )}
       </NavigationContainer>
-    </PaperProvider>
+   
   );
 };
 
@@ -78,32 +92,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-/* <NavigationContainer independent={true}>
-      <Stack.Navigator>
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={LoginScreen}
-        />
-         <Stack.Screen name="Feed" component={Feed} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="SetGoal" component={SetGoal} />
-        <Stack.Screen name="SubGoalForm" component={SubGoalForm} /> 
-      </Stack.Navigator>
-      
-   
-             <Tab.Screen name='Feed' component={Feed} />
-            <Tab.Screen name='SetGoal' component={SetGoal} />
-            <Tab.Screen name='Social' component={Social} /> */
-
-{
-  /* 
-            {/* <Stack.Screen name="Nav" component={Nav} options={{headerShown: false}} />  */
-}
-// <Stack.Screen
-//   options={{ headerShown: false }}
-//   name="Login"
-//   component={LoginScreen}
-// />
-// <Stack.Screen name="Register" component={RegisterScreen} />
