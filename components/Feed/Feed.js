@@ -5,7 +5,11 @@ import Goals from "../Profile/UserPage";
 import Social from "./Social";
 import Subgoals from "./Subgoals";
 import { TouchableOpacity, FlatList } from "react-native";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  useNavigation,
+  useFocusEffect,
+} from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SetGoal from "../Set_Goal/SetGoal";
 import GoalStatus from "./GoalStatus";
@@ -17,28 +21,30 @@ const Feed = ({ navigation }) => {
 
   const [friendPosts, setFriendPosts] = useState([]);
 
-  useEffect(() => {
-    getFriends(currentUser)
-      .then((friends) => {
-        friends.push(currentUser);
-        const postPromises = friends.map((friend) => {
-          return getPostsByUser(friend);
+  useFocusEffect(
+    React.useCallback(() => {
+      getFriends(currentUser)
+        .then((friends) => {
+          friends.push(currentUser);
+          const postPromises = friends.map((friend) => {
+            return getPostsByUser(friend);
+          });
+          return Promise.all(postPromises);
+        })
+        .then((posts) => {
+          let combinedPostArray = [];
+          posts.forEach((userPosts) => {
+            combinedPostArray = [...combinedPostArray, ...userPosts];
+          });
+          combinedPostArray.sort((a, b) => {
+            return (
+              new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
+            );
+          });
+          setFriendPosts(combinedPostArray);
         });
-        return Promise.all(postPromises);
-      })
-      .then((posts) => {
-        let combinedPostArray = [];
-        posts.forEach((userPosts) => {
-          combinedPostArray = [...combinedPostArray, ...userPosts];
-        });
-        combinedPostArray.sort((a, b) => {
-          return (
-            new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
-          );
-        });
-        setFriendPosts(combinedPostArray);
-      });
-  }, []);
+    }, [])
+  );
 
   const HeaderComponent = () => {
     return (
@@ -67,7 +73,9 @@ const Feed = ({ navigation }) => {
       style={styles.container}
       ListHeaderComponent={<HeaderComponent />}
       data={friendPosts}
-      renderItem={({ item }) => <Social postDetails={item} />}
+      renderItem={({ item }) => (
+        <Social friendPosts={friendPosts} postDetails={item} />
+      )}
     />
   );
 };

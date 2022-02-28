@@ -13,11 +13,13 @@ import { useState, useEffect } from "react";
 import dateFormat, { masks } from "dateformat";
 import { getGoalByGoalId, getSubgoalsByGoalId } from "../../utils/api";
 import ProgressBar from "../../shared/ProgressBar";
+import PatchSubGoal from "../Feed/PatchSubgoals";
 
 const GoalPage = ({ navigation, route }) => {
   const [goal, setGoal] = useState();
   const [subgoals, setSubgoals] = useState([]);
   const { goal_id } = route.params;
+  const currentUser = "jeff";
 
   useEffect(() => {
     getGoalByGoalId(goal_id).then((goal) => {
@@ -122,6 +124,20 @@ const GoalPage = ({ navigation, route }) => {
                     progress={item.progress}
                     target_value={item.target_value}
                   />
+                  {currentUser === item.owner &&
+                  Date.now() > new Date(item.start_date).getTime() &&
+                  Date.now() <
+                    new Date(
+                      new Date(item.end_date).setDate(
+                        new Date(item.end_date).getDate() + 1
+                      )
+                    ).getTime() ? (
+                    <View style={styles.progress}>
+                      <Text style={styles.unit}>Made progress?</Text>
+                      <PatchSubGoal goal={item} goalUnit={item.unit} />
+                      <Text style={styles.unit}>{item.unit}</Text>
+                    </View>
+                  ) : null}
                 </View>
               ) : item.status === "completed" ? (
                 <Text style={styles.duedate}>COMPLETED</Text>
@@ -222,5 +238,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 20,
     marginTop: 200,
+  },
+  progress: {
+    flexDirection: "row",
+    margin: 20,
+  },
+  unit: {
+    marginLeft: 5,
+    padding: 3,
+    fontWeight: "bold",
+    color: "green",
   },
 });

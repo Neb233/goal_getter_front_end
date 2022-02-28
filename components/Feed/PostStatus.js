@@ -8,7 +8,8 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { postStatus } from "../../utils/api";
+import { patchSubGoalbyId, postStatus, patchGoalbyId } from "../../utils/api";
+import { useNavigation } from "@react-navigation/native";
 
 const PostStatus = ({
   goal,
@@ -21,26 +22,43 @@ const PostStatus = ({
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState("");
 
+  const navigation = useNavigation();
+
   const handleSubmit = () => {
-    postStatus({
-      associated_data_type: "subgoal",
-      associated_id: subgoal,
-      owner: ownerP,
-      datetime: new Date(Date.now()),
+    const patchObject = {
+      date: new Date(
+        new Date(Date.now()).getFullYear(),
+        new Date(Date.now()).getMonth(),
+        new Date(Date.now()).getDate()
+      ),
+      value: parseFloat(progress),
+    };
+    patchSubGoalbyId(goal.subgoal_id, patchObject)
+      .then(() => {
+        return postStatus({
+          associated_data_type: "subgoal",
+          associated_id: subgoal,
+          owner: ownerP,
+          datetime: new Date(Date.now()),
 
-      progress_point:
-        goal.type === "progress" ? goal.progress.length : undefined,
-      message: message,
-    }).then((res) => {
-      setFriendPosts((oldFriendPost) => {
-        const newFriendPost = [...oldFriendPost];
-        newFriendPost.unshift(res.post);
-        return newFriendPost;
+          progress_point:
+            goal.type === "progress" ? goal.progress.length : undefined,
+          message: message,
+        });
+      })
+      .then((res) => {
+        if (setFriendPosts) {
+          setFriendPosts((oldFriendPost) => {
+            const newFriendPost = [...oldFriendPost];
+            newFriendPost.unshift(res.post);
+            return newFriendPost;
+          });
+        }
       });
-
-    });
-
+    patchGoalbyId(goal.goal_id, patchObject);
     setModalVisible(!modalVisible);
+    console.log("hello");
+    navigation.navigate("Feed");
   };
 
   //   ${ownerP} completed ${progress} ${goalUnit} of ${subgoal.objective}  ${message}`
@@ -52,7 +70,6 @@ const PostStatus = ({
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-
           setModalVisible(!modalVisible);
         }}
       >

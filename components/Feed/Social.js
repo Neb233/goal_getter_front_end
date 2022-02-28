@@ -70,6 +70,11 @@ const Social = (props) => {
   const [currentUserReaction, setCurrentUserReaction] = useState();
   const [subgoals, setSubgoals] = useState([]);
 
+  let friendPosts = [];
+  if (props.friendPosts) {
+    friendPosts = props.friendPosts;
+  }
+
   const {
     owner,
     datetime,
@@ -119,7 +124,7 @@ const Social = (props) => {
         }
       });
     });
-  }, [owner]);
+  }, [owner, friendPosts]);
 
   const handleCommentClick = () => {
     setIsShowing((currValue) => {

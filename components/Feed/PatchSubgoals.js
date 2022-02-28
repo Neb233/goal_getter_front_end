@@ -34,7 +34,7 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
   useEffect(() => {
     patchObject = {
       date: submitDate,
-      value: parseInt(progress),
+      value: parseFloat(progress),
     };
   }, [progress]);
 

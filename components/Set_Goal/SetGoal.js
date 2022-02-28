@@ -22,6 +22,10 @@ import { KeyboardAvoidingView } from "react-native-web";
 
 const SetGoal = ({ navigation, route }) => {
   const currentUser = "jeff";
+  if (!route.params) {
+    route.params = { goalProperties: {}, clickCounter: 0 };
+  }
+
   let { goalProperties } = route.params;
 
   const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
