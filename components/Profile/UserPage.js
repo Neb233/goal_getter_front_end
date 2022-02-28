@@ -9,7 +9,7 @@ import {
   Image,
   ScrollView,
   Modal,
-  Pressable
+  Pressable,
 } from "react-native";
 import { useState, useEffect } from "react";
 import {
@@ -17,15 +17,17 @@ import {
   getPostsByUser,
   getSubgoalsByGoalId,
   getUser,
+  getUsers,
+  patchAvatar
 } from "../../utils/api";
 import dateFormat, { masks } from "dateformat";
 import Social from "../Feed/Social";
 import ProgressBar from "../../shared/ProgressBar";
 import { auth } from "../../firebase";
-import * as ImagePicker from 'expo-image-picker';
-import {updateProfile} from 'firebase/auth';
+import * as ImagePicker from "expo-image-picker";
+import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { patchAvatar } from "../../utils/api";
+
 
 const Goals = ({ navigation, route }) => {
   const [goals, setGoals] = useState([]);
@@ -35,24 +37,15 @@ const Goals = ({ navigation, route }) => {
   const [userPosts, setUserPosts] = useState([]);
   const [showGoals, setShowGoals] = useState(false);
   const [subgoals, setSubgoals] = useState({});
-  const [imagemodalVisible, setImageModaVisible] = useState("")
-  const [profPic, SetProfPic] = useState("")
-  
-  
+  const [imagemodalVisible, setImageModaVisible] = useState("");
+  const [profPic, SetProfPic] = useState("");
 
- 
+  const user = auth.currentUser;
 
+  const default_url =
+    "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
 
-const user = auth.currentUser;
-
-  
-const default_url =
-"https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
-
-
-const storage = getStorage();
-
-
+  const storage = getStorage();
 
   useEffect(() => {
     setSubgoals({});
@@ -60,13 +53,16 @@ const storage = getStorage();
     setFutureGoals([]);
     setOldGoals([]);
     setShowGoals(false);
+
+
     if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
-        (url) => {
-          console.log(url);
-          SetProfPic(url);
-        }
-      );
+      getUsers().then((res) => {
+        res.users.map((profile) => {
+          if (profile.username === user.displayName) {
+            SetProfPic(profile.avatar_url);
+          }
+        });
+      });
     } else {
       SetProfPic(default_url);
     }
@@ -108,6 +104,13 @@ const storage = getStorage();
     });
   }, [user]);
 
+  //   getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
+  //     (url) => {
+  //       // console.log(url);
+  //       SetProfPic(url);
+  //     }
+  //   );
+  // }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -127,29 +130,25 @@ const storage = getStorage();
 
       await uploadBytes(refo, bytes);
     }
-    await updateProfile(user, { photoURL: `${user.displayName}: Profile Picture` });
+    await updateProfile(user, {
+      photoURL: `${user.displayName}: Profile Picture`,
+    });
 
-    
     getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
       (url) => {
         console.log(url);
         patchAvatar(user.displayName, url).then((res) => {
-          console.log(res)
-        })
+          console.log(res);
+        });
       }
     );
     setImageModaVisible(!imagemodalVisible);
   };
 
-
-
-
-
-
   return (
     <ScrollView>
       <View style={styles.header}>
-      <Modal
+        <Modal
           animationType="fade"
           transparent={true}
           visible={imagemodalVisible}
@@ -175,8 +174,8 @@ const storage = getStorage();
           </View>
         </Modal>
 
-          <Pressable onPress={() => setImageModaVisible(true)}>
-        <Image source={{uri: profPic}} style={styles.profPic} />
+        <Pressable onPress={() => setImageModaVisible(true)}>
+          <Image source={{ uri: profPic }} style={styles.profPic} />
         </Pressable>
 
         <View style={styles.body}>

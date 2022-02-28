@@ -19,7 +19,7 @@ const Tab = createBottomTabNavigator();
 const Nav = ({ navigation }) => {
  
   return (
-    <Tab.Navigator   options={{ headerShown: false }}>
+    
     <Tab.Navigator options={{ headerShown: false }}>
 
       <Tab.Screen name="Feed" component={Feed} />

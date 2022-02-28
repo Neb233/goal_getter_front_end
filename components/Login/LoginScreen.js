@@ -23,7 +23,7 @@ const LoginScreen = () => {
 
   
   
-const navigation = useNavigation();
+
 
 // const handleTest = (values) => {
 //   navigation.navigate("Profile")

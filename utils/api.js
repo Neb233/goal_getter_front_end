@@ -244,3 +244,8 @@ export const patchAvatar = (username, url) => {
   })
 }
 
+export const getUsers = () => {
+  return goalgetterApi.get('/users').then(({data}) => {
+    return data
+  })
+}
