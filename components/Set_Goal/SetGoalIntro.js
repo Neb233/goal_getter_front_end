@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedBack,
   Keyboard,
   ScrollView,
+  Switch,
 } from "react-native";
 import React, { useState } from "react";
 import SetGoalGuide from "./SetGoalGuide";
@@ -33,6 +34,7 @@ const SetGoalIntro = ({ navigation, route }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [hideProgressOptions, setHideProgressOptions] = useState(true);
   const [clickCounter, setClickCounter] = useState(0);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   const handleCheckboxCheck = (isChecked) => {
     setHideProgressOptions(!isChecked);
@@ -108,6 +110,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                 : "",
             }}
             onSubmit={(values) => {
+              console.log(values.target_value);
               console.warn(values);
               // values.start_date = new Date(2022, 0, 1);
               // values.end_date = new Date(2022, 11, 31);
@@ -159,10 +162,17 @@ const SetGoalIntro = ({ navigation, route }) => {
                     range of tools to track and keep on top of your goals, such
                     as graphing progress, and making smaller milestones.
                   </Text>
-                  <BouncyCheckbox
-                    onPress={(isChecked) => {
+                  <Switch
+                    onValueChange={(isChecked) => {
+                      setIsEnabled((previousState) => !previousState);
                       handleCheckboxCheck(isChecked);
                     }}
+                    disabled={
+                      props.values.target_value !== "" ||
+                      props.values.unit !== "" ||
+                      props.values.subgoalPeriod !== ""
+                    }
+                    value={isEnabled}
                   />
                   <HideableView hidden={hideProgressOptions}>
                     <Text>What final value are you aiming for?</Text>

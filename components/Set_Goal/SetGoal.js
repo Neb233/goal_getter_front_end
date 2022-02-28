@@ -26,12 +26,12 @@ const SetGoal = ({ navigation, route }) => {
   } else {
     route.params.goalProperties.start_date = new Date(2022, 0, 1);
     route.params.goalProperties.end_date = new Date(2022, 11, 31);
-    if (typeof route.params.goalProperties.target_value !== "number") {
-      route.params.goalProperties.target_value = null;
-    } else {
-      route.params.goalProperties.target_value = parseFloat(
-        route.params.goalProperties.target_value
-      );
+
+    route.params.goalProperties.target_value = parseFloat(
+      route.params.goalProperties.target_value
+    );
+    if (isNaN(route.params.goalProperties.target_value)) {
+      route.params.goalProperties.target_value = "";
     }
     if (route.params.goalProperties.unit === "") {
       route.params.goalProperties.unit = null;
