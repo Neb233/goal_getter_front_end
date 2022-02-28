@@ -22,55 +22,35 @@ import { KeyboardAvoidingView } from "react-native-web";
 
 const SetGoal = ({ navigation, route }) => {
   if (!route.params) {
-    route.params = { goalProperties: {} };
+    route.params = { goalProperties: {}, clickCounter: 0 };
   } else {
     route.params.goalProperties.start_date = new Date(2022, 0, 1);
     route.params.goalProperties.end_date = new Date(2022, 11, 31);
-    if (route.params.goalProperties.target_value === "") {
-      route.params.goalProperties.target_value = null;
-    } else {
-      route.params.goalProperties.target_value = parseFloat(
-        route.params.goalProperties.target_value
-      );
+
+    route.params.goalProperties.target_value = parseFloat(
+      route.params.goalProperties.target_value
+    );
+    if (isNaN(route.params.goalProperties.target_value)) {
+      route.params.goalProperties.target_value = "";
     }
     if (route.params.goalProperties.unit === "") {
       route.params.goalProperties.unit = null;
     }
+    if (route.params.goalProperties.subgoalPeriod === "") {
+      route.params.goalProperties.subgoalPeriod = null;
+    }
+    if (!route.params.goalProperties.subgoals) {
+      route.params.goalProperties.subgoals = [];
+    }
   }
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const currentUser = "jeff";
+  const { goalProperties } = route.params;
+
   const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
 
-  const [subGoals, setSubGoals] = useState([
-    {
-      objective: "Finish Act 1 of novella",
-      start_date: null,
-      end_date: "2022-02-11T00:00:00.000Z",
-      target_value: null,
-      unit: null,
-    },
-    {
-      objective: "Finish Act 2 of novella",
-      start_date: null,
-      end_date: "2022-02-21T00:00:00.000Z",
-      target_value: 1000,
-      unit: "words",
-    },
-    {
-      objective: "Finish Act 3 of novella",
-      start_date: null,
-      end_date: "2022-03-01T00:00:00.000Z",
-      target_value: null,
-      unit: null,
-    },
-    {
-      objective: "Proof-read novella",
-      start_date: null,
-      end_date: "2022-03-04T00:00:00.000Z",
-      target_value: null,
-      unit: null,
-    },
-  ]);
+
+  const [subGoals, setSubGoals] = useState([]);
   const [showSubGoalDetails, setShowSubGoalDetails] = useState(
     subGoals.map(() => {
       return false;
@@ -78,12 +58,114 @@ const SetGoal = ({ navigation, route }) => {
   );
 
   useEffect(() => {
-    subGoals.map(() => {
-      return false;
-    });
-  }, [subGoals]);
+    console.log(goalProperties);
+    setSubGoals([]);
+    if (goalProperties.target_value) {
+      const goalNumberOfDays =
+        Math.round(
+          (goalProperties.end_date.getTime() -
+            goalProperties.start_date.getTime()) /
+            86400000
+        ) + 1;
+      let subgoalPeriod = 7;
+      if (goalProperties.subgoalPeriod) {
+        subgoalPeriod = goalProperties.subgoalPeriod;
+      }
+      const noOfCompleteSubgoals = Math.floor(goalNumberOfDays / subgoalPeriod);
+      let finalSubgoalPeriod = goalNumberOfDays % subgoalPeriod;
+      for (let i = 0; i < noOfCompleteSubgoals; i++) {
+        const target_value =
+          Math.round(
+            (100 * (goalProperties.target_value * subgoalPeriod)) /
+              goalNumberOfDays
+          ) / 100;
+        setSubGoals((oldSubgoals) => {
+          const newSubgoals = [...oldSubgoals];
+          const newSubgoal = {
+            start_date: new Date(goalProperties.start_date).setDate(
+              goalProperties.start_date.getDate() + i * subgoalPeriod
+            ),
+            end_date: new Date(goalProperties.start_date).setDate(
+              goalProperties.start_date.getDate() +
+                i * subgoalPeriod +
+                (subgoalPeriod - 1)
+            ),
+            owner: currentUser,
+            target_value: target_value,
+            unit: goalProperties.unit,
+          };
+          if (
+            goalProperties.objective.includes(
+              goalProperties.target_value.toString()
+            )
+          ) {
+            newSubgoal.objective = goalProperties.objective.replace(
+              goalProperties.target_value.toString(),
+              target_value.toString()
+            );
+          } else {
+            newSubgoal.objective =
+              target_value.toString() + " " + goalProperties.unit;
+          }
+          newSubgoals.push(newSubgoal);
+          return newSubgoals;
+        });
+      }
+      if (finalSubgoalPeriod > 0) {
+        const target_value =
+          Math.round(
+            (100 * goalProperties.target_value * finalSubgoalPeriod) /
+              goalNumberOfDays
+          ) / 100;
+        setSubGoals((oldSubgoals) => {
+          const newSubgoals = [...oldSubgoals];
+          const newSubgoal = {
+            start_date: new Date(goalProperties.start_date).setDate(
+              goalProperties.start_date.getDate() +
+                noOfCompleteSubgoals * subgoalPeriod
+            ),
+            end_date: goalProperties.end_date,
+            owner: currentUser,
+            target_value: target_value,
+            unit: goalProperties.unit,
+            core: true,
+          };
+          if (
+            goalProperties.objective.includes(
+              goalProperties.target_value.toString()
+            )
+          ) {
+            newSubgoal.objective = goalProperties.objective.replace(
+              goalProperties.target_value.toString(),
+              target_value.toString()
+            );
+          } else {
+            newSubgoal.objective =
+              target_value.toString() + " " + goalProperties.unit;
+          }
+          newSubgoals.push(newSubgoal);
+          return newSubgoals;
+        });
+      }
+    } else {
+      setSubGoals([
+        {
+          objective: goalProperties.objective,
+          end_date: goalProperties.end_date,
+          owner: currentUser,
+          core: true,
+        },
+      ]);
+    }
+  }, [route.params.clickCounter]);
 
-  const { goalProperties } = route.params;
+  useEffect(() => {
+    setShowSubGoalDetails(
+      subGoals.map(() => {
+        return false;
+      })
+    );
+  }, [subGoals]);
 
   const addSubGoal = (subGoal) => {
     setSubGoals((currentSubGoals) => {
@@ -108,6 +190,7 @@ const SetGoal = ({ navigation, route }) => {
 
   return (
     <ScrollView>
+
     
       <Modal visible={addSubGoalModalOpen} animationType="slide">
         <View style={styles.modalContainer}>
@@ -123,25 +206,15 @@ const SetGoal = ({ navigation, route }) => {
       </Modal>
       
 
-      <Text>Goal Details</Text>
-      <Text>Objective - {goalProperties.objective}</Text>
-      <Text>Description - {goalProperties.description}</Text>
-      <Text>
-        Start Date -
-        {` ${new Date(goalProperties.start_date).getFullYear()}-${
-          new Date(goalProperties.start_date).getMonth() + 1
-        }-${new Date(goalProperties.start_date).getDate()}`}
-      </Text>
-      <Text>
-        End Date -
-        {` ${new Date(goalProperties.end_date).getFullYear()}-${
-          new Date(goalProperties.end_date).getMonth() + 1
-        }-${new Date(goalProperties.end_date).getDate()}`}
-      </Text>
-      <HideableView hidden={goalProperties.target_value === null}>
-        <Text>Target Value - {goalProperties.target_value}</Text>
+
+        <Text>Goal Details</Text>
+        <Text>Objective - {goalProperties.objective}</Text>
+        <Text>Description - {goalProperties.description}</Text>
         <Text>
-          Unit - {goalProperties.unit ? goalProperties.unit : "None specified"}
+          Start Date -
+          {` ${new Date(goalProperties.start_date).getFullYear()}-${
+            new Date(goalProperties.start_date).getMonth() + 1
+          }-${new Date(goalProperties.start_date).getDate()}`}
         </Text>
       </HideableView>
       <Button
@@ -203,10 +276,73 @@ const SetGoal = ({ navigation, route }) => {
         <Button
           title="Add SubGoal"
          
+
           onPress={() => {
-            setAddSubGoalModalOpen(true);
+            // goalProperties.subgoals = subGoals.filter((subgoal) => {
+            //   return !subgoal.core;
+            // });
+            navigation.navigate("SetGoalIntro", {
+              goalProperties,
+            });
           }}
         ></Button>
+        <Text>Subgoals:</Text>
+        <View>
+          <FlatList
+            data={subGoals}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => {
+                  setShowSubGoalDetails((showSubGoalDetails) => {
+                    const newState = showSubGoalDetails.map(
+                      (boolean, index) => {
+                        return subGoals.indexOf(item) === index;
+                      }
+                    );
+                    return newState;
+                  });
+                }}
+              >
+                <Modal
+                  visible={showSubGoalDetails[subGoals.indexOf(item)] === true}
+                  animationType="fade"
+                >
+                  <View>
+                    <Button
+                      title="Close"
+                      onPress={() => {
+                        setShowSubGoalDetails((showSubGoalDetails) => {
+                          const newState = showSubGoalDetails.map(() => {
+                            return false;
+                          });
+                          return newState;
+                        });
+                      }}
+                    ></Button>
+                    <SubGoalDetails
+                      setSubGoals={setSubGoals}
+                      setShowSubGoalDetails={setShowSubGoalDetails}
+                      showSubGoalDetails={showSubGoalDetails}
+                      subGoals={subGoals}
+                      item={item}
+                    />
+                  </View>
+                </Modal>
+                <Card>
+                  <Text style={styles.text}>{item.objective}</Text>
+                </Card>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+        <View>
+          <Button
+            title="Add SubGoal"
+            onPress={() => {
+              setAddSubGoalModalOpen(true);
+            }}
+          ></Button>
+
 
         <Button
           title="Add Goal"
@@ -215,6 +351,7 @@ const SetGoal = ({ navigation, route }) => {
           }}
         ></Button>
       </View>
+
     </ScrollView>
   );
 };
