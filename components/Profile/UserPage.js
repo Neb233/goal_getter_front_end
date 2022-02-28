@@ -220,8 +220,13 @@ const storage = getStorage();
                           {`${
                             item.progress.length === 0
                               ? 0
-                              : item.progress[item.progress.length - 1][1]
-                          } / ${item.target_value} ${item.unit}`}
+                              : Math.round(
+                                  100 *
+                                    item.progress[item.progress.length - 1][1]
+                                ) / 100
+                          } / ${Math.round(100 * item.target_value)} ${
+                            item.unit
+                          }`}
                         </Text>
                       ) : (
                         <Text style={styles.duedate}>

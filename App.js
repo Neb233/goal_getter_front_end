@@ -31,8 +31,8 @@ const App = () => {
   const [profile, SetProfile] = useState(false);
 
 
-  useEffect(() => {
 
+  useEffect(() => {
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -43,11 +43,6 @@ const App = () => {
        })
     }, [])
 
-
-
-
-   
-  
 
   return (
    
