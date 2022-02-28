@@ -55,8 +55,12 @@ const GoalPage = ({ navigation, route }) => {
                     {`${
                       goal.progress.length === 0
                         ? 0
-                        : goal.progress[goal.progress.length - 1][1]
-                    } / ${goal.target_value} ${goal.unit}`}
+                        : Math.round(
+                            100 * goal.progress[goal.progress.length - 1][1]
+                          ) / 100
+                    } / ${Math.round(100 * goal.target_value) / 100} ${
+                      goal.unit
+                    }`}
                   </Text>
                 ) : (
                   <Text style={styles.duedate}>
@@ -109,8 +113,12 @@ const GoalPage = ({ navigation, route }) => {
                     {`${
                       item.progress.length === 0
                         ? 0
-                        : item.progress[item.progress.length - 1][1]
-                    } / ${item.target_value} ${item.unit}`}
+                        : Math.round(
+                            100 * item.progress[item.progress.length - 1][1]
+                          ) / 100
+                    } / ${Math.round(100 * item.target_value) / 100} ${
+                      item.unit
+                    }`}
                   </Text>
                   <ProgressBar
                     progress={item.progress}
