@@ -20,19 +20,12 @@ import * as Yup from "yup";
 import * as Animatable from "react-native-animatable";
 
 const LoginScreen = () => {
-
-  
-  
-const navigation = useNavigation();
-
-// const handleTest = (values) => {
-//   navigation.navigate("Profile")
-
-// }
-
-
   const navigation = useNavigation();
 
+  // const handleTest = (values) => {
+  //   navigation.navigate("Profile")
+
+  // }
 
   const valSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
@@ -56,16 +49,12 @@ const navigation = useNavigation();
         }}
         validationSchema={valSchema}
         onSubmit={(values) => {
-          
-         
           signInWithEmailAndPassword(auth, values.email, values.password)
-              
             .then((userCredential) => {
-              const user = userCredential.user
+              const user = userCredential.user;
               return user;
             })
-           
-            
+
             .catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
@@ -197,7 +186,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     zIndex: 1,
     elevation: 1,
-
   },
   buttonText: {
     color: "white",
