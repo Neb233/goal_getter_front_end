@@ -10,6 +10,7 @@ import {
   Pressable,
   TouchableWithoutFeedBack,
   Keyboard,
+  ScrollView
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Card from "../../shared/card";
@@ -52,8 +53,8 @@ const SetGoal = ({ navigation, route }) => {
       objective: "Finish Act 2 of novella",
       start_date: null,
       end_date: "2022-02-21T00:00:00.000Z",
-      target_value: null,
-      unit: null,
+      target_value: 1000,
+      unit: "words",
     },
     {
       objective: "Finish Act 3 of novella",
@@ -86,6 +87,7 @@ const SetGoal = ({ navigation, route }) => {
 
   const addSubGoal = (subGoal) => {
     setSubGoals((currentSubGoals) => {
+      
       return [...currentSubGoals, subGoal];
     });
     setAddSubGoalModalOpen(false);
@@ -94,25 +96,29 @@ const SetGoal = ({ navigation, route }) => {
   const handleAddGoal = () => {
     postGoal(goalProperties).then((goal_id) => {
       subGoals.forEach((subgoal) => {
+       
         postSubgoal(subgoal, goal_id);
       });
-    });
+    }).catch((err) => {
+      console.log(err)
+    })
 
     navigation.navigate("Feed");
   };
 
   return (
-    <SafeAreaView>
+    <ScrollView>
     
       <Modal visible={addSubGoalModalOpen} animationType="slide">
         <View style={styles.modalContainer}>
           <Button
+          style={styles.closebutton}
             title="Close"
             onPress={() => {
               setAddSubGoalModalOpen(false);
             }}
           />
-          <SubGoalForm addSubGoal={addSubGoal} />
+          <SubGoalForm addSubGoal={addSubGoal} setShowSubGoalDetails={setShowSubGoalDetails} />
         </View>
       </Modal>
       
@@ -147,7 +153,7 @@ const SetGoal = ({ navigation, route }) => {
         }}
       ></Button>
       <Text>Subgoals:</Text>
-      <View>
+      <View style={styles.subgoalscontainer}>
         <FlatList
           data={subGoals}
           renderItem={({ item }) => (
@@ -196,6 +202,7 @@ const SetGoal = ({ navigation, route }) => {
       <View>
         <Button
           title="Add SubGoal"
+         
           onPress={() => {
             setAddSubGoalModalOpen(true);
           }}
@@ -208,7 +215,7 @@ const SetGoal = ({ navigation, route }) => {
           }}
         ></Button>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
@@ -228,6 +235,13 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: "bold",
   },
+  closebutton: {
+    marginBottom: 40
+  },
+  subgoalscontainer: {
+    marginTop: 20,
+    marginBottom: 20
+  }
 });
 
 export default SetGoal;
