@@ -60,11 +60,12 @@ const SetGoal = ({ navigation, route }) => {
     console.log(goalProperties);
     setSubGoals([]);
     if (goalProperties.target_value) {
-      const goalNumberOfDays = Math.round(
-        (goalProperties.end_date.getTime() -
-          goalProperties.start_date.getTime()) /
-          86400000
-      );
+      const goalNumberOfDays =
+        Math.round(
+          (goalProperties.end_date.getTime() -
+            goalProperties.start_date.getTime()) /
+            86400000
+        ) + 1;
       let subgoalPeriod = 7;
       if (goalProperties.subgoalPeriod) {
         subgoalPeriod = goalProperties.subgoalPeriod;
