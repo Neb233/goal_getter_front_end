@@ -100,7 +100,7 @@ const LoginScreen = () => {
                 </Text>
 
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("Register")}
+                  onPress={() => navigation.navigate("RegisterScreen")}
                   style={styles.button}
                 >
                   <Text style={styles.buttonText}>Register</Text>
