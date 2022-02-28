@@ -30,6 +30,7 @@ const Profile = () => {
   const [modalVisible, setModaVisible] = useState("");
 
   const user = auth.currentUser;
+  
 
   const default_url =
     "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
@@ -147,7 +148,7 @@ const Profile = () => {
               />
             )}
 
-            <Button icon="account-arrow-left" size={50}>Press</Button>
+           
           </View>
         </View>
       </View>
