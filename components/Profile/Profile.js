@@ -35,6 +35,7 @@ const Profile = () => {
   const default_url =
     "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
 
+
   const storage = getStorage();
 
   useEffect(() => {

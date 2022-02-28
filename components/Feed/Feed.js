@@ -78,6 +78,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#abbabe",
   },
   personalWrapper: {
+
+    // height: "fitContents",
+
     borderRadius: 10,
     backgroundColor: "white",
     padding: 10,
