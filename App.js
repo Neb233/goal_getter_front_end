@@ -26,7 +26,7 @@ import RootStack from "./components/RootStack/RootStack";
 const Stack = createNativeStackNavigator();
 
 const App = ({ navigation }) => {
-  const [profile, SetProfile] = useState({ username: "jeff" });
+  const [profile, SetProfile] = useState("");
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -35,15 +35,19 @@ const App = ({ navigation }) => {
   }, []);
 
   return (
-    <PaperProvider>
+   
       <NavigationContainer>
         {profile !== null ? (
           <Stack.Navigator>
-            <Stack.Screen name="Nav" component={Nav} options={{ headerShown: false }} />
+            <Stack.Screen
+              name="Nav"
+              component={Nav}
+              options={{ headerShown: false }}
+            />
 
             <Stack.Screen name="Feed" component={Feed} />
             <Stack.Screen name="SetGoal" component={SetGoal} />
-            <Stack.Screen name="GoalCalendar" component={GoalCalendar} /> 
+            <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
             <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="SearchUsers" component={SearchUsers} />
@@ -53,15 +57,13 @@ const App = ({ navigation }) => {
             <Stack.Screen name="UserPage" component={Goals} />
             <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
 
-          
-
             <Stack.Screen name="Register" component={RegisterScreen} />
           </Stack.Navigator>
         ) : (
           <RootStack />
         )}
       </NavigationContainer>
-    </PaperProvider>
+   
   );
 };
 
@@ -75,4 +77,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
