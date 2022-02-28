@@ -24,6 +24,11 @@ const LoginScreen = () => {
   
 const navigation = useNavigation();
 
+// const handleTest = (values) => {
+//   navigation.navigate("Profile")
+
+// }
+
 
   const valSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
@@ -49,10 +54,17 @@ const navigation = useNavigation();
         }}
         validationSchema={valSchema}
         onSubmit={(values) => {
+          
+         
           signInWithEmailAndPassword(auth, values.email, values.password)
-            .then((userCredential) => {
-              return userCredential.user;
+            .then((userCredentials) => {
+              const user = userCredentials.user;
+              navigation.navigate("Profile")
+              return user
+              
             })
+           
+            
             .catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
@@ -181,6 +193,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 60,
     textAlign: "center",
+    zIndex: 1,
+    elevation: 1,
   },
   buttonText: {
     color: "white",
