@@ -10,7 +10,7 @@ import {
   Pressable,
   TouchableWithoutFeedBack,
   Keyboard,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Card from "../../shared/card";
@@ -48,6 +48,7 @@ const SetGoal = ({ navigation, route }) => {
   const { goalProperties } = route.params;
 
   const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
+
 
   const [subGoals, setSubGoals] = useState([]);
   const [showSubGoalDetails, setShowSubGoalDetails] = useState(
@@ -168,6 +169,7 @@ const SetGoal = ({ navigation, route }) => {
 
   const addSubGoal = (subGoal) => {
     setSubGoals((currentSubGoals) => {
+      
       return [...currentSubGoals, subGoal];
     });
     setAddSubGoalModalOpen(false);
@@ -176,27 +178,34 @@ const SetGoal = ({ navigation, route }) => {
   const handleAddGoal = () => {
     postGoal(goalProperties).then((goal_id) => {
       subGoals.forEach((subgoal) => {
+       
         postSubgoal(subgoal, goal_id);
       });
-    });
+    }).catch((err) => {
+      console.log(err)
+    })
 
     navigation.navigate("Feed");
   };
 
   return (
     <ScrollView>
-      <SafeAreaView>
-        <Modal visible={addSubGoalModalOpen} animationType="slide">
-          <View style={styles.modalContainer}>
-            <Button
-              title="Close"
-              onPress={() => {
-                setAddSubGoalModalOpen(false);
-              }}
-            />
-            <SubGoalForm addSubGoal={addSubGoal} />
-          </View>
-        </Modal>
+
+    
+      <Modal visible={addSubGoalModalOpen} animationType="slide">
+        <View style={styles.modalContainer}>
+          <Button
+          style={styles.closebutton}
+            title="Close"
+            onPress={() => {
+              setAddSubGoalModalOpen(false);
+            }}
+          />
+          <SubGoalForm addSubGoal={addSubGoal} setShowSubGoalDetails={setShowSubGoalDetails} />
+        </View>
+      </Modal>
+      
+
 
         <Text>Goal Details</Text>
         <Text>Objective - {goalProperties.objective}</Text>
@@ -207,21 +216,67 @@ const SetGoal = ({ navigation, route }) => {
             new Date(goalProperties.start_date).getMonth() + 1
           }-${new Date(goalProperties.start_date).getDate()}`}
         </Text>
-        <Text>
-          End Date -
-          {` ${new Date(goalProperties.end_date).getFullYear()}-${
-            new Date(goalProperties.end_date).getMonth() + 1
-          }-${new Date(goalProperties.end_date).getDate()}`}
-        </Text>
-        <HideableView hidden={goalProperties.target_value === null}>
-          <Text>Target Value - {goalProperties.target_value}</Text>
-          <Text>
-            Unit -{" "}
-            {goalProperties.unit ? goalProperties.unit : "None specified"}
-          </Text>
-        </HideableView>
+      </HideableView>
+      <Button
+        title="Edit Goal"
+        onPress={() => {
+          navigation.navigate("SetGoalIntro", {
+            goalProperties,
+          });
+        }}
+      ></Button>
+      <Text>Subgoals:</Text>
+      <View style={styles.subgoalscontainer}>
+        <FlatList
+          data={subGoals}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => {
+                setShowSubGoalDetails((showSubGoalDetails) => {
+                  const newState = showSubGoalDetails.map((boolean, index) => {
+                    return subGoals.indexOf(item) === index;
+                  });
+                  return newState;
+                });
+              }}
+            >
+              <Modal
+                visible={showSubGoalDetails[subGoals.indexOf(item)] === true}
+                animationType="fade"
+              >
+                <View>
+                  <Button
+                    title="Close"
+                    onPress={() => {
+                      setShowSubGoalDetails((showSubGoalDetails) => {
+                        const newState = showSubGoalDetails.map(() => {
+                          return false;
+                        });
+                        return newState;
+                      });
+                    }}
+                  ></Button>
+                  <SubGoalDetails
+                    setSubGoals={setSubGoals}
+                    setShowSubGoalDetails={setShowSubGoalDetails}
+                    showSubGoalDetails={showSubGoalDetails}
+                    subGoals={subGoals}
+                    item={item}
+                  />
+                </View>
+              </Modal>
+              <Card>
+                <Text style={styles.text}>{item.objective}</Text>
+              </Card>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+      <View>
         <Button
-          title="Edit Goal"
+          title="Add SubGoal"
+         
+
           onPress={() => {
             // goalProperties.subgoals = subGoals.filter((subgoal) => {
             //   return !subgoal.core;
@@ -288,14 +343,15 @@ const SetGoal = ({ navigation, route }) => {
             }}
           ></Button>
 
-          <Button
-            title="Add Goal"
-            onPress={() => {
-              handleAddGoal();
-            }}
-          ></Button>
-        </View>
-      </SafeAreaView>
+
+        <Button
+          title="Add Goal"
+          onPress={() => {
+            handleAddGoal();
+          }}
+        ></Button>
+      </View>
+
     </ScrollView>
   );
 };
@@ -316,6 +372,13 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: "bold",
   },
+  closebutton: {
+    marginBottom: 40
+  },
+  subgoalscontainer: {
+    marginTop: 20,
+    marginBottom: 20
+  }
 });
 
 export default SetGoal;

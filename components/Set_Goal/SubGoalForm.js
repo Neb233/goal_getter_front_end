@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Button, TextInput, View, Text, Switch, KeyboardAvoidingView } from "react-native";
-import { Formik } from "formik";
+import { StyleSheet, Button, TextInput, View, Text, Switch, KeyboardAvoidingView, ScrollView } from "react-native";
+import { Formik, useField } from "formik";
 import * as yup from "yup";
 import DatePicker from "../../shared/DatePicker";
 import { prodErrorMap } from "firebase/auth";
@@ -8,28 +8,33 @@ import { HideableView } from "../../shared/HideableView";
 
 
 const ReviewSchema = yup.object({
-  title: yup.string().required().min(4),
+ 
   objective: yup.string().required().min(10),
-  start_date: yup.date().required(),
-  end_date: yup.date().required()
+  start_date: yup.date(),
+  end_date: yup.date(),
+  target_value: yup.number(),
+  unit: yup.string()
 });
 
-const SubGoalForm = ({ addSubGoal }) => {
+const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
   const [hideProgressOptions, setHideProgressOptions] = useState(true);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () =>{
      setIsEnabled(previousState => !previousState)
 isEnabled ? setHideProgressOptions(true) : setHideProgressOptions(false)
 };
+
   return (
     
-    <KeyboardAvoidingView behavior="padding">
+    <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column'}} behavior="padding" enabled   keyboardVerticalOffset={100}>
       <Formik
         initialValues={{
-          title: "",
+         
           objective: "",
           start_date: "",
           end_date: "",
+          target_value: 0,
+          unit: ""
 
         }}
         onSubmit={(values) => {
@@ -38,23 +43,8 @@ isEnabled ? setHideProgressOptions(true) : setHideProgressOptions(false)
         validationSchema={ReviewSchema}
       >
         {(props) => (
-          <View>
-           
-            <View style={styles.container}>
-            
-            <TextInput
-              style={styles.input}
-              multiline
-              
-              placeholder="SubGoal Title"
-              onChangeText={props.handleChange("title")}
-              value={props.values.title}
-            />
-             
-            </View>
-            <Text style={styles.errorText}>
-              {props.touched.title && props.errors.title}
-            </Text>
+          <ScrollView>
+         
             
             
             <View style={styles.container}>
@@ -80,26 +70,33 @@ isEnabled ? setHideProgressOptions(true) : setHideProgressOptions(false)
 
             <DatePicker
              name="end_date" />
-{/* <View style={styles.switchcontainer}> */}
-  {/* <Text>Set Numerical Values</Text> */}
+<View style={styles.switchcontainer}>
+  <Text>Set Numerical Values</Text>
 <Switch
         trackColor={{ false: "#767577", true: "#81b0ff" }}
         thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
         ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch}
         value={isEnabled}
+        style={styles.switch}
         
       />
-      {/* </View> */}
+      </View>
 
-             <HideableView hidden={hideProgressOptions}>
+             <HideableView hidden={hideProgressOptions}
+             style={styles.HideableView}>
             
              <TextInput
                     style={styles.input}
                     multiline
                     placeholder="Target Value"
-                    onChangeText={props.handleChange("target_value")}
+                    type="number"
+                    onChangeText={
+                      props.handleChange("target_value")
+                    }
                     value={props.values.target_value}
+                    keyboardType="numeric"
+                  
                   />
                   <TextInput
                     style={styles.input}
@@ -114,9 +111,12 @@ isEnabled ? setHideProgressOptions(true) : setHideProgressOptions(false)
             <Button
               title="Add SubGoal"
               color="maroon"
-              onPress={props.handleSubmit}
+             
+              onPress={   
+                props.handleSubmit
+              }
             />
-          </View>
+          </ScrollView>
         )}
       </Formik>
 
@@ -129,8 +129,9 @@ isEnabled ? setHideProgressOptions(true) : setHideProgressOptions(false)
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    padding: 20,
+    // flex: 1,
+    // flexDirection: "row",
+    // padding: 5,
   },
   errorText: {
     color: "crimson",
@@ -139,13 +140,28 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   input: {
-    
-borderColor: "black",
-borderRadius:10
+    marginTop:20,
+    marginBottom: 20
+
+
+
   },
   switchcontainer: {
     flex: 1,
-    flexDirection: "column"
+    flexDirection: "row",
+    marginTop: 20,
+    marginBottom: 20
+   
+  },
+  switch: {
+marginLeft: 180
+  },
+  HideableView: {
+    marginTop: 20,
+    marginBottom: 20
+  },
+  addsubgoalbutton: {
+    marginTop: 20
   }
 });
 
