@@ -14,6 +14,7 @@ import {
   postReaction,
   deleteReaction,
   postComment,
+  getSubgoalsByGoalId,
 } from "../../utils/api";
 import { formatDatetime } from "../../utils/format";
 import {
@@ -23,6 +24,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
+import ProgressBar from "../../shared/ProgressBar";
 
 const currentUser = "jeff";
 
@@ -66,6 +68,7 @@ const Social = (props) => {
     proud: 0,
   });
   const [currentUserReaction, setCurrentUserReaction] = useState();
+  const [subgoals, setSubgoals] = useState([]);
 
   const {
     owner,
@@ -78,6 +81,7 @@ const Social = (props) => {
   } = props.postDetails;
 
   useEffect(() => {
+    setAssociatedGoal({});
     if (associated_data_type === "subgoal") {
       getSubgoalBySubgoalId(associated_id).then((subgoal) => {
         setAssociatedGoal(subgoal);
@@ -85,6 +89,9 @@ const Social = (props) => {
     } else {
       getGoalByGoalId(associated_id).then((goal) => {
         setAssociatedGoal(goal);
+      });
+      getSubgoalsByGoalId(associated_id).then((subgoals) => {
+        setSubgoals(subgoals);
       });
     }
     getCommentsByPost(post_id).then((comments) => {
@@ -112,7 +119,7 @@ const Social = (props) => {
         }
       });
     });
-  }, []);
+  }, [owner]);
 
   const handleCommentClick = () => {
     setIsShowing((currValue) => {
@@ -122,7 +129,6 @@ const Social = (props) => {
 
   const handleAddComment = () => {
     postComment(post_id, currentUser, currentComment).then((comment) => {
-      console.log(comment);
       setComments((oldComments) => {
         const newComments = [...oldComments];
         newComments.push(comment);
@@ -182,7 +188,8 @@ const Social = (props) => {
             >
               {associatedGoal.objective}
             </Text>
-            {progress_point && Object.keys(associatedGoal).length !== 0 ? (
+            {progress_point !== null &&
+            Object.keys(associatedGoal).length !== 0 ? (
               <View>
                 <Text
                   onPress={() => {
@@ -190,42 +197,92 @@ const Social = (props) => {
                       goal_id: associatedGoal.goal_id,
                     });
                   }}
-                >{`Added ${
-                  associatedGoal.progress[
-                    associatedGoal.progress.length - 1
-                  ][1] -
-                  (associatedGoal.progress.length > 1
-                    ? associatedGoal.progress[
-                        associatedGoal.progress.length - 2
-                      ][1]
-                    : 0)
-                } ${associatedGoal.unit} to ${associatedGoal.target_value}  ${
-                  associatedGoal.unit
-                } target`}</Text>
+                >
+                  {associatedGoal.progress
+                    ? `Added ${
+                        associatedGoal.progress[parseInt(progress_point)][1] -
+                        (associatedGoal.progress.length > 1
+                          ? associatedGoal.progress[
+                              parseInt(progress_point) - 1
+                            ][1]
+                          : 0)
+                      } ${associatedGoal.unit} to ${
+                        associatedGoal.target_value
+                      }  ${associatedGoal.unit} target`
+                    : null}
+                </Text>
                 <Text
                   onPress={() => {
                     navigation.navigate("GoalPage", {
                       goal_id: associatedGoal.goal_id,
                     });
                   }}
-                >{`Current progress: ${
-                  associatedGoal.progress[associatedGoal.progress.length - 1][1]
-                } ${associatedGoal.unit}`}</Text>
+                >
+                  {associatedGoal.progress
+                    ? `New progress: ${associatedGoal.progress[progress_point][1]} ${associatedGoal.unit}`
+                    : null}
+                </Text>
               </View>
             ) : null}
+            {Object.keys(associatedGoal).length !== 0 &&
+            (!associatedGoal.subgoal_id ||
+              associatedGoal.type !== "boolean") ? (
+              <ProgressBar
+                progress={
+                  associatedGoal.progress
+                    ? associatedGoal.progress.slice(0, progress_point + 1)
+                    : null
+                }
+                target_value={associatedGoal.target_value}
+                subgoals={subgoals}
+              />
+            ) : null}
           </View>
+
           <Text>{message}</Text>
           <Text>{formatDatetime(datetime)}</Text>
         </View>
         <View style={styles.flexRow}>
-          <View style={styles.awesome} />
-          <Text>{reactionCount.awesome}</Text>
-          <View style={styles.congrats} />
-          <Text>{reactionCount.congrats}</Text>
-          <View style={styles.encourage} />
-          <Text>{reactionCount.encourage}</Text>
-          <View style={styles.proud} />
-          <Text>{reactionCount.proud}</Text>
+          {reactionCount.awesome > 0 ? (
+            <View style={styles.reaction}>
+              <View style={styles.awesome} />
+              {currentUserReaction && currentUserReaction[0] === "awesome" ? (
+                <Text style={styles.blueText}>{reactionCount.awesome}</Text>
+              ) : (
+                <Text>{reactionCount.awesome}</Text>
+              )}
+            </View>
+          ) : null}
+          {reactionCount.congrats > 0 ? (
+            <View style={styles.reaction}>
+              <View style={styles.congrats} />
+              {currentUserReaction && currentUserReaction[0] === "congrats" ? (
+                <Text style={styles.blueText}>{reactionCount.congrats}</Text>
+              ) : (
+                <Text>{reactionCount.congrats}</Text>
+              )}
+            </View>
+          ) : null}
+          {reactionCount.encourage > 0 ? (
+            <View style={styles.reaction}>
+              <View style={styles.encourage} />
+              {currentUserReaction && currentUserReaction[0] === "encourage" ? (
+                <Text style={styles.blueText}>{reactionCount.encourage}</Text>
+              ) : (
+                <Text>{reactionCount.encourage}</Text>
+              )}
+            </View>
+          ) : null}
+          {reactionCount.proud > 0 ? (
+            <View style={styles.reaction}>
+              <View style={styles.proud} />
+              {currentUserReaction && currentUserReaction[0] === "proud" ? (
+                <Text style={styles.blueText}>{reactionCount.proud}</Text>
+              ) : (
+                <Text>{reactionCount.proud}</Text>
+              )}
+            </View>
+          ) : null}
         </View>
         <View style={styles.interact}>
           {currentUserReaction ? (
@@ -352,24 +409,28 @@ const styles = StyleSheet.create({
     width: 30,
     backgroundColor: "blue",
     borderRadius: 15,
+    marginRight: 8,
   },
   congrats: {
     height: 30,
     width: 30,
     backgroundColor: "yellow",
     borderRadius: 15,
+    marginRight: 8,
   },
   encourage: {
     height: 30,
     width: 30,
     backgroundColor: "green",
     borderRadius: 15,
+    marginRight: 8,
   },
   proud: {
     height: 30,
     width: 30,
     backgroundColor: "pink",
     borderRadius: 15,
+    marginRight: 8,
   },
 
   profilePic: {
@@ -426,6 +487,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-evenly",
+    marginTop: 20,
   },
   comment: {
     color: "white",
@@ -442,9 +504,19 @@ const styles = StyleSheet.create({
   redText: {
     color: "red",
   },
+  blueText: {
+    color: "blue",
+    fontWeight: "bold",
+  },
   boxed: {
     borderWidth: 1,
     borderColor: "black",
+  },
+  reaction: {
+    paddingLeft: 5,
+    paddingRight: 5,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
