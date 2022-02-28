@@ -209,3 +209,12 @@ export const postComment = (post_id, owner, message) => {
       console.log(err.response.data);
     });
 };
+
+
+export const patchAvatar = (username, url) => {
+  const patchObject = {username: username, avatar_url: url};
+  return goalgetterApi.patch('/users', patchObject).then(({data}) => {
+    return data
+  })
+}
+

@@ -25,6 +25,7 @@ import { auth } from "../../firebase";
 import * as ImagePicker from 'expo-image-picker';
 import {updateProfile} from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { patchAvatar } from "../../utils/api";
 
 const Goals = ({ navigation, route }) => {
   const [goals, setGoals] = useState([]);
@@ -36,6 +37,7 @@ const Goals = ({ navigation, route }) => {
   const [subgoals, setSubgoals] = useState({});
   const [imagemodalVisible, setImageModaVisible] = useState("")
   const [profPic, SetProfPic] = useState("")
+  
   
 
  
@@ -125,7 +127,17 @@ const storage = getStorage();
 
       await uploadBytes(refo, bytes);
     }
-    updateProfile(user, { photoURL: `${user.displayName}: Profile Picture` });
+    await updateProfile(user, { photoURL: `${user.displayName}: Profile Picture` });
+
+    
+    getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
+      (url) => {
+        console.log(url);
+        patchAvatar(user.displayName, url).then((res) => {
+          console.log(res)
+        })
+      }
+    );
     setImageModaVisible(!imagemodalVisible);
   };
 
