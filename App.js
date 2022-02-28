@@ -26,54 +26,47 @@ import RootStack from "./components/RootStack/RootStack";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const [profile, SetProfile] = useState({ username: "jeff" });
 
+  // useEffect(() => {
 
-  const [profile, SetProfile] = useState(false);
-
-
-
-  useEffect(() => {
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-            SetProfile(true)
-      } else {
-        SetProfile(false)
-      }
-       })
-    }, [])
-
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //           SetProfile(true)
+  //     } else {
+  //       SetProfile(false)
+  //     }
+  //      })
+  //   }, [])
 
   return (
-   
-      <NavigationContainer>
-        { profile === true ? (
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Nav"
-              component={Nav}
-              options={{ headerShown: false }}
-            />
+    <NavigationContainer>
+      {profile ? (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Nav"
+            component={Nav}
+            options={{ headerShown: false }}
+          />
 
-            <Stack.Screen name="Feed" component={Feed} />
-            <Stack.Screen name="SetGoal" component={SetGoal} />
-            <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
-            <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
-            <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen name="SearchUsers" component={SearchUsers} />
+          <Stack.Screen name="Feed" component={Feed} />
+          <Stack.Screen name="SetGoal" component={SetGoal} />
+          <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
+          <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="SearchUsers" component={SearchUsers} />
 
-            <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
 
-            <Stack.Screen name="UserPage" component={Goals} />
-            <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
+          <Stack.Screen name="UserPage" component={Goals} />
+          <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
 
-            <Stack.Screen name="Register" component={RegisterScreen} />
-          </Stack.Navigator>
-        ) : (
-          <RootStack />
-        )}
-      </NavigationContainer>
-   
+          <Stack.Screen name="Register" component={RegisterScreen} />
+        </Stack.Navigator>
+      ) : (
+        <RootStack />
+      )}
+    </NavigationContainer>
   );
 };
 

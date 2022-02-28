@@ -31,7 +31,7 @@ const SearchUsers = () => {
       setFriends(friendsRes);
       console.log("friends result state", friendsRes);
     });
-  }, [friends]);
+  }, []);
 
   useEffect(() => {
     return searchUsers(queryState.query).then((results) => {
@@ -96,7 +96,7 @@ const SearchUsers = () => {
         />
       </View>
       <ScrollView>
-        <List.Section>
+        {/* <List.Section>
           <List.Subheader>Results</List.Subheader>
 
           {resultState ? (
@@ -143,7 +143,7 @@ const SearchUsers = () => {
           ) : (
             <Text>""</Text>
           )}
-        </List.Section>
+        </List.Section> */}
       </ScrollView>
     </KeyboardAvoidingView>
   );

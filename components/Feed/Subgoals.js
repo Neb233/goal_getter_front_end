@@ -62,10 +62,10 @@ const Subgoals = ({ setFriendPosts }) => {
                         End date:{" "}
                         {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
                       </Text>
-                      <ProgressBar
+                      {/* <ProgressBar
                         progress={goal.progress}
                         target_value={goal.target_value}
-                      />
+                      /> */}
                       <View style={styles.progress}>
                         <Text style={styles.unit}>Made progress?</Text>
                         <PatchSubGoal
@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.6,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   text: {

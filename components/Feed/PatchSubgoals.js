@@ -52,7 +52,7 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
           keyboardType="numeric"
           placeholder="completed..."
           onChangeText={setProgress}
-          value={progress}
+          value={progress.toString()}
         />
       </View>
       <View>
