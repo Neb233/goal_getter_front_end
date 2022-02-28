@@ -15,7 +15,7 @@ import Profile from "./components/Profile/Profile";
 import SetGoalIntro from "./components/Set_Goal/SetGoalIntro";
 import GoalCalendar from "./components/Calendar/GoalCalendar";
 import React, { useEffect, useState, useContext } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { auth } from "./firebase";
 import { UserContext, UserProvider } from "./context/user";
 import Goals from "./components/Profile/UserPage";
@@ -25,19 +25,29 @@ import { Provider as PaperProvider } from "react-native-paper";
 import RootStack from "./components/RootStack/RootStack";
 const Stack = createNativeStackNavigator();
 
-const App = ({ navigation }) => {
-  const [profile, SetProfile] = useState({ username: "jeff" });
+const App = () => {
 
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     SetProfile(user);
-  //   });
-  // }, []);
+
+  const [profile, SetProfile] = useState(false);
+
+
+
+  useEffect(() => {
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+            SetProfile(true)
+      } else {
+        SetProfile(false)
+      }
+       })
+    }, [])
+
 
   return (
-    <PaperProvider>
+   
       <NavigationContainer>
-        {profile !== null ? (
+        { profile === true ? (
           <Stack.Navigator>
             <Stack.Screen
               name="Nav"
@@ -63,7 +73,7 @@ const App = ({ navigation }) => {
           <RootStack />
         )}
       </NavigationContainer>
-    </PaperProvider>
+   
   );
 };
 
