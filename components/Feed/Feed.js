@@ -8,7 +8,6 @@ import { TouchableOpacity, FlatList } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SetGoal from "../Set_Goal/SetGoal";
-import Nav from "../Nav/Nav";
 import GoalStatus from "./GoalStatus";
 
 import { getFriends, getPostsByUser } from "../../utils/api";

@@ -78,9 +78,7 @@ const GoalPage = ({ navigation, route }) => {
                   subgoals={subgoals}
                 />
               </View>
-            ) : (
-              ""
-            )}
+            ) : null}
           </View>
         </View>
       </View>
