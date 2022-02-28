@@ -8,6 +8,7 @@ import {
   Image,
   Pressable,
   Modal,
+  
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { auth } from "../../firebase";
@@ -18,6 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UserContext, UserProvider } from "../../context/user";
+
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -83,6 +85,7 @@ const Profile = () => {
   };
 
   return (
+    
     <View style={styles.container}>
       <View style={styles.header}>
         <Modal
@@ -143,10 +146,13 @@ const Profile = () => {
                 style={{ width: 200, height: 200 }}
               />
             )}
+
+            <Button icon="account-arrow-left" size={50}>Press</Button>
           </View>
         </View>
       </View>
     </View>
+   
   );
 };
 
@@ -226,8 +232,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     shadowColor: "#000",
   },
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
+  // shadowOffset: {
+  //   width: 0,
+  //   height: 2,
+  // },
 });
