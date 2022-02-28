@@ -82,6 +82,32 @@ export const addFriend = (loggedInUser, userToAdd) => {
     });
 };
 
+export const deleteFriend = (loggedInUser, userToDelete) => {
+  console.log("DELETEPARAMs", loggedInUser, userToDelete);
+  //FRIENDSHIPS ARE STORED AS IDs
+  return goalgetterApi
+    .get(`/users/${loggedInUser}/friendships`)
+    .then((friendships) => {
+      console.log(friendships.data.friendships);
+      for (let i = 0; friendships.data.friendships.length; i++) {
+        if (
+          friendships.data.friendships[i]["user_1"] == userToDelete ||
+          friendships.data.friendships[i]["user_2"] == userToDelete
+        ) {
+          return friendships.data.friendships[i]["friendship_id"];
+        }
+      }
+    })
+    .then((friendship_id) => {
+      console.log(friendship_id, "friendship id to delete");
+      return goalgetterApi.delete(`/friendships/${friendship_id}`);
+    })
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    });
+};
+
 export const getFriends = (user) => {
   return goalgetterApi.get(`/users/${user}/friendships`).then((res) => {
     const { friendships } = res.data;
