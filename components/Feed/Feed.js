@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import Goals from "../Profile/UserPage";
 import Social from "./Social";
 import Subgoals from "./Subgoals";
@@ -41,33 +41,35 @@ const Feed = ({ navigation }) => {
       });
   }, []);
 
-  return (
-    <ScrollView style={styles.container}>
-      <Subgoals setFriendPosts={setFriendPosts} />
-      <View style={styles.personalWrapper}>
-        {/* <Text style={styles.sectionTitle}>Goal Status:</Text>
-        <View style={styles.status}><GoalStatus /></View> */}
-
-        <View>
-          <TouchableOpacity
-            style={styles.takeToCalendar}
-            onPress={() => navigation.navigate("GoalCalendar")}
-          >
-            <Text>See Calendar</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+  const HeaderComponent = () => {
+    return (
       <View>
-        <Text style={styles.friends}>Friends feed</Text>
+        <Subgoals setFriendPosts={setFriendPosts} />
+        <View style={styles.personalWrapper}>
+          {/* <Text style={styles.sectionTitle}>Goal Status:</Text>
+    <View style={styles.status}><GoalStatus /></View> */}
 
-        <View>
-          <FlatList
-            data={friendPosts}
-            renderItem={({ item }) => <Social postDetails={item} />}
-          />
+          <View>
+            <TouchableOpacity
+              style={styles.takeToCalendar}
+              onPress={() => navigation.navigate("GoalCalendar")}
+            >
+              <Text>See Calendar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+        <Text style={styles.friends}>Friends feed</Text>
       </View>
-    </ScrollView>
+    );
+  };
+
+  return (
+    <FlatList
+      style={styles.container}
+      ListHeaderComponent={<HeaderComponent />}
+      data={friendPosts}
+      renderItem={({ item }) => <Social postDetails={item} />}
+    />
   );
 };
 
