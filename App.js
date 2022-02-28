@@ -15,7 +15,7 @@ import Profile from "./components/Profile/Profile";
 import SetGoalIntro from "./components/Set_Goal/SetGoalIntro";
 import GoalCalendar from "./components/Calendar/GoalCalendar";
 import React, { useEffect, useState, useContext } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 import { auth } from "./firebase";
 import { UserContext, UserProvider } from "./context/user";
 import Goals from "./components/Profile/UserPage";
@@ -25,25 +25,44 @@ import { Provider as PaperProvider } from "react-native-paper";
 import RootStack from "./components/RootStack/RootStack";
 const Stack = createNativeStackNavigator();
 
-const App = ({ navigation }) => {
-  const [profile, SetProfile] = useState({ username: "jeff" });
+const App = () => {
+
+
+  const [profile, SetProfile] = useState(false);
+
 
   useEffect(() => {
+
+
     onAuthStateChanged(auth, (user) => {
-      SetProfile(user);
-    });
-  }, []);
+      if (user) {
+            SetProfile(true)
+      } else {
+        SetProfile(false)
+      }
+       })
+    }, [])
+
+
+
+
+   
+  
 
   return (
-    <PaperProvider>
+   
       <NavigationContainer>
-        {profile !== null ? (
+        { profile === true ? (
           <Stack.Navigator>
-            <Stack.Screen name="Nav" component={Nav} options={{ headerShown: false }} />
+            <Stack.Screen
+              name="Nav"
+              component={Nav}
+              options={{ headerShown: false }}
+            />
 
             <Stack.Screen name="Feed" component={Feed} />
             <Stack.Screen name="SetGoal" component={SetGoal} />
-            <Stack.Screen name="GoalCalendar" component={GoalCalendar} /> 
+            <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
             <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="SearchUsers" component={SearchUsers} />
@@ -53,15 +72,13 @@ const App = ({ navigation }) => {
             <Stack.Screen name="UserPage" component={Goals} />
             <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
 
-          
-
             <Stack.Screen name="Register" component={RegisterScreen} />
           </Stack.Navigator>
         ) : (
           <RootStack />
         )}
       </NavigationContainer>
-    </PaperProvider>
+   
   );
 };
 
@@ -75,4 +92,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-

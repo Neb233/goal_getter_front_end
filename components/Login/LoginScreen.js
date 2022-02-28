@@ -46,7 +46,8 @@ const LoginScreen = () => {
         onSubmit={(values) => {
           signInWithEmailAndPassword(auth, values.email, values.password)
             .then((userCredential) => {
-              return userCredential.user;
+              const user = userCredential.user
+              return user;
             })
             .catch((error) => {
               const errorCode = error.code;
@@ -100,7 +101,7 @@ const LoginScreen = () => {
                 </Text>
 
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("Register")}
+                  onPress={() => navigation.navigate("RegisterScreen")}
                   style={styles.button}
                 >
                   <Text style={styles.buttonText}>Register</Text>
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginBottom: 60,
-    textAlign: "center",
+    // textAlign: "center",
   },
   buttonText: {
     color: "white",
