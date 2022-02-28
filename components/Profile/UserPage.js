@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Modal,
+  Pressable
 } from "react-native";
 import { useState, useEffect } from "react";
 import {
@@ -19,6 +21,10 @@ import {
 import dateFormat, { masks } from "dateformat";
 import Social from "../Feed/Social";
 import ProgressBar from "../../shared/ProgressBar";
+import { auth } from "../../firebase";
+import * as ImagePicker from 'expo-image-picker';
+import {updateProfile} from 'firebase/auth';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const Goals = ({ navigation, route }) => {
   const [goals, setGoals] = useState([]);
@@ -28,7 +34,23 @@ const Goals = ({ navigation, route }) => {
   const [userPosts, setUserPosts] = useState([]);
   const [showGoals, setShowGoals] = useState(false);
   const [subgoals, setSubgoals] = useState({});
-  const { user } = route.params;
+  const [imagemodalVisible, setImageModaVisible] = useState("")
+  const [profPic, SetProfPic] = useState("")
+  
+
+ 
+
+
+const user = auth.currentUser;
+
+  
+const default_url =
+"https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
+
+
+const storage = getStorage();
+
+
 
   useEffect(() => {
     setSubgoals({});
@@ -36,7 +58,17 @@ const Goals = ({ navigation, route }) => {
     setFutureGoals([]);
     setOldGoals([]);
     setShowGoals(false);
-    getGoalsByUser(user).then((goals) => {
+    if (user.photoURL !== null) {
+      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
+        (url) => {
+          console.log(url);
+          SetProfPic(url);
+        }
+      );
+    } else {
+      SetProfPic(default_url);
+    }
+    getGoalsByUser(user.displayName).then((goals) => {
       goals.forEach((goal) => {
         getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
           setSubgoals((oldSubgoals) => {
@@ -66,21 +98,78 @@ const Goals = ({ navigation, route }) => {
         })
       );
     });
-    getPostsByUser(user).then((posts) => {
+    getPostsByUser(user.displayName).then((posts) => {
       setUserPosts(posts);
     });
-    getUser(user).then((userDetails) => {
+    getUser(user.displayName).then((userDetails) => {
       setUserDetails(userDetails[0]);
     });
   }, [user]);
 
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      SetProfPic(result.uri);
+      const storage = getStorage();
+      const refo = ref(storage, `${user.displayName}: Profile Picture`);
+
+      const img = await fetch(result.uri);
+      const bytes = await img.blob();
+
+      await uploadBytes(refo, bytes);
+    }
+    updateProfile(user, { photoURL: `${user.displayName}: Profile Picture` });
+    setImageModaVisible(!imagemodalVisible);
+  };
+
+
+
+
+
+
   return (
     <ScrollView>
       <View style={styles.header}>
-        <Image source={""} style={styles.profPic} />
+      <Modal
+          animationType="fade"
+          transparent={true}
+          visible={imagemodalVisible}
+          onRequestClose={() => {
+            setImageModaVisible(!imagemodalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={pickImage}
+              >
+                <Text style={styles.textStyle}>Update Profile Picture</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setImageModaVisible(!imagemodalVisible)}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+
+          <Pressable onPress={() => setImageModaVisible(true)}>
+        <Image source={{uri: profPic}} style={styles.profPic} />
+        </Pressable>
+
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-            <Text style={styles.userName}>{user}</Text>
+            <Text style={styles.userName}>{user.displayName}</Text>
             <Text>{userDetails.profile}</Text>
           </View>
         </View>
@@ -388,5 +477,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 20,
     marginTop: 200,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  modalView: {
+    margin: 40,
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    alignItems: "center",
+    shadowColor: "#000",
   },
 });
