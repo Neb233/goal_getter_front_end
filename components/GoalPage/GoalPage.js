@@ -208,7 +208,11 @@ const GoalPage = ({ navigation, route }) => {
                     ).getTime() ? (
                     <View style={styles.progress}>
                       <Text style={styles.unit}>Made progress?</Text>
-                      <PatchSubGoal goal={item} goalUnit={item.unit} />
+                      <PatchSubGoal
+                        goal={item}
+                        goalUnit={item.unit}
+                        goalPageId={item.goal_id}
+                      />
                       <Text style={styles.unit}>{item.unit}</Text>
                     </View>
                   ) : null}
