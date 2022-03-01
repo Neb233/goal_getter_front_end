@@ -59,11 +59,11 @@ const Feed = ({ navigation }) => {
               style={styles.takeToCalendar}
               onPress={() => navigation.navigate("GoalCalendar")}
             >
-              <Text>See Calendar</Text>
+              <Text>Check out your calendar</Text>
             </TouchableOpacity>
           </View>
         </View>
-        <Text style={styles.friends}>Friends feed</Text>
+        <Text style={styles.friends}>What have your friends been up to?</Text>
       </View>
     );
   };
