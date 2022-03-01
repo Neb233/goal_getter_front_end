@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image } from "react-native";
 
 import { TouchableOpacity, FlatList } from "react-native";
 import { useState, useEffect } from "react";
@@ -15,6 +15,8 @@ import {
   deleteReaction,
   postComment,
   getSubgoalsByGoalId,
+  getUsers,
+  getAvatar
 } from "../../utils/api";
 import { formatDatetime } from "../../utils/format";
 import {
@@ -25,8 +27,9 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 import ProgressBar from "../../shared/ProgressBar";
+import { auth } from "../../firebase";
 
-const currentUser = "jeff";
+const currentUser = {username: 'jeff', profile: 'Constant Striver', avatar_url: 'https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/jeff%3A%20Profile%20Picture?alt=media&token=282b5b87-e76b-4068-b625-59472543e284'}
 
 const getReactionCount = (reactions) => {
   const reactionCount = {
@@ -69,6 +72,7 @@ const Social = (props) => {
   });
   const [currentUserReaction, setCurrentUserReaction] = useState();
   const [subgoals, setSubgoals] = useState([]);
+  const [avatarUrl, setAvatarUrl] = useState(null)
 
   const {
     owner,
@@ -79,6 +83,8 @@ const Social = (props) => {
     post_id,
     progress_point,
   } = props.postDetails;
+
+ 
 
   useEffect(() => {
     setAssociatedGoal({});
@@ -101,7 +107,7 @@ const Social = (props) => {
       const reactionCount = getReactionCount(reactions);
       setReactionCount(reactionCount);
       reactions.forEach((reaction) => {
-        if (reaction.owner === currentUser) {
+        if (reaction.owner === currentUser.username) {
           switch (reaction.reaction) {
             case "Awesome!":
               setCurrentUserReaction(["awesome", reaction.reaction_id]);
@@ -119,6 +125,9 @@ const Social = (props) => {
         }
       });
     });
+    getAvatar(owner).then((res) => {
+    setAvatarUrl(res.user[0].avatar_url)
+    })
   }, [owner]);
 
   const handleCommentClick = () => {
@@ -128,7 +137,7 @@ const Social = (props) => {
   };
 
   const handleAddComment = () => {
-    postComment(post_id, currentUser, currentComment).then((comment) => {
+    postComment(post_id, currentUser.username, currentComment).then((comment) => {
       setComments((oldComments) => {
         const newComments = [...oldComments];
         newComments.push(comment);
@@ -144,7 +153,7 @@ const Social = (props) => {
       newReactionCount[value] = newReactionCount[value] + 1;
       return newReactionCount;
     });
-    postReaction(post_id, value, currentUser).then((reaction_id) => {
+    postReaction(post_id, value, currentUser.username).then((reaction_id) => {
       setCurrentUserReaction([value, reaction_id]);
     });
   };
@@ -164,8 +173,13 @@ const Social = (props) => {
     <KeyboardAvoidingView>
       <View style={styles.goalContainer}>
         <View style={styles.userInfo}>
-          <View style={styles.profilePic} />
-
+         
+          
+           
+          { avatarUrl !== null  ? 
+            <Image style={styles.profilePic} source={{uri: avatarUrl}} /> :
+            <Image style={styles.profilePic} source={{uri: default_url}}/>
+          }
           <Text
             style={styles.username}
             onPress={() => {
@@ -175,6 +189,8 @@ const Social = (props) => {
             }}
           >
             {owner}
+          
+           
           </Text>
         </View>
         <View style={styles.post}>
