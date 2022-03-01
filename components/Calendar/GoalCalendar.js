@@ -44,9 +44,12 @@ const GoalCalendar = () => {
 
   const renderItem = (items) => {
     return (
-      <View style={{ margin: 50 }}>
+      <Card style={{ marginTop: 35 }}>
+
+      <Card.Content>
         <Text>{items.name}</Text>
-      </View>
+      </Card.Content>
+      </Card>
     );
   };
 

@@ -157,7 +157,7 @@ const PostStatus = ({
   return (
     <View style={styles.centeredView}>
       <Modal
-        animaitonType="slide"
+        animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {

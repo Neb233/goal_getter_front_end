@@ -123,8 +123,8 @@ const Subgoals = ({ setFriendPosts }) => {
       </Modal>
       <Text style={styles.text}>Tell us what progress you've made today</Text>
       <View style={styles.page}>
-       {/* pagingEnabled={true} */}
-        <ScrollView horizontal={true}  >
+       
+        <ScrollView horizontal={true}  pagingEnabled={true}>
           {goals.map((goal) => {
             const type = goal.type === "progress";
             return (
@@ -173,7 +173,7 @@ const Subgoals = ({ setFriendPosts }) => {
                         text={goal.objective}
                         textStyle={{
                           color: "white",
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: "bold",
                         }}
                         style={styles.checkBox}
@@ -235,9 +235,9 @@ const styles = StyleSheet.create({
   subGoal: {
     flex: 1,
     
-    backgroundColor: "#5b72a4",
-    height: 250,
-    margin: 10,
+    backgroundColor: "#3e4d6e",
+    height: 300,
+    marginRight: 3,
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -287,11 +287,11 @@ const styles = StyleSheet.create({
   },
   goalObj: {
     flexDirection: "column",
-    fontSize: 24,
+    fontSize: 20,
+    marginBottom: 10,
     fontWeight: "bold",
     color: "white",
-    alignItems: "center",
-    justifyContent: "center",
+   alignSelf: 'center'
   },
   goalDescription: {
     flexDirection: "column",
