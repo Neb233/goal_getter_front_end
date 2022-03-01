@@ -6,15 +6,26 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Modal,
+  Pressable,
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import {
+  getGoalByGoalId,
+  patchSubgoalStatusById,
+  patchSubGoalbyId,
+  patchGoalStatusById,
+  patchGoalbyId,
+} from "../../utils/api";
+import { useNavigation } from "@react-navigation/native";
 
 import PostStatus from "./PostStatus";
-
-import { patchGoalbyId, patchSubGoalbyId } from "../../utils/api";
-
 const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
   const [progress, setProgress] = useState(0);
+  const [congratsModalVisible, setCongratsModalVisible] = useState(false);
+  const [goalObjective, setGoalObjective] = useState("");
+
+  const navigation = useNavigation();
 
   const submitTime = new Date(Date.now());
 
@@ -23,8 +34,6 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
     submitTime.getMonth(),
     submitTime.getDate()
   );
-
-  console.log(submitDate);
 
   let patchObject = {
     date: submitDate,
@@ -36,16 +45,86 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
       date: submitDate,
       value: parseFloat(progress),
     };
+    getGoalByGoalId(goal.goal_id).then((supergoal) => {
+      setGoalObjective(supergoal.objective);
+    });
   }, [progress]);
 
   const onSubmit = () => {
-    patchSubGoalbyId(goal.subgoal_id, patchObject);
-    patchGoalbyId(goal.goal_id, patchObject);
-    console.warn(goal);
+    if (!isNaN(parseFloat(progress)) && progress > 0) {
+      const patchObject = {
+        date: new Date(
+          new Date(Date.now()).getFullYear(),
+          new Date(Date.now()).getMonth(),
+          new Date(Date.now()).getDate()
+        ),
+        value: parseFloat(progress),
+      };
+      patchSubGoalbyId(goal.subgoal_id, patchObject)
+        .then((subgoal) => {
+          if (
+            subgoal.progress[subgoal.progress.length - 1][1] >=
+              subgoal.target_value &&
+            subgoal.status === "active"
+          ) {
+            return patchSubgoalStatusById(subgoal.subgoal_id, "completed");
+          }
+          return;
+        })
+        .then(() => {
+          return getGoalByGoalId(goal.goal_id);
+        })
+        .then((supergoal) => {
+          if (supergoal.type === "progress" && goal.unit === supergoal.unit) {
+            return patchGoalbyId(goal.goal_id, patchObject);
+          }
+          return;
+        })
+        .then((patchedGoal) => {
+          setProgress("");
+          if (
+            patchedGoal &&
+            patchedGoal.progress[patchedGoal.progress.length - 1][1] >=
+              patchedGoal.target_value &&
+            patchedGoal.status === "active"
+          ) {
+            console.log("hello");
+            setCongratsModalVisible(true);
+            return patchGoalStatusById(patchedGoal.goal_id, "completed");
+          }
+          return;
+        });
+    }
+  };
+
+  const handleCongratsMessageSubmit = () => {
+    setCongratsModalVisible(!congratsModalVisible);
   };
 
   return (
     <View>
+      <Modal
+        animaitonType="slide"
+        transparent={true}
+        visible={congratsModalVisible}
+        onRequestClose={() => {
+          setCongratsModalVisible(!congratsModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text>
+              Congratulations! You completed your goal "{goalObjective}"!
+            </Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={handleCongratsMessageSubmit}
+            >
+              <Text style={styles.textStyle}>Great News!</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <View>
         <TextInput
           style={styles.input}
@@ -149,11 +228,35 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "green",
   },
-  input: {
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  modalView: {
+    margin: 40,
     backgroundColor: "white",
-    flexDirection: "column",
-    marginLeft: 5,
-    borderRadius: 10,
-    padding: 3,
+    borderRadius: 20,
+    paddingVertical: 35,
+    paddingHorizontal: 70,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+    margin: 5,
   },
 });
