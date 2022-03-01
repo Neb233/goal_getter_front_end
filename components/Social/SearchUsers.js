@@ -92,7 +92,7 @@ const SearchUsers = () => {
           onChangeText={(query) => {
             setQueryState({ query: query });
           }}
-          value={queryState}
+          value={queryState.query}
         />
       </View>
       <ScrollView>
