@@ -8,33 +8,107 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Modal,
+  Pressable,
 } from "react-native";
 import { useState, useEffect } from "react";
 import dateFormat, { masks } from "dateformat";
-import { getGoalByGoalId, getSubgoalsByGoalId } from "../../utils/api";
+import {
+  getGoalByGoalId,
+  getSubgoalsByGoalId,
+  patchSubgoalStatusById,
+  patchGoalStatusById,
+} from "../../utils/api";
 import ProgressBar from "../../shared/ProgressBar";
 import PatchSubGoal from "../Feed/PatchSubgoals";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import PostStatus from "../Feed/PostStatus";
+import { useFocusEffect } from "@react-navigation/native";
 
 const GoalPage = ({ navigation, route }) => {
   const [goal, setGoal] = useState();
   const [subgoals, setSubgoals] = useState([]);
   const { goal_id } = route.params;
   const currentUser = "jeff";
+  const [isChecked, setIsChecked] = useState(false);
+  const [congratsModalVisible, setCongratsModalVisible] = useState(false);
+  const [goalObjective, setGoalObjective] = useState("");
 
-  useEffect(() => {
-    getGoalByGoalId(goal_id).then((goal) => {
-      setGoal(goal);
-    });
-    getSubgoalsByGoalId(goal_id).then((subgoals) => {
-      subgoals.sort((a, b) => {
-        return new Date(a.end_date).getTime() - new Date(b.end_date).getTime();
+  useFocusEffect(
+    React.useCallback(() => {
+      getGoalByGoalId(goal_id).then((goal) => {
+        setGoal(goal);
       });
-      setSubgoals(subgoals);
-    });
-  }, [goal_id]);
+      getSubgoalsByGoalId(goal_id).then((subgoals) => {
+        subgoals.sort((a, b) => {
+          return (
+            new Date(a.end_date).getTime() - new Date(b.end_date).getTime()
+          );
+        });
+        setSubgoals(subgoals);
+      });
+    }, [goal_id])
+  );
+
+  const handleCheckBoxClick = (subgoal) => {
+    console.log(subgoal);
+    setIsChecked((currVal) => !currVal);
+    getGoalByGoalId(subgoal.goal_id)
+      .then((supergoal) => {
+        setGoalObjective(supergoal.objective);
+      })
+      .then(() => {
+        patchSubgoalStatusById(subgoal.subgoal_id, "completed")
+          .then(() => {
+            const subgoalPromise = getSubgoalsByGoalId(subgoal.goal_id);
+            const goalPromise = getGoalByGoalId(subgoal.goal_id);
+            return Promise.all([subgoalPromise, goalPromise]);
+          })
+          .then(([subgoals, supergoal]) => {
+            let allSubgoalsCompleted = true;
+            for (const subgoal of subgoals) {
+              if (subgoal.status === "active") {
+                allSubgoalsCompleted = false;
+              }
+            }
+            if (allSubgoalsCompleted) {
+              console.log("adsadsdasads");
+              setCongratsModalVisible(true);
+              return patchGoalStatusById(supergoal.goal_id, "completed");
+            }
+            return null;
+          });
+      });
+  };
+
+  const handleCongratsMessageSubmit = () => {
+    setCongratsModalVisible(!congratsModalVisible);
+  };
 
   return (
     <ScrollView>
+      <Modal
+        animaitonType="slide"
+        transparent={true}
+        visible={congratsModalVisible}
+        onRequestClose={() => {
+          setCongratsModalVisible(!congratsModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text>
+              Congratulations! You completed your goal "{goalObjective}"!
+            </Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={handleCongratsMessageSubmit}
+            >
+              <Text style={styles.textStyle}>Great News!</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.header}>
         <View style={styles.item}>
           <View>
@@ -144,6 +218,33 @@ const GoalPage = ({ navigation, route }) => {
               ) : (
                 <Text style={styles.duedate}>Incomplete</Text>
               )}
+              {currentUser === item.owner &&
+              item.type === "boolean" &&
+              item.status === "active" &&
+              Date.now() <
+                new Date(
+                  new Date(item.end_date).setDate(
+                    new Date(item.end_date).getDate() + 1
+                  )
+                ).getTime() ? (
+                <View style={styles.progress}>
+                  <BouncyCheckbox
+                    text={item.objective}
+                    textStyle={{
+                      color: "white",
+                      fontSize: 24,
+                      fontWeight: "bold",
+                    }}
+                    style={styles.checkBox}
+                    onPress={() => handleCheckBoxClick(item)}
+                  />
+                  <PostStatus
+                    goal={item}
+                    subgoal={item.subgoal_id}
+                    ownerP={item.owner}
+                  />
+                </View>
+              ) : null}
             </View>
           )}
         />
@@ -248,5 +349,36 @@ const styles = StyleSheet.create({
     padding: 3,
     fontWeight: "bold",
     color: "green",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  modalView: {
+    margin: 40,
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingVertical: 35,
+    paddingHorizontal: 70,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+    margin: 5,
   },
 });
