@@ -176,10 +176,8 @@ const Social = (props) => {
          
           
            
-          { avatarUrl !== null  ? 
-            <Image style={styles.profilePic} source={{uri: avatarUrl}} /> :
-            <Image style={styles.profilePic} source={{uri: default_url}}/>
-          }
+            <Image style={styles.profilePic} source={{uri: avatarUrl}} /> 
+           
           <Text
             style={styles.username}
             onPress={() => {

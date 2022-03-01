@@ -67,7 +67,9 @@ const Feed = ({ navigation }) => {
           />
         </View>
       </View>
+      {/* <Nav /> */}
     </ScrollView>
+    
   );
 };
 

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./components/Login/LoginScreen";
@@ -66,20 +66,24 @@ const App = () => {
 
             <Stack.Screen name="UserPage" component={Goals} />
             <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
-
+          
             <Stack.Screen name="Register" component={RegisterScreen} />
+            
           </Stack.Navigator>
+          
         ) : (
           <RootStack />
         )}
+        
       </NavigationContainer>
+    
    
   );
 };
 
 export default App;
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
   container: {
     flex: 1,
     backgroundColor: "#efbcd9",
