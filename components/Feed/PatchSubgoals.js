@@ -20,7 +20,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import PostStatus from "./PostStatus";
-const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
+const PatchSubGoal = ({
+  goal,
+  goals,
+  goalUnit,
+  setFriendPosts,
+  goalPageId,
+}) => {
   const [progress, setProgress] = useState(0);
   const [congratsModalVisible, setCongratsModalVisible] = useState(false);
   const [goalObjective, setGoalObjective] = useState("");
@@ -93,6 +99,12 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
             return patchGoalStatusById(patchedGoal.goal_id, "completed");
           }
           return;
+        })
+        .then(() => {
+          if (goalPageId) {
+            navigation.navigate("SetGoalIntro");
+            navigation.navigate("GoalPage", { goal_id: goalPageId });
+          }
         });
     }
   };
