@@ -19,10 +19,12 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
   const submitTime = new Date(Date.now());
 
   const submitDate = new Date(
-    submitTime.getYear(),
+    submitTime.getFullYear(),
     submitTime.getMonth(),
     submitTime.getDate()
   );
+
+  console.log(submitDate);
 
   let patchObject = {
     date: submitDate,

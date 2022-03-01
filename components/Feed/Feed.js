@@ -14,7 +14,6 @@ import GoalStatus from "./GoalStatus";
 import { getFriends, getPostsByUser } from "../../utils/api";
 
 const Feed = ({ navigation }) => {
-  console.log(navigation);
   const currentUser = "jeff";
 
   const [friendPosts, setFriendPosts] = useState([]);
@@ -79,7 +78,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#abbabe",
   },
   personalWrapper: {
+
     // height: "fitContents",
+
     borderRadius: 10,
     backgroundColor: "white",
     padding: 10,

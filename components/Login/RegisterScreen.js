@@ -21,7 +21,7 @@ import { getStorage, ref, uploadBytes } from "firebase/storage";
 import axios from "axios";
 import { updateProfile } from "firebase/auth";
 import { UserContext } from "../../context/user";
-import * as Animatable from 'react-native-animatable'
+import * as Animatable from "react-native-animatable";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -76,7 +76,6 @@ const RegisterScreen = () => {
                 console.log(error);
               });
 
-              navigation.navigate("Nav", { screen: "Profile" });
               return user;
             })
 
@@ -84,68 +83,62 @@ const RegisterScreen = () => {
         }
       >
         {({ values, handleChange, handleSubmit, errors, touched }) => (
-          <KeyboardAvoidingView  behaviour="padding">
+          <KeyboardAvoidingView behaviour="padding">
             <View style={styles.header}>
               <Text style={styles.title_text}>Register Your Account</Text>
             </View>
-            
 
-            <Animatable.View 
-            animation='fadeInUpBig'
-            style={styles.footer}
-            >
-             <View style={styles.action}>
-               <Text style={styles.text_footer}>Email</Text>
-              <TextInput
-                id="email"
-                name="email"
-              
-                value={values.email}
-                onChange={handleChange("email")}
-                style={styles.textInput}
-              />
-              <Text style={styles.errorMsg}>{touched.email && errors.email}</Text>
-            </View>
-
-            <View style={styles.action}>
-              <Text style={styles.text_footer}>Username</Text>
-              <TextInput
-                id="username"
-                name="username"
-               
-                value={values.username}
-                onChange={handleChange("username")}
-                style={styles.textInput}
-              />
-              <Text style={styles.errorMsg}>{touched.username && errors.username}</Text>
+            <Animatable.View animation="fadeInUpBig" style={styles.footer}>
+              <View style={styles.action}>
+                <Text style={styles.text_footer}>Email</Text>
+                <TextInput
+                  id="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange("email")}
+                  style={styles.textInput}
+                />
+                <Text style={styles.errorMsg}>
+                  {touched.email && errors.email}
+                </Text>
               </View>
 
+              <View style={styles.action}>
+                <Text style={styles.text_footer}>Username</Text>
+                <TextInput
+                  id="username"
+                  name="username"
+                  value={values.username}
+                  onChange={handleChange("username")}
+                  style={styles.textInput}
+                />
+                <Text style={styles.errorMsg}>
+                  {touched.username && errors.username}
+                </Text>
+              </View>
 
               <View style={styles.action}>
                 <Text style={styles.text_footer}>Profile</Text>
-              <TextInput
-                id="profile"
-                name="profile"
-                
-                value={values.profile}
-                onChange={handleChange("profile")}
-                style={styles.textInput}
-              ></TextInput>
-                </View>
+                <TextInput
+                  id="profile"
+                  name="profile"
+                  value={values.profile}
+                  onChange={handleChange("profile")}
+                  style={styles.textInput}
+                ></TextInput>
+              </View>
 
               <View style={styles.action}>
                 <Text style={styles.text_footer}>Password</Text>
-              <TextInput
-                id="password"
-                name="password"
-                
-                value={values.password}
-                onChange={handleChange("password")}
-                style={styles.textInput}
-                secureTextEntry
-              ></TextInput>
+                <TextInput
+                  id="password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange("password")}
+                  style={styles.textInput}
+                  secureTextEntry
+                ></TextInput>
               </View>
-
 
               <Text>
                 {`
@@ -156,13 +149,12 @@ const RegisterScreen = () => {
                 `}
               </Text>
               <Text>{touched.password && errors.password}</Text>
-           
 
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                <Text style={styles.buttonText}>Sign Up</Text>
-              </TouchableOpacity>
-          </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+                  <Text style={styles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+              </View>
             </Animatable.View>
           </KeyboardAvoidingView>
         )}
@@ -178,73 +170,73 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#009387",
   },
-  
+
   header: {
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
     paddingHorizontal: 20,
     paddingBottom: 50,
     marginTop: 50,
   },
   title_text: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 30,
   },
   footer: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
     paddingVertical: 30,
     paddingTop: 50,
- },
+  },
 
- text_header: {
-  color: "#fff",
-  fontWeight: "bold",
-  fontSize: 30,
-},
-text_footer: {
-  color: "#05375a",
-  fontSize: 18,
-},
-action: {
-  flexDirection: "column",
-  marginTop: 10,
-  borderBottomWidth: 1,
-  borderBottomColor: "#f2f2f2",
-  paddingBottom: 5,
-},
+  text_header: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 30,
+  },
+  text_footer: {
+    color: "#05375a",
+    fontSize: 18,
+  },
+  action: {
+    flexDirection: "column",
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f2f2f2",
+    paddingBottom: 5,
+  },
 
-textInput: {
-  padding: 5,
-  color: "black",
-  borderWidth: 1,
-  borderRadius: 5,
-},
-errorMsg: {
-  color: "#FF0000",
-  fontSize: 14,
-},
-buttonContainer: {
-  paddingBottom: 400,
-  width: "80%",
-},
-button: {
-  backgroundColor: "#009387",
-  alignItems: "flex-start",
-  marginTop: 40,
-  padding: 15,
-  borderRadius: 10,
-  marginBottom: 60,
-  textAlign: "center",
-},
-buttonText: {
-  color: "white",
-  fontWeight: "700",
-  fontSize: 16,
-},
-register_text: {
-  marginTop: 20,
-},
+  textInput: {
+    padding: 5,
+    color: "black",
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  errorMsg: {
+    color: "#FF0000",
+    fontSize: 14,
+  },
+  buttonContainer: {
+    paddingBottom: 400,
+    width: "80%",
+  },
+  button: {
+    backgroundColor: "#009387",
+    alignItems: "flex-start",
+    marginTop: 40,
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 60,
+    textAlign: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  register_text: {
+    marginTop: 20,
+  },
 });

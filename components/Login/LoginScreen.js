@@ -20,6 +20,7 @@ import * as Yup from "yup";
 import * as Animatable from "react-native-animatable";
 
 const LoginScreen = () => {
+
   
   
 const navigation = useNavigation();
@@ -28,6 +29,9 @@ const navigation = useNavigation();
 //   navigation.navigate("Profile")
 
 // }
+
+
+  const navigation = useNavigation();
 
 
   const valSchema = Yup.object({
@@ -40,8 +44,6 @@ const navigation = useNavigation();
       .matches(/\d/, "Password must have a number")
       .required("Required"),
   });
-
-  
 
   return (
     <View style={styles.container}>
@@ -57,11 +59,10 @@ const navigation = useNavigation();
           
          
           signInWithEmailAndPassword(auth, values.email, values.password)
-            .then((userCredentials) => {
-              const user = userCredentials.user;
-              navigation.navigate("Profile")
-              return user
               
+            .then((userCredential) => {
+              const user = userCredential.user
+              return user;
             })
            
             
@@ -192,9 +193,11 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginBottom: 60,
+
     textAlign: "center",
     zIndex: 1,
     elevation: 1,
+
   },
   buttonText: {
     color: "white",

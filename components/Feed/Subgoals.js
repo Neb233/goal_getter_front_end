@@ -13,9 +13,12 @@ import { getSubGoalsByUser } from "../../utils/api";
 import PatchSubGoal from "./PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import PostStatus from "./PostStatus";
-
+import { useNavigation } from "@react-navigation/native";
+import ProgressBar from "../../shared/ProgressBar";
+import dateFormat from "dateformat";
 
 const Subgoals = ({ setFriendPosts }) => {
+  const navigation = useNavigation();
 
   const [goals, setGoals] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState("jeff");
@@ -37,13 +40,32 @@ const Subgoals = ({ setFriendPosts }) => {
           {goals.map((goal) => {
             const type = goal.type === "progress";
             return (
-
               <View key={goal.subgoal_id} style={styles.subGoal}>
-
                 <View style={styles.pageContent}>
                   {type ? (
                     <View style={styles.pageContent}>
-                      <Text style={styles.goalObj}>{goal.objective}</Text>
+                      <Text
+                        style={styles.goalObj}
+                        onPress={() => {
+                          navigation.navigate("GoalPage", {
+                            goal_id: goal.goal_id,
+                          });
+                        }}
+                      >
+                        {goal.objective}
+                      </Text>
+                      <Text style={styles.duedate}>
+                        Start date:{" "}
+                        {dateFormat(goal.start_date, "dddd, mmmm dS, yyyy")}
+                      </Text>
+                      <Text style={styles.duedate}>
+                        End date:{" "}
+                        {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
+                      </Text>
+                      <ProgressBar
+                        progress={goal.progress}
+                        target_value={goal.target_value}
+                      />
                       <View style={styles.progress}>
                         <Text style={styles.unit}>Made progress?</Text>
                         <PatchSubGoal
@@ -51,9 +73,7 @@ const Subgoals = ({ setFriendPosts }) => {
                           setGoals={setGoals}
                           goal={goal}
                           goalUnit={goal.unit}
-
                           setFriendPosts={setFriendPosts}
-
                         />
                         <Text style={styles.unit}>{goal.unit}</Text>
                       </View>
@@ -187,5 +207,11 @@ const styles = StyleSheet.create({
     padding: 3,
     fontWeight: "bold",
     color: "green",
+  },
+  duedate: {
+    color: "white",
+    marginLeft: -30,
+    marginRight: 5,
+    marginBottom: 2,
   },
 });
