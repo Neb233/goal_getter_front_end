@@ -9,7 +9,7 @@ import {
   Image,
   ScrollView,
   Modal,
-  Pressable
+  Pressable,
 } from "react-native";
 import { useState, useEffect } from "react";
 import {
@@ -22,8 +22,8 @@ import dateFormat, { masks } from "dateformat";
 import Social from "../Feed/Social";
 import ProgressBar from "../../shared/ProgressBar";
 import { auth } from "../../firebase";
-import * as ImagePicker from 'expo-image-picker';
-import {updateProfile} from 'firebase/auth';
+import * as ImagePicker from "expo-image-picker";
+import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const Goals = ({ navigation, route }) => {
@@ -34,23 +34,16 @@ const Goals = ({ navigation, route }) => {
   const [userPosts, setUserPosts] = useState([]);
   const [showGoals, setShowGoals] = useState(false);
   const [subgoals, setSubgoals] = useState({});
-  const [imagemodalVisible, setImageModaVisible] = useState("")
-  const [profPic, SetProfPic] = useState("")
-  
+  const [imagemodalVisible, setImageModaVisible] = useState("");
+  const [profPic, SetProfPic] = useState("");
 
- 
+  const user = route.params;
+  console.log("USERPAGE USER", user);
 
+  const default_url =
+    "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
 
-const user = auth.currentUser;
-
-  
-const default_url =
-"https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
-
-
-const storage = getStorage();
-
-
+  const storage = getStorage();
 
   useEffect(() => {
     setSubgoals({});
@@ -59,16 +52,15 @@ const storage = getStorage();
     setOldGoals([]);
     setShowGoals(false);
     if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
-        (url) => {
-          console.log(url);
-          SetProfPic(url);
-        }
-      );
+      getDownloadURL(ref(storage, `${user}: Profile Picture`)).then((url) => {
+        console.log(url);
+        SetProfPic(url);
+      });
     } else {
       SetProfPic(default_url);
     }
-    getGoalsByUser(user.displayName).then((goals) => {
+    getGoalsByUser(user).then((goals) => {
+      console.log("USERS GOALS", goals);
       goals.forEach((goal) => {
         getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
           setSubgoals((oldSubgoals) => {
@@ -98,14 +90,14 @@ const storage = getStorage();
         })
       );
     });
-    getPostsByUser(user.displayName).then((posts) => {
+    getPostsByUser(user).then((posts) => {
+      console.log("USERS POSTS", posts);
       setUserPosts(posts);
     });
-    getUser(user.displayName).then((userDetails) => {
+    getUser(user).then((userDetails) => {
       setUserDetails(userDetails[0]);
     });
   }, [user]);
-
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -129,15 +121,10 @@ const storage = getStorage();
     setImageModaVisible(!imagemodalVisible);
   };
 
-
-
-
-
-
   return (
     <ScrollView>
       <View style={styles.header}>
-      <Modal
+        <Modal
           animationType="fade"
           transparent={true}
           visible={imagemodalVisible}
@@ -163,8 +150,8 @@ const storage = getStorage();
           </View>
         </Modal>
 
-          <Pressable onPress={() => setImageModaVisible(true)}>
-        <Image source={{uri: profPic}} style={styles.profPic} />
+        <Pressable onPress={() => setImageModaVisible(true)}>
+          <Image source={userDetails.avatar_url} style={styles.profPic} />
         </Pressable>
 
         <View style={styles.body}>

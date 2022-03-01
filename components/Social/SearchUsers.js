@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { KeyboardAvoidingView } from "react-native";
-import { Searchbar, List,Button } from "react-native-paper";
+import { Searchbar, List, Button } from "react-native-paper";
 import {
   searchUsers,
   addFriend,
@@ -24,39 +25,39 @@ const SearchUsers = () => {
   const [resultState, setResultState] = useState([]);
 
   const [friends, setFriends] = useState([]);
-  const [isFriend, setIsFriend] = useState([])
+  const [isFriend, setIsFriend] = useState([]);
 
-  // useEffect(() => {
-  //   return getFriends("jeff").then((friendsRes) => {
-  //     setFriends(friendsRes);
-  //     console.log("friends result state", friendsRes);
-  //   })
-  // }, []);
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    return searchUsers(queryState.query).then((results) => {
-      setResultState(results);
-      setIsFriend(results.map((user) => {return !(friends.indexOf(user) === -1)}))
-      console.log("result state", resultState);
-    });
-  }, [queryState]);
-
+  //RUN WHEN PAGE IS FIRST LOADED
   useEffect(() => {
     return getFriends("jeff").then((friendsRes) => {
       setFriends(friendsRes);
-      console.log("friends result state", friendsRes);
     });
-  }, [isFriend]);
+  }, []);
 
+  //RUN WHEN SEARCH IS CHANGED
+  useEffect(() => {
+    return searchUsers(queryState.query).then((results) => {
+      setResultState(results);
+    });
+  }, [queryState]);
+
+  //RUN WHEN FRIENDS CHANGE
+  useEffect(() => {
+    return getFriends("jeff").then((friendsRes) => {
+      setFriends(friendsRes);
+    });
+    console.log(friendsRes);
+  }, [friends]);
 
   const addFriendClick = (userToAdd) => {
-    console.log(userToAdd);
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return addFriend("loggedInUser", "usertoadd").catch((err) => {
           */
     return addFriend("jeff", userToAdd)
       .then((res) => {
-        console.log(res);
+        console.log(`${UserToAdd} Added`);
       })
       .catch((err) => {
         return getFriends("jeff").then((friends) => {
@@ -74,7 +75,6 @@ const SearchUsers = () => {
   };
 
   const removeFriendClick = (userToRemove) => {
-    console.log("usertoremove", userToRemove);
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return RemoveFriend("loggedInUser", "usertoRemove").catch((err) => {
           */
@@ -109,13 +109,7 @@ const SearchUsers = () => {
         <List.Subheader>Results</List.Subheader>
 
         {resultState ? (
-     
           resultState.map((item, index) => {
-            console.log(
-              "item.username",
-              item.username,
-              typeof friends
-            );
             if (!isFriend[index]) {
               return (
                 <View style={styles.viewStyle}>
@@ -123,6 +117,9 @@ const SearchUsers = () => {
                     style={styles.listItem}
                     key={item.username}
                     title={item.username}
+                    onPress={() => {
+                      navigation.navigate("UserPage", item.username);
+                    }}
                     left={(props) => <List.Icon {...props} icon="account" />}
                   />
 
@@ -131,12 +128,13 @@ const SearchUsers = () => {
                     mode="contained"
                     color="green"
                     onPress={() => {
-                      setIsFriend((oldIsFriend) => {
-                        const newIsFriend = [...oldIsFriend]
-                        newIsFriend[index] = true
-                        return newIsFriend
-                      })
-                      addFriendClick(item.username)}}
+                      setFriends((oldFriends) => {
+                        const newFriends = [...oldFriends];
+                        newFriends[index] = true;
+                        return newFriends;
+                      });
+                      addFriendClick(item.username);
+                    }}
                   >
                     Add Friend
                   </Button>
@@ -150,18 +148,22 @@ const SearchUsers = () => {
                     key={item.username}
                     title={item.username}
                     left={(props) => <List.Icon {...props} icon="account" />}
+                    onPress={() => {
+                      navigation.navigate("UserPage", item.username);
+                    }}
                   />
 
                   <Button
                     mode="contained"
                     color="red"
                     onPress={() => {
-                      setIsFriend((oldIsFriend) => {
-                        const newIsFriend = [...oldIsFriend]
-                        newIsFriend[index] = false
-                        return newIsFriend
-                      })
-                      removeFriendClick(item.username)}}
+                      setFriends((oldFriends) => {
+                        const newFriends = [...oldFriends];
+                        newFriends[index] = false;
+                        return newFriends;
+                      });
+                      removeFriendClick(item.username);
+                    }}
                     style={styles.button}
                   >
                     Remove Friend
