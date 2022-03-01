@@ -30,6 +30,53 @@ import Feed from "../Feed/Feed";
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
+  const [email, SetEmail] = useState('')
+  const [password, SetPassword] = useState('')
+  const [profile, SetProfile] = useState('')
+  const [username, SetUsername] = useState('')
+
+
+  const handleRegister = () => {
+    valSchema.isValid({
+      email: email,
+      username: username,
+      password: password,
+      profile: profile
+
+    })
+    
+    .then((valid) => {
+     if (valid) {
+     
+      createUserWithEmailAndPassword(auth, email, password)
+    .then(async (userCredentials) => {
+      const user = userCredentials.user;
+
+      await updateProfile(user, { displayName: username });
+
+      var body = { username: username, profile: profile };
+
+      await axios({
+        method: "post",
+        url: "https://goalgetter-backend.herokuapp.com/api/users",
+        data: body,
+      }).catch(function (error) {
+        console.log(error);
+      });
+      navigation.navigate("Feed")
+      return user;
+    })
+
+    .catch((error) => alert(error.message))
+  }
+    })
+  
+}
+  
+
+
+
+
   // const { setLoggedInUser, loggedInUser } = useContext(UserContext);
 
   const valSchema = Yup.object({
@@ -50,7 +97,7 @@ const RegisterScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Formik
+       {/* <Formik
         initialValues={{
           firstName: "",
           profile: "",
@@ -81,8 +128,8 @@ const RegisterScreen = () => {
 
             .catch((error) => alert(error.message))
         }
-      >
-        {({ values, handleChange, handleSubmit, errors, touched }) => (
+      > */}
+        {/* {({  errors, touched }) => (  */}
           <KeyboardAvoidingView behaviour="padding">
             <View style={styles.header}>
               <Text style={styles.title_text}>Register Your Account</Text>
@@ -94,13 +141,13 @@ const RegisterScreen = () => {
                 <TextInput
                   id="email"
                   name="email"
-                  value={values.email}
-                  onChange={handleChange("email")}
+                  value={email}
+                  onChangeText={(text)=> SetEmail(text)}
                   style={styles.textInput}
                 />
-                <Text style={styles.errorMsg}>
+                {/* <Text style={styles.errorMsg}>
                   {touched.email && errors.email}
-                </Text>
+                </Text> */}
               </View>
 
               <View style={styles.action}>
@@ -108,13 +155,13 @@ const RegisterScreen = () => {
                 <TextInput
                   id="username"
                   name="username"
-                  value={values.username}
-                  onChange={handleChange("username")}
+                  value={username}
+                  onChangeText={(text) => SetUsername(text)}
                   style={styles.textInput}
                 />
-                <Text style={styles.errorMsg}>
+                {/* <Text style={styles.errorMsg}>
                   {touched.username && errors.username}
-                </Text>
+                </Text> */}
               </View>
 
               <View style={styles.action}>
@@ -122,8 +169,8 @@ const RegisterScreen = () => {
                 <TextInput
                   id="profile"
                   name="profile"
-                  value={values.profile}
-                  onChange={handleChange("profile")}
+                  value={profile}
+                  onChangeText={(text) => SetProfile(text)}
                   style={styles.textInput}
                 ></TextInput>
               </View>
@@ -133,8 +180,8 @@ const RegisterScreen = () => {
                 <TextInput
                   id="password"
                   name="password"
-                  value={values.password}
-                  onChange={handleChange("password")}
+                  value={password}
+                  onChangeText={(text) => SetPassword(text)}
                   style={styles.textInput}
                   secureTextEntry
                 ></TextInput>
@@ -148,17 +195,17 @@ const RegisterScreen = () => {
                                  Maximum 10 characters
                 `}
               </Text>
-              <Text>{touched.password && errors.password}</Text>
+              {/* <Text>{touched.password && errors.password}</Text> */}
 
               <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+                <TouchableOpacity onPress={handleRegister} style={styles.button}>
                   <Text style={styles.buttonText}>Sign Up</Text>
                 </TouchableOpacity>
               </View>
             </Animatable.View>
           </KeyboardAvoidingView>
-        )}
-      </Formik>
+         {/* )} */}
+      {/* </Formik> */} 
     </View>
   );
 };
