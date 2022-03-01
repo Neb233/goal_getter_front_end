@@ -10,6 +10,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../context/user";
 import { StatusBar } from "expo-status-bar";
 
+
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 
@@ -56,16 +57,12 @@ const LoginScreen = () => {
         }}
         validationSchema={valSchema}
         onSubmit={(values) => {
-          
-         
           signInWithEmailAndPassword(auth, values.email, values.password)
               
-            .then((userCredential) => {
-              const user = userCredential.user
-              return user;
-            })
-           
-            
+          .then((userCredential) => {
+            const user = userCredential.user
+            return user;
+          })
             .catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;

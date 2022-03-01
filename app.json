@@ -17,16 +17,22 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "Goal.Getter",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true
     },
     "android": {
-      
+
+      "package": "GoalGetter.Android",
+      "googleServicesFile": "./google-services.json",
+    
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       } 
-      
     },
+      
+    
     "web": {
       "favicon": "./assets/favicon.png"
     }

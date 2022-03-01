@@ -1,5 +1,6 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, firebase } from "firebase/app";
 import { getAuth } from "firebase/auth";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCpk6WBH9wpxDqeMOKR5m8IbieOzqmNodU",
@@ -8,7 +9,17 @@ const firebaseConfig = {
   storageBucket: "goalgetter-4937c.appspot.com",
   messagingSenderId: "502285142372",
   appId: "1:502285142372:web:57911be048a440bd719271",
-};
+  ios: {
+    "bundleIdentifier": "Goal.Getter",
+    "googleServicesFile": "./GoogleService-Info.plist",
+    "supportsTablet": true
+  },
+  android: {
+
+    "package": "GoalGetter.Android",
+    "googleServicesFile": "./google-services.json",
+  }
+}
 
 const app = initializeApp(firebaseConfig);
 

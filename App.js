@@ -41,7 +41,7 @@ const App = () => {
         SetProfile(false)
       }
        })
-    }, [])
+    }, [auth])
 
 
   return (
