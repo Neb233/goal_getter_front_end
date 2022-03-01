@@ -6,10 +6,18 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Modal,
+  Pressable,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getSubGoalsByUser } from "../../utils/api";
+import {
+  getSubGoalsByUser,
+  getGoalByGoalId,
+  getSubgoalsByGoalId,
+  patchSubgoalStatusById,
+  patchGoalStatusById,
+} from "../../utils/api";
 import PatchSubGoal from "./PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import PostStatus from "./PostStatus";
@@ -24,16 +32,95 @@ const Subgoals = ({ setFriendPosts }) => {
   const [loggedInUser, setLoggedInUser] = useState("jeff");
   const { owner } = useParams();
   const [isChecked, setIsChecked] = useState(false);
+  const [congratsModalVisible, setCongratsModalVisible] = useState(false);
+  const [goalObjective, setGoalObjective] = useState("");
 
   useEffect(() => {
-    getSubGoalsByUser("jeff").then((res) => {
-      setGoals(res);
+    getSubGoalsByUser(loggedInUser).then((subgoals) => {
+      const currentSubgoals = subgoals.filter((subgoal) => {
+        const currentDate = new Date(Date.now());
+        const endDate = new Date(subgoal.end_date);
+        if (subgoal.type === "boolean") {
+          return (
+            endDate.getDate() === currentDate.getDate() &&
+            endDate.getMonth() === currentDate.getMonth() &&
+            endDate.getFullYear() === currentDate.getFullYear() &&
+            subgoal.status === "active"
+          );
+        } else {
+          const startDate = new Date(subgoal.start_date);
+          const dayAfterEndDate = new Date(
+            new Date(endDate).setDate(endDate.getDate() + 1)
+          );
+          return (
+            startDate.getTime() < Date.now() &&
+            dayAfterEndDate.getTime() > Date.now()
+          );
+        }
+      });
+      setGoals(currentSubgoals);
     });
   }, [loggedInUser]);
 
+  const handleCheckBoxClick = (subgoal) => {
+    setIsChecked((currVal) => !currVal);
+    getGoalByGoalId(subgoal.goal_id)
+      .then((supergoal) => {
+        setGoalObjective(supergoal.objective);
+      })
+      .then(() => {
+        patchSubgoalStatusById(subgoal.subgoal_id, "completed")
+          .then(() => {
+            const subgoalPromise = getSubgoalsByGoalId(subgoal.goal_id);
+            const goalPromise = getGoalByGoalId(subgoal.goal_id);
+            return Promise.all([subgoalPromise, goalPromise]);
+          })
+          .then(([subgoals, supergoal]) => {
+            let allSubgoalsCompleted = true;
+            for (const subgoal of subgoals) {
+              if (subgoal.status === "active") {
+                allSubgoalsCompleted = false;
+              }
+            }
+            if (allSubgoalsCompleted) {
+              console.log("adsadsdasads");
+              setCongratsModalVisible(true);
+              return patchGoalStatusById(supergoal.goal_id, "completed");
+            }
+            return null;
+          });
+      });
+  };
+
+  const handleCongratsMessageSubmit = () => {
+    setCongratsModalVisible(!congratsModalVisible);
+  };
+
   return (
     <View style={styles.cont}>
-      <Text style={styles.text}>Current subgoals:</Text>
+      <Modal
+        animaitonType="slide"
+        transparent={true}
+        visible={congratsModalVisible}
+        onRequestClose={() => {
+          setCongratsModalVisible(!congratsModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text>
+              Congratulations! You completed your goal "{goalObjective}"!
+            </Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={handleCongratsMessageSubmit}
+            >
+              <Text style={styles.textStyle}>Great News!</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <Text style={styles.text}>Tell us what progress you've made today</Text>
       <View style={styles.page}>
         {/* pagingEnabled={true} */}
         <ScrollView horizontal={true}>
@@ -79,7 +166,7 @@ const Subgoals = ({ setFriendPosts }) => {
                       </View>
                     </View>
                   ) : (
-                    <View style={styles.progress}>
+                    <View style={[styles.progress, styles.checkBox]}>
                       {/* <Text>Complete?</Text> */}
                       <BouncyCheckbox
                         text={goal.objective}
@@ -89,7 +176,13 @@ const Subgoals = ({ setFriendPosts }) => {
                           fontWeight: "bold",
                         }}
                         style={styles.checkBox}
-                        onPress={() => setIsChecked((currVal) => !currVal)}
+                        onPress={() => handleCheckBoxClick(goal)}
+                      />
+                      <PostStatus
+                        goal={goal}
+                        subgoal={goal.subgoal_id}
+                        ownerP={goal.owner}
+                        setFriendPosts={setFriendPosts}
                       />
                     </View>
                   )}
@@ -127,15 +220,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   page: {
-    height: 200,
+    height: 260,
     width: 335,
     marginLeft: 5,
     marginRight: 5,
-    backgroundColor: "#abbabe",
+    backgroundColor: "white",
     borderRadius: 5,
   },
   subGoal: {
-    height: 200,
+    height: 260,
     maxWidth: 400,
     minWidth: 330,
     marginLeft: 10,
@@ -212,5 +305,39 @@ const styles = StyleSheet.create({
     marginLeft: -30,
     marginRight: 5,
     marginBottom: 2,
+  },
+  checkBox: {
+    flexDirection: "column",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  modalView: {
+    margin: 40,
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingVertical: 35,
+    paddingHorizontal: 70,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+    margin: 5,
   },
 });

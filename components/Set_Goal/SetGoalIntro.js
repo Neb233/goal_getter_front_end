@@ -174,6 +174,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                       placeholder="Target Value"
                       onChangeText={props.handleChange("target_value")}
                       value={props.values.target_value}
+                      keyboardType="numeric"
                     />
                     <Text>What units are the above values measured in?</Text>
                     <TextInput
@@ -194,6 +195,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                       placeholder="Subgoal Period"
                       onChangeText={props.handleChange("subgoalPeriod")}
                       value={props.values.subgoalPeriod}
+                      keyboardType="numeric"
                     />
                     <Text>days</Text>
                   </HideableView>
