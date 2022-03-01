@@ -269,5 +269,10 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+    backgroundColor: '#f7f7fa',
+    color: 'white',
+    borderRadius: 20,
+    padding: 5,
+    width: '150%'
   },
 });

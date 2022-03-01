@@ -50,7 +50,8 @@ const Feed = ({ navigation }) => {
     return (
       <View>
         <Subgoals setFriendPosts={setFriendPosts} />
-        <View style={styles.personalWrapper}>
+        <View >
+          {/* style={styles.personalWrapper} */}
           {/* <Text style={styles.sectionTitle}>Goal Status:</Text>
     <View style={styles.status}><GoalStatus /></View> */}
 
@@ -59,7 +60,7 @@ const Feed = ({ navigation }) => {
               style={styles.takeToCalendar}
               onPress={() => navigation.navigate("GoalCalendar")}
             >
-              <Text>Check out your calendar</Text>
+              <Text style={styles.buttonText}>Check out your calendar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -84,23 +85,23 @@ export default Feed;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#abbabe",
+    backgroundColor: "#cfd0dd",
   },
   personalWrapper: {
     borderRadius: 10,
-    backgroundColor: "white",
-    padding: 10,
-    margin: 10,
-    paddingHorizontal: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 3.84,
+    // backgroundColor: "white",
+    // padding: 10,
+    // margin: 10,
+    // paddingHorizontal: 20,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.6,
+    // shadowRadius: 3.84,
 
-    elevation: 5,
+    // elevation: 5,
   },
   sectionTitle: {
     color: "black",
@@ -108,11 +109,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   friends: {
-    color: "white",
+    color: "#3e4d6e",
     fontSize: 25,
     fontWeight: "bold",
     paddingTop: 20,
+    marginBottom: 10,
     marginLeft: 10,
+    alignSelf: 'center'
   },
   status: {
     height: 100,
@@ -122,12 +125,24 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   takeToCalendar: {
+    margin: 10,
+    padding: 10,
     height: 50,
-    width: "100%",
-    backgroundColor: "#587274",
+    // width: "100%",
+    backgroundColor: "#5b72a4",
     marginTop: 10,
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
+  buttonText: {color: 'white', fontWeight: 'bold'}
 });

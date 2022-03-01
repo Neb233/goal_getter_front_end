@@ -172,7 +172,7 @@ const Social = (props) => {
           <View style={styles.profilePic} />
 
           <Text
-            style={styles.username}
+            style={styles.postUsername}
             onPress={() => {
               navigation.navigate("UserPage", {
                 user: owner,
@@ -412,11 +412,14 @@ const styles = StyleSheet.create({
   },
 
   username: {
-    color: "black",
+    color: "white",
     marginBottom: 15,
     fontWeight: "bold",
     margin: 10,
   },
+  postUsername: {color: 'black', marginBottom: 15,
+  fontWeight: "bold",
+  margin: 10},
   progress: {
     marginTop: 10,
   },
@@ -481,6 +484,8 @@ const styles = StyleSheet.create({
     color: "white",
     padding: 2,
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   unreact: {
     backgroundColor: "red",
@@ -489,6 +494,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 30,
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   button: {
     backgroundColor: "#468705",
@@ -503,6 +510,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 30,
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 3
   },
   flexRow: {
     flexDirection: "row",
@@ -539,6 +549,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  text: {
+    color: 'white'
+  }
 });
 
 export default Social;

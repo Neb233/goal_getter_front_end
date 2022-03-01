@@ -97,7 +97,8 @@ const Subgoals = ({ setFriendPosts }) => {
   };
 
   return (
-    <View style={styles.cont}>
+    // style={styles.cont}
+    <View >
       <Modal
         animaitonType="slide"
         transparent={true}
@@ -122,8 +123,8 @@ const Subgoals = ({ setFriendPosts }) => {
       </Modal>
       <Text style={styles.text}>Tell us what progress you've made today</Text>
       <View style={styles.page}>
-        {/* pagingEnabled={true} */}
-        <ScrollView horizontal={true}>
+       {/* pagingEnabled={true} */}
+        <ScrollView horizontal={true}  >
           {goals.map((goal) => {
             const type = goal.type === "progress";
             return (
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   cont: {
     flex: 1,
     backgroundColor: "white",
-    height: 260,
+    height: 350,
     margin: 10,
     borderRadius: 10,
     shadowColor: "#000",
@@ -218,23 +219,44 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 24,
     fontWeight: "bold",
+    color: '#3e4d6e',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center'
   },
   page: {
-    height: 260,
-    width: 335,
-    marginLeft: 5,
-    marginRight: 5,
-    backgroundColor: "white",
-    borderRadius: 5,
+    // height: 260,
+    // width: 335,
+    // marginLeft: 5,
+    // marginRight: 5,
+    // backgroundColor: "white",
+    // borderRadius: 5,
   },
   subGoal: {
-    height: 260,
-    maxWidth: 400,
-    minWidth: 330,
-    marginLeft: 10,
-    marginRight: 5,
-    backgroundColor: "#abbabe",
-    borderRadius: 5,
+    flex: 1,
+    
+    backgroundColor: "#5b72a4",
+    height: 250,
+    margin: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 3.84,
+    elevation: 5,
+    // flex: 1,
+    // height: 260,
+    // maxWidth: 400,
+    // minWidth: 330,
+    // marginLeft: 10,
+    // marginRight: 5,
+    // backgroundColor: "#158e9e",
+    // alignItems: 'center',
+    // justifyContent: 'center'
+    // borderRadius: 5,
   },
   // page: {
   //     height: 170,
@@ -246,9 +268,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 5,
     margin: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
+    // alignItems: "center",
+    // justifyContent: "center",
+    // position: "relative",
   },
   updateText: {
     padding: 2,
@@ -261,6 +283,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+
   },
   goalObj: {
     flexDirection: "column",
@@ -298,7 +321,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     padding: 3,
     fontWeight: "bold",
-    color: "green",
+    color: "white",
   },
   duedate: {
     color: "white",
