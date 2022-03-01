@@ -78,6 +78,7 @@ export const addFriend = (loggedInUser, userToAdd) => {
   return goalgetterApi
     .post(`/friendships`, { user_1: loggedInUser, user_2: userToAdd })
     .then((res) => {
+      console.log("API", res.data);
       return res.data;
     });
 };

@@ -66,7 +66,7 @@ const SearchUsers = () => {
           })
         );
       });
-  }, [queryState]);
+  }, [queryState, friends]);
 
   const addFriendClick = (userToAdd) => {
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
@@ -74,13 +74,12 @@ const SearchUsers = () => {
           */
     return addFriend("jeff", userToAdd)
       .then(() => {
-        console.log(`${UserToAdd} Added`);
-
         const ind = resultState.findIndex(
           (user) => user.username === userToAdd
         );
         setFriends((oldFriends) => {
-          const newFriends = [...oldFriends, resultState[ind]];
+          console.log("INDEX", ind);
+          const newFriends = [...oldFriends, resultState[ind].username];
           return newFriends;
         });
         setIsFriend(
