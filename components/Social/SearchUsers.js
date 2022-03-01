@@ -29,39 +29,72 @@ const SearchUsers = () => {
 
   const navigation = useNavigation();
 
+  console.log(friends, "Friend Render State");
+  console.log(resultState, "result Render State");
+  console.log(isFriend, "isFriend Render State");
+
   //RUN WHEN PAGE IS FIRST LOADED
   useEffect(() => {
-    return getFriends("jeff").then((friendsRes) => {
-      setFriends(friendsRes);
-    });
+    return getFriends("jeff")
+      .then((friendsRes) => {
+        setFriends([...friendsRes]);
+      })
+      .then(() => {
+        searchUsers(queryState.query).then((results) => {
+          setResultState([...results]);
+        });
+      })
+      .then(() => {
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
+      });
   }, []);
 
   //RUN WHEN SEARCH IS CHANGED
   useEffect(() => {
-    return searchUsers(queryState.query).then((results) => {
-      setResultState(results);
-    });
+    return searchUsers(queryState.query)
+      .then((results) => {
+        setResultState(results);
+      })
+      .then(() => {
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
+      });
   }, [queryState]);
-
-  //RUN WHEN FRIENDS CHANGE
-  useEffect(() => {
-    return getFriends("jeff").then((friendsRes) => {
-      setFriends(friendsRes);
-    });
-    console.log(friendsRes);
-  }, [friends]);
 
   const addFriendClick = (userToAdd) => {
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return addFriend("loggedInUser", "usertoadd").catch((err) => {
           */
     return addFriend("jeff", userToAdd)
-      .then((res) => {
+      .then(() => {
         console.log(`${UserToAdd} Added`);
+
+        const ind = resultState.findIndex(
+          (user) => user.username === userToAdd
+        );
+        setFriends((oldFriends) => {
+          const newFriends = [...oldFriends, resultState[ind]];
+          return newFriends;
+        });
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
+        return Alert.alert("Friend Added", "Friend Added", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
       })
       .catch((err) => {
         return getFriends("jeff").then((friends) => {
-          if (friends.indexOf(!userToAdd === -1)) {
+          if (friends.indexOf(userToAdd !== -1)) {
             return Alert.alert("Error", "Already friends", [
               { text: "OK", onPress: () => console.log("OK Pressed") },
             ]);
@@ -81,9 +114,20 @@ const SearchUsers = () => {
     return deleteFriendship("jeff", userToRemove)
       .then(() => {
         console.log("friend removed");
+
         const ind = friends.indexOf(userToRemove);
-        const newFriends = [...friends].splice(ind, 1);
-        setFriends(newFriends);
+        setFriends((oldFriends) => {
+          const newFriends = [
+            ...oldFriends.slice(0, ind),
+            ...oldFriends.slice(ind + 1, oldFriends.length),
+          ];
+          return newFriends;
+        });
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
         return Alert.alert("Friend removed", "Friend remove", [
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
@@ -128,11 +172,6 @@ const SearchUsers = () => {
                     mode="contained"
                     color="green"
                     onPress={() => {
-                      setFriends((oldFriends) => {
-                        const newFriends = [...oldFriends];
-                        newFriends[index] = true;
-                        return newFriends;
-                      });
                       addFriendClick(item.username);
                     }}
                   >
@@ -157,11 +196,6 @@ const SearchUsers = () => {
                     mode="contained"
                     color="red"
                     onPress={() => {
-                      setFriends((oldFriends) => {
-                        const newFriends = [...oldFriends];
-                        newFriends[index] = false;
-                        return newFriends;
-                      });
                       removeFriendClick(item.username);
                     }}
                     style={styles.button}
