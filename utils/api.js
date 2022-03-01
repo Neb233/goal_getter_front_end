@@ -249,3 +249,9 @@ export const getUsers = () => {
     return data
   })
 }
+
+export const getAvatar = (username) => {
+  return goalgetterApi.get(`/users/${username}`).then(({data}) => {
+    return data
+  })
+}
