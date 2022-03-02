@@ -25,8 +25,9 @@ import { auth } from "../../firebase";
 import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useNavigation } from "@react-navigation/native";
 
-const Goals = ({ navigation, route }) => {
+const Goals = ({ route }) => {
   const [goals, setGoals] = useState([]);
   const [oldGoals, setOldGoals] = useState();
   const [futureGoals, setFutureGoals] = useState();
@@ -36,9 +37,22 @@ const Goals = ({ navigation, route }) => {
   const [subgoals, setSubgoals] = useState({});
   const [imagemodalVisible, setImageModaVisible] = useState("");
   const [profPic, SetProfPic] = useState("");
-
+  const navigation = useNavigation();
   // const user = auth.currentUser;
-  const user = { displayName: "jeff", photoURL: null };
+  let user = { displayName: "jeff", photoURL: null };
+
+  if (route.params) {
+    user = { displayName: route.params.user };
+  }
+
+  useEffect(() => {
+    const onBlur = navigation.addListener("blur", () => {
+      navigation.setParams({ user: "jeff" });
+    });
+
+    return onBlur;
+  }, [navigation]);
+
   const default_url =
     "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
 
@@ -50,17 +64,18 @@ const Goals = ({ navigation, route }) => {
     setFutureGoals([]);
     setOldGoals([]);
     setShowGoals(false);
-    if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
-        (url) => {
-          console.log(url);
-          SetProfPic(url);
-        }
-      );
-    } else {
-      SetProfPic(default_url);
-    }
+    // if (user.photoURL !== null) {
+    //   getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
+    //     (url) => {
+    //       console.log(url);
+    //       SetProfPic(url);
+    //     }
+    //   );
+    // } else {
+    //   SetProfPic(default_url);
+    // }
     getGoalsByUser(user.displayName).then((goals) => {
+      console.log("USERS GOALS", goals);
       goals.forEach((goal) => {
         getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
           setSubgoals((oldSubgoals) => {
@@ -91,12 +106,14 @@ const Goals = ({ navigation, route }) => {
       );
     });
     getPostsByUser(user.displayName).then((posts) => {
+      console.log("USERS POSTS", posts);
       setUserPosts(posts);
     });
     getUser(user.displayName).then((userDetails) => {
       setUserDetails(userDetails[0]);
+      SetProfPic(userDetails[0].avatar_url);
     });
-  }, [user]);
+  }, []);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -150,7 +167,15 @@ const Goals = ({ navigation, route }) => {
         </Modal>
 
         <Pressable onPress={() => setImageModaVisible(true)}>
-          <Image source={{ uri: profPic }} style={styles.profPic} />
+          <Image
+            source={{
+              uri: profPic,
+              headers: {
+                Accept: "*/*",
+              },
+            }}
+            style={styles.profPic}
+          />
         </Pressable>
 
         <View style={styles.body}>

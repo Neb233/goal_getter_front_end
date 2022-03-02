@@ -27,7 +27,6 @@ import dateFormat from "dateformat";
 
 const Subgoals = ({ setFriendPosts }) => {
   const navigation = useNavigation();
-
   const [goals, setGoals] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState("jeff");
   const { owner } = useParams();
@@ -97,7 +96,8 @@ const Subgoals = ({ setFriendPosts }) => {
   };
 
   return (
-    <View style={styles.cont}>
+    // style={styles.cont}
+    <View>
       <Modal
         animaitonType="slide"
         transparent={true}
@@ -122,8 +122,11 @@ const Subgoals = ({ setFriendPosts }) => {
       </Modal>
       <Text style={styles.text}>Tell us what progress you've made today</Text>
       <View style={styles.page}>
-        {/* pagingEnabled={true} */}
-        <ScrollView horizontal={true}>
+        <ScrollView
+          horizontal={true}
+          pagingEnabled={true}
+          style={{ flexDirection: "column", padding: 5 }}
+        >
           {goals.map((goal) => {
             const type = goal.type === "progress";
             return (
@@ -154,7 +157,7 @@ const Subgoals = ({ setFriendPosts }) => {
                         target_value={goal.target_value}
                       /> */}
                       <View style={styles.progress}>
-                        <Text style={styles.unit}>Made progress?</Text>
+                        {/* <Text style={styles.unit}>Made progress?</Text> */}
                         <PatchSubGoal
                           goals={goals}
                           setGoals={setGoals}
@@ -162,7 +165,7 @@ const Subgoals = ({ setFriendPosts }) => {
                           goalUnit={goal.unit}
                           setFriendPosts={setFriendPosts}
                         />
-                        <Text style={styles.unit}>{goal.unit}</Text>
+                        {/* <Text style={styles.unit}>{goal.unit}</Text> */}
                       </View>
                     </View>
                   ) : (
@@ -172,7 +175,7 @@ const Subgoals = ({ setFriendPosts }) => {
                         text={goal.objective}
                         textStyle={{
                           color: "white",
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: "bold",
                         }}
                         style={styles.checkBox}
@@ -199,145 +202,42 @@ const Subgoals = ({ setFriendPosts }) => {
 export default Subgoals;
 
 const styles = StyleSheet.create({
-  cont: {
-    flex: 1,
-    backgroundColor: "white",
-    height: 260,
-    margin: 10,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
   text: {
     padding: 10,
     fontSize: 24,
     fontWeight: "bold",
-  },
-  page: {
-    height: 260,
-    width: 335,
-    marginLeft: 5,
-    marginRight: 5,
-    backgroundColor: "white",
-    borderRadius: 5,
+    color: "#3e4d6e",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
   },
   subGoal: {
-    height: 260,
-    maxWidth: 400,
-    minWidth: 330,
-    marginLeft: 10,
-    marginRight: 5,
-    backgroundColor: "#abbabe",
-    borderRadius: 5,
-  },
-  // page: {
-  //     height: 170,
-  //     width: 200,
-  //     margin: 10
-  // },
-  update: {
-    backgroundColor: "#4892b7",
-    borderRadius: 8,
-    padding: 5,
-    margin: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
-  updateText: {
-    padding: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
+    padding: 20,
+    width: "100%",
+    backgroundColor: "#3e4d6e",
+    borderRadius: 10,
   },
   pageContent: {
     marginTop: 10,
-    flexDirection: "column",
-    justifyContent: "center",
     alignItems: "center",
   },
   goalObj: {
     flexDirection: "column",
-    fontSize: 24,
+    fontSize: 20,
+    marginBottom: 10,
     fontWeight: "bold",
     color: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  goalDescription: {
-    flexDirection: "column",
-    padding: 10,
-    fontSize: 24,
-    color: "white",
-  },
-
-  updateText: {
-    padding: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
+    alignSelf: "center",
   },
   progress: {
     flexDirection: "row",
-    margin: 20,
-  },
-  input: {
-    backgroundColor: "white",
-    flexDirection: "column",
-    marginLeft: 5,
-    borderRadius: 10,
-    padding: 3,
-  },
-  unit: {
-    marginLeft: 5,
-    padding: 3,
-    fontWeight: "bold",
-    color: "green",
+    margin: 5,
+    padding: 10,
   },
   duedate: {
     color: "white",
-    marginLeft: -30,
-    marginRight: 5,
-    marginBottom: 2,
   },
   checkBox: {
     flexDirection: "column",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  modalView: {
-    margin: 40,
-    backgroundColor: "white",
-    borderRadius: 20,
-    paddingVertical: 35,
-    paddingHorizontal: 70,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-    margin: 5,
   },
 });

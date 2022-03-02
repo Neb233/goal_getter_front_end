@@ -20,7 +20,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import PostStatus from "./PostStatus";
-const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
+const PatchSubGoal = ({
+  goal,
+  goals,
+  goalUnit,
+  setFriendPosts,
+  goalPageId,
+}) => {
   const [progress, setProgress] = useState(0);
   const [congratsModalVisible, setCongratsModalVisible] = useState(false);
   const [goalObjective, setGoalObjective] = useState("");
@@ -93,6 +99,12 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
             return patchGoalStatusById(patchedGoal.goal_id, "completed");
           }
           return;
+        })
+        .then(() => {
+          if (goalPageId) {
+            navigation.navigate("SetGoalIntro");
+            navigation.navigate("GoalPage", { goal_id: goalPageId });
+          }
         });
     }
   };
@@ -125,7 +137,8 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
           </View>
         </View>
       </Modal>
-      <View>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.madeProgress}>Made progress?</Text>
         <TextInput
           style={styles.input}
           keyboardType="numeric"
@@ -133,10 +146,11 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
           onChangeText={setProgress}
           value={progress.toString()}
         />
+        <Text style={styles.goalUnit}>{goal.unit}</Text>
       </View>
-      <View>
+      <View style={{ flexDirection: "row" }}>
         <TouchableOpacity style={styles.update} onPress={onSubmit}>
-          <Text style={styles.updateText}>Submit progress</Text>
+          <Text style={styles.updateText}>Submit privately</Text>
         </TouchableOpacity>
 
         <PostStatus
@@ -155,65 +169,32 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
 export default PatchSubGoal;
 
 const styles = StyleSheet.create({
-  subGoal: {
-    height: 200,
-    maxWidth: 400,
-    minWidth: 330,
-    marginLeft: 10,
-    marginRight: 5,
-    backgroundColor: "#abbabe",
-    borderRadius: 5,
-  },
-  // page: {
-  //     height: 170,
-  //     width: 200,
-  //     margin: 10
-  // },
-  update: {
-    backgroundColor: "#4892b7",
-    borderRadius: 8,
-    padding: 5,
-    margin: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
-  updateText: {
-    padding: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-  },
-  pageContent: {
-    marginTop: 10,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  goalObj: {
-    flexDirection: "column",
-    fontSize: 24,
+  subGoal: {},
+  madeProgress: {
+    marginLeft: 5,
+    padding: 3,
     fontWeight: "bold",
     color: "white",
-    alignItems: "center",
-    justifyContent: "center",
   },
-  goalDescription: {
-    flexDirection: "column",
-    padding: 10,
-    fontSize: 24,
+  goalUnit: {
+    marginLeft: 5,
+    padding: 3,
+    fontWeight: "bold",
     color: "white",
   },
-
+  update: {
+    backgroundColor: "#c68df7",
+    borderRadius: 8,
+    padding: 5,
+    margin: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    // position: "relative",
+  },
   updateText: {
-    padding: 2,
     alignItems: "center",
     justifyContent: "center",
     color: "white",
-  },
-  progress: {
-    flexDirection: "row",
-    margin: 20,
   },
   input: {
     backgroundColor: "white",
@@ -221,42 +202,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     borderRadius: 10,
     padding: 3,
-  },
-  unit: {
-    marginLeft: 5,
-    padding: 3,
-    fontWeight: "bold",
-    color: "green",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  modalView: {
-    margin: 40,
-    backgroundColor: "white",
-    borderRadius: 20,
-    paddingVertical: 35,
-    paddingHorizontal: 70,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-    margin: 5,
+    width: 50,
   },
 });

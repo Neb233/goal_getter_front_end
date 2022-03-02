@@ -105,7 +105,6 @@ const App = () => {
            
             <Tab.Screen name="Search Users" component={SearchStackScreen } />
           </Tab.Navigator>
-        
       ) : (
         <RootStack />
       )}
