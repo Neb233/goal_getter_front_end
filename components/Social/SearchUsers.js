@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
@@ -18,8 +19,17 @@ import {
   deleteFriendship,
   getUser,
 } from "../../utils/api";
+import { auth } from "../../firebase";
 
+// const SearchUsers = ({ navigation, route }) => {
 const SearchUsers = () => {
+  const user = {};
+  // if (route.params) {
+  //   user.displayName = route.params.user;
+  // } else {
+  //   user.displayName = auth.currentUser.displayName;
+  // }
+
   const [queryState, setQueryState] = useState({
     query: "",
   });
@@ -34,11 +44,14 @@ const SearchUsers = () => {
   //RUN WHEN PAGE IS FIRST LOADED
   useEffect(() => {
     searchUsers(queryState.query).then((results) => {
+      const filteredResults = results.filter((user) => {
+        return user.username !== user.displayName;
+      });
       console.log(results);
-      setResultState(results);
+      setResultState(filteredResults);
     });
 
-    getFriends("jeff").then((friends) => {
+    getFriends(user.displayName).then((friends) => {
       setFriends(friends);
     });
   }, []);
@@ -77,7 +90,10 @@ const SearchUsers = () => {
   //RUN WHEN SEARCH IS CHANGED
   useEffect(() => {
     return searchUsers(queryState.query).then((results) => {
-      setResultState(results);
+      const filteredResults = results.filter((user) => {
+        return user.username !== user.displayName;
+      });
+      setResultState(filteredResults);
     });
   }, [queryState]);
 
@@ -85,7 +101,7 @@ const SearchUsers = () => {
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return addFriend("loggedInUser", "usertoadd").catch((err) => {
           */
-    return addFriend("jeff", userToAdd)
+    return addFriend(user.displayName, userToAdd)
       .then(() => {
         const ind = resultState.findIndex(
           (user) => user.username === userToAdd
@@ -104,7 +120,7 @@ const SearchUsers = () => {
         ]);
       })
       .catch((err) => {
-        return getFriends("jeff").then((friends) => {
+        return getFriends(user.displayName).then((friends) => {
           if (friends.indexOf(userToAdd !== -1)) {
             return Alert.alert("Error", "Already friends", [
               { text: "OK", onPress: () => console.log("OK Pressed") },
@@ -122,7 +138,7 @@ const SearchUsers = () => {
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return RemoveFriend("loggedInUser", "usertoRemove").catch((err) => {
           */
-    return deleteFriendship("jeff", userToRemove)
+    return deleteFriendship(user.displayName, userToRemove)
       .then(() => {
         console.log("friend removed");
 
@@ -157,6 +173,7 @@ const SearchUsers = () => {
             setQueryState({ query: query });
           }}
           value={queryState.query}
+          style={styles.searchBar}
         />
       </View>
 
@@ -172,17 +189,29 @@ const SearchUsers = () => {
                     style={styles.listItem}
                     key={item.username}
                     title={item.username}
+                    color="#fdf9e6"
                     onPress={() => {
-                      navigation.navigate("UserPage", item.username);
+                      navigation.navigate("UserPage", {
+                        user: item.username,
+                      });
                     }}
                     left={(props) => {
                       return (
-                        <Avatar.Image
-                          {...props}
-                          source={
-                            userAvatars[index] ? userAvatars[index] : "account"
-                          }
-                          style={{ backgroundColor: "white" }}
+                        <Image
+                          source={{
+                            uri: userAvatars[index]
+                              ? userAvatars[index]
+                              : "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d",
+                            headers: {
+                              Accept: "*/*",
+                            },
+                          }}
+                          style={{
+                            backgroundColor: "white",
+                            width: 50,
+                            height: 50,
+                            borderRadius: 25,
+                          }}
                         />
                       );
                     }}
@@ -207,19 +236,32 @@ const SearchUsers = () => {
                     style={styles.listItem}
                     key={item.username}
                     title={item.username}
+                    color="#fdf9e6"
                     left={(props) => {
                       return (
-                        <Avatar.Image
-                          {...props}
-                          source={
-                            userAvatars[index] ? userAvatars[index] : "account"
-                          }
-                          style={{ backgroundColor: "white" }}
+                        <Image
+                          source={{
+                            uri: userAvatars[index]
+                              ? userAvatars[index]
+                              : "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d",
+                            headers: {
+                              Accept: "*/*",
+                            },
+                          }}
+                          style={{
+                            backgroundColor: "white",
+                            width: 50,
+                            height: 50,
+                            borderRadius: 25,
+                          }}
                         />
                       );
                     }}
                     onPress={() => {
-                      navigation.navigate("UserPage", item.username);
+                      navigation.navigate("GoalPage", { goal_id: 1 });
+                      navigation.navigate("UserPage", {
+                        user: item.username,
+                      });
                     }}
                   />
 
@@ -246,13 +288,17 @@ const SearchUsers = () => {
 };
 
 const styles = StyleSheet.create({
-  // list: {
-  // //   flex: 1,
-  // //   // flexDirection: "column",
-  // // },
-  // viewStyle: { flex: 1, flexDirection: "column" },
-  // // listItem: { flexDirection: "column" },
-  // button: { color: "red" },
+  searchBar: {
+    backgroundColor: "#fdf9e6",
+  },
+  list: {
+    flex: 1,
+    backgroundColor: "#fdf9e6",
+    justifyContent: "center",
+  },
+  viewStyle: { padding: 30 },
+  listItem: { backgroundColor: "#fdf9e6", alignSelf: "center" },
+  button: { width: "50%", alignSelf: "center" },
 });
 
 export default SearchUsers;
