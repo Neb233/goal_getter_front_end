@@ -3,19 +3,19 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
   Alert,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { KeyboardAvoidingView } from "react-native";
-import { Searchbar, List } from "react-native-paper";
+import { Searchbar, List, Button } from "react-native-paper";
 import {
   searchUsers,
   addFriend,
   getFriends,
-  deleteFriend,
+  deleteFriendship,
 } from "../../utils/api";
 
 const SearchUsers = () => {
@@ -25,33 +25,75 @@ const SearchUsers = () => {
   const [resultState, setResultState] = useState([]);
 
   const [friends, setFriends] = useState([]);
+  const [isFriend, setIsFriend] = useState([]);
 
+  const navigation = useNavigation();
+
+  console.log(friends, "Friend Render State");
+  console.log(resultState, "result Render State");
+  console.log(isFriend, "isFriend Render State");
+
+  //RUN WHEN PAGE IS FIRST LOADED
   useEffect(() => {
-    return getFriends("martina").then((friendsRes) => {
-      setFriends(friendsRes);
-      console.log("friends result state", friendsRes);
-    });
+    return getFriends("jeff")
+      .then((friendsRes) => {
+        setFriends([...friendsRes]);
+      })
+      .then(() => {
+        searchUsers(queryState.query).then((results) => {
+          setResultState([...results]);
+        });
+      })
+      .then(() => {
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
+      });
   }, []);
 
+  //RUN WHEN SEARCH IS CHANGED
   useEffect(() => {
-    return searchUsers(queryState.query).then((results) => {
-      setResultState(results);
-      console.log("result state", resultState);
-    });
-  }, [queryState]);
+    return searchUsers(queryState.query)
+      .then((results) => {
+        setResultState(results);
+      })
+      .then(() => {
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
+      });
+  }, [queryState, friends]);
 
   const addFriendClick = (userToAdd) => {
-    console.log(userToAdd);
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return addFriend("loggedInUser", "usertoadd").catch((err) => {
           */
-    return addFriend("martina", userToAdd)
-      .then((res) => {
-        console.log(res);
+    return addFriend("jeff", userToAdd)
+      .then(() => {
+        const ind = resultState.findIndex(
+          (user) => user.username === userToAdd
+        );
+        setFriends((oldFriends) => {
+          console.log("INDEX", ind);
+          const newFriends = [...oldFriends, resultState[ind].username];
+          return newFriends;
+        });
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
+        return Alert.alert("Friend Added", "Friend Added", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
       })
       .catch((err) => {
-        return getFriends("martina").then((friends) => {
-          if (friends.indexOf(!userToAdd === -1)) {
+        return getFriends("jeff").then((friends) => {
+          if (friends.indexOf(userToAdd !== -1)) {
             return Alert.alert("Error", "Already friends", [
               { text: "OK", onPress: () => console.log("OK Pressed") },
             ]);
@@ -65,16 +107,26 @@ const SearchUsers = () => {
   };
 
   const removeFriendClick = (userToRemove) => {
-    console.log(userToRemove);
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return RemoveFriend("loggedInUser", "usertoRemove").catch((err) => {
           */
-    return deleteFriend("martina", userToRemove)
+    return deleteFriendship("jeff", userToRemove)
       .then(() => {
         console.log("friend removed");
+
         const ind = friends.indexOf(userToRemove);
-        const newFriends = [...friends].splice(ind, 1);
-        setFriends(newFriends);
+        setFriends((oldFriends) => {
+          const newFriends = [
+            ...oldFriends.slice(0, ind),
+            ...oldFriends.slice(ind + 1, oldFriends.length),
+          ];
+          return newFriends;
+        });
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
         return Alert.alert("Friend removed", "Friend remove", [
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
@@ -85,7 +137,7 @@ const SearchUsers = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.searchStyle}>
+    <KeyboardAvoidingView>
       <View>
         <Searchbar
           placeholder="Search"
@@ -95,69 +147,80 @@ const SearchUsers = () => {
           value={queryState.query}
         />
       </View>
-      <ScrollView>
-        {/* <List.Section>
-          <List.Subheader>Results</List.Subheader>
 
-          {resultState ? (
-            resultState.map((item) => {
-              console.log(
-                "item.username",
-                item.username,
-                typeof loggedInUsersFriends
+      <List.Section style={styles.list}>
+        <List.Subheader>Results</List.Subheader>
+
+        {resultState ? (
+          resultState.map((item, index) => {
+            if (!isFriend[index]) {
+              return (
+                <View style={styles.viewStyle}>
+                  <List.Item
+                    style={styles.listItem}
+                    key={item.username}
+                    title={item.username}
+                    onPress={() => {
+                      navigation.navigate("UserPage", item.username);
+                    }}
+                    left={(props) => <List.Icon {...props} icon="account" />}
+                  />
+
+                  <Button
+                    style={styles.button}
+                    mode="contained"
+                    color="green"
+                    onPress={() => {
+                      addFriendClick(item.username);
+                    }}
+                  >
+                    Add Friend
+                  </Button>
+                </View>
               );
-              if (friends.indexOf(item.username) === -1) {
-                return (
-                  <>
-                    <List.Item
-                      style={styles.listItem}
-                      key={item.username}
-                      title={item.username}
-                      left={(props) => <List.Icon {...props} icon="account" />}
-                    />
-                    <TouchableOpacity
-                      onPress={() => addFriendClick(item.username)}
-                    >
-                      <Text>Add Friend</Text>
-                    </TouchableOpacity>
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <List.Item
-                      style={styles.listItem}
-                      key={item.username}
-                      title={item.username}
-                      left={(props) => <List.Icon {...props} icon="account" />}
-                    />
-                    <TouchableOpacity
-                      onPress={() => removeFriendClick(item.username)}
-                    >
-                      <Text>Remove Friend</Text>
-                    </TouchableOpacity>
-                  </>
-                );
-              }
-            })
-          ) : (
-            <Text>""</Text>
-          )}
-        </List.Section> */}
-      </ScrollView>
+            } else {
+              return (
+                <>
+                  <List.Item
+                    style={styles.listItem}
+                    key={item.username}
+                    title={item.username}
+                    left={(props) => <List.Icon {...props} icon="account" />}
+                    onPress={() => {
+                      navigation.navigate("UserPage", item.username);
+                    }}
+                  />
+
+                  <Button
+                    mode="contained"
+                    color="red"
+                    onPress={() => {
+                      removeFriendClick(item.username);
+                    }}
+                    style={styles.button}
+                  >
+                    Remove Friend
+                  </Button>
+                </>
+              );
+            }
+          })
+        ) : (
+          <Text>""</Text>
+        )}
+      </List.Section>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  buttons: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-evenly",
-  },
-  listItem: {
-    justifyContent: "flex-end",
-  },
+  // list: {
+  // //   flex: 1,
+  // //   // flexDirection: "column",
+  // // },
+  // viewStyle: { flex: 1, flexDirection: "column" },
+  // // listItem: { flexDirection: "column" },
+  // button: { color: "red" },
 });
 
 export default SearchUsers;
