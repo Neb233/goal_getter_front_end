@@ -8,7 +8,7 @@ import {
   Switch,
   KeyboardAvoidingView,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { Formik, useField } from "formik";
 import * as yup from "yup";
@@ -62,10 +62,14 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
             <Text style={styles.errorText}>
               {props.touched.objective && props.errors.end_date}
             </Text>
-
-
-            <DatePicker name="end_date"
-            type={"End"} />
+            <View style={styles.switchcontainer}>
+              <DatePicker
+                name="end_date"
+                type={"End"}
+                style={styles.datepicker}
+              />
+              <Text style={styles.leftlabel}>DATE</Text>
+            </View>
             <View style={styles.switchcontainer}>
               <Text style={styles.header}>Set Numerical Values</Text>
               <Switch
@@ -82,40 +86,48 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
               hidden={hideProgressOptions}
               style={styles.HideableView}
             >
-               <DatePicker name="start_date"
-               type={"Start"} />
-            <Text style={styles.errorText}>
-              {props.touched.start_date && props.errors.start_date}
-            </Text>
-            <View style={styles.switchcontainer}>
-              <Text>Target Value</Text>
-              <TextInput
-                style={styles.valueinput}
-                multiline
-                placeholder="Target Value"
-                type="number"
-                onChangeText={props.handleChange("target_value")}
-                value={props.values.target_value}
-                keyboardType="numeric"
-              />
+              <View style={styles.switchcontainer}>
+                <DatePicker
+                  name="start_date"
+                  type={"Start"}
+                  style={styles.datepicker}
+                />
+                <Text style={styles.leftlabel}>TEXT</Text>
+              </View>
+
+              <Text style={styles.errorText}>
+                {props.touched.start_date && props.errors.start_date}
+              </Text>
+              <View style={styles.switchcontainer}>
+                <Text style={styles.leftlabel}>Target Value</Text>
+                <TextInput
+                  style={styles.valueinput}
+                  multiline
+                  placeholder="Target Value"
+                  type="number"
+                  onChangeText={props.handleChange("target_value")}
+                  value={props.values.target_value}
+                  keyboardType="numeric"
+                />
               </View>
               <View style={styles.switchcontainer}>
-              <Text style={styles.leftlabel}>Units</Text>
-              <TextInput
-                style={styles.valueinput}
-                multiline
-                placeholder="Units"
-                onChangeText={props.handleChange("unit")}
-                value={props.values.unit}
-              />
+                <Text style={styles.leftlabel}>Units</Text>
+                <TextInput
+                  style={styles.valueinput}
+                  multiline
+                  placeholder="Units"
+                  onChangeText={props.handleChange("unit")}
+                  value={props.values.unit}
+                />
               </View>
             </HideableView>
 
             <TouchableOpacity
-             
-            style={styles.addsubgoalbutton}
+              style={styles.addsubgoalbutton}
               onPress={props.handleSubmit}
-          ><Text style={styles.addsubgoaltext}>Add Subgoal</Text></TouchableOpacity>
+            >
+              <Text style={styles.addsubgoaltext}>Add Subgoal</Text>
+            </TouchableOpacity>
           </ScrollView>
         )}
       </Formik>
@@ -129,6 +141,7 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
     // padding: 5,
   },
+
   errorText: {
     color: "crimson",
     fontWeight: "bold",
@@ -136,7 +149,8 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   header: {
-fontWeight: "bold"
+    textAlignVertical: "center",
+    fontWeight: "bold",
   },
   objectiveinput: {
     marginTop: 20,
@@ -144,32 +158,33 @@ fontWeight: "bold"
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "black",
-height: 50,
-borderRadius:10,
-padding: 5
+    height: 50,
+    borderRadius: 10,
+    padding: 5,
   },
   input: {
     marginTop: 20,
     marginBottom: 20,
-padding: 3,
+    padding: 3,
     backgroundColor: "white",
-   
   },
   switchcontainer: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     marginTop: 20,
     marginBottom: 20,
+    justifyContent: "space-between",
   },
   switch: {
     marginLeft: 180,
+    transform: [{ scaleX: 1.4 }, { scaleY: 1.4 }],
+    marginRight: 25,
   },
   HideableView: {
     marginTop: 20,
     marginBottom: 20,
   },
   addsubgoalbutton: {
-   
     margin: 10,
     padding: 10,
     height: 50,
@@ -188,23 +203,20 @@ padding: 3,
     shadowRadius: 3.84,
 
     elevation: 5,
-    
-    
   },
   addsubgoaltext: {
     color: "white",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   valueinput: {
     marginTop: 20,
     marginBottom: 20,
-
     backgroundColor: "white",
-    marginLeft: 150
   },
   leftlabel: {
-    textAlignVertical:"center"
-  }
+    // fontWeight: "bold",
+    textAlignVertical: "center",
+  },
 });
 
 export default SubGoalForm;
