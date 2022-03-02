@@ -26,18 +26,18 @@ import RootStack from "./components/RootStack/RootStack";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [profile, SetProfile] = useState({ username: "jeff" });
+  const [profile, SetProfile] = useState(false);
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //           SetProfile(true)
-  //     } else {
-  //       SetProfile(false)
-  //     }
-  //      })
-  //   }, [])
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+            SetProfile(true)
+      } else {
+        SetProfile(false)
+      }
+       })
+    }, [])
 
   return (
     <NavigationContainer>

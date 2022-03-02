@@ -17,6 +17,7 @@ import {
   getPostsByUser,
   getSubgoalsByGoalId,
   getUser,
+  patchAvatar
 } from "../../utils/api";
 import dateFormat, { masks } from "dateformat";
 import Social from "../Feed/Social";
@@ -26,6 +27,7 @@ import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
+import { signOut } from "firebase/auth";
 
 const Goals = ({ route }) => {
   const [goals, setGoals] = useState([]);
@@ -37,9 +39,12 @@ const Goals = ({ route }) => {
   const [subgoals, setSubgoals] = useState({});
   const [imagemodalVisible, setImageModaVisible] = useState("");
   const [profPic, SetProfPic] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("")
   const navigation = useNavigation();
   // const user = auth.currentUser;
-  let user = { displayName: "jeff", photoURL: null };
+
+
+  let user = auth.currentUser;
 
   if (route.params) {
     user = { displayName: route.params.user };
@@ -53,10 +58,9 @@ const Goals = ({ route }) => {
     return onBlur;
   }, [navigation]);
 
-  const default_url =
-    "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
+  
 
-  const storage = getStorage();
+  
 
   useEffect(() => {
     setSubgoals({});
@@ -64,16 +68,7 @@ const Goals = ({ route }) => {
     setFutureGoals([]);
     setOldGoals([]);
     setShowGoals(false);
-    if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
-        (url) => {
-          console.log(url);
-          SetProfPic(url);
-        }
-      );
-    } else {
-      SetProfPic(default_url);
-    }
+   
     getGoalsByUser(user.displayName).then((goals) => {
       console.log("USERS GOALS", goals);
       goals.forEach((goal) => {
@@ -111,6 +106,7 @@ const Goals = ({ route }) => {
     });
     getUser(user.displayName).then((userDetails) => {
       setUserDetails(userDetails[0]);
+      setAvatarUrl(userDetails[0].avatar_url)
     });
   }, []);
 
@@ -123,7 +119,7 @@ const Goals = ({ route }) => {
     });
 
     if (!result.cancelled) {
-      SetProfPic(result.uri);
+      setAvatarUrl(result.uri);
       const storage = getStorage();
       const refo = ref(storage, `${user.displayName}: Profile Picture`);
 
@@ -132,13 +128,37 @@ const Goals = ({ route }) => {
 
       await uploadBytes(refo, bytes);
     }
-    updateProfile(user, { photoURL: `${user.displayName}: Profile Picture` });
+    await updateProfile(user, {
+      photoURL: `${user.displayName}: Profile Picture`,
+    });
+    const storage= getStorage();
+    getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
+      (url) => {
+        console.log(url);
+        patchAvatar(user.displayName, url).then((res) => {
+          console.log(res);
+        });
+      }
+    );
     setImageModaVisible(!imagemodalVisible);
+  };
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        console.log("signed out");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
     <ScrollView>
       <View style={styles.header}>
+    
+        { !route.params ?  (
+          <View>
         <Modal
           animationType="fade"
           transparent={true}
@@ -166,8 +186,20 @@ const Goals = ({ route }) => {
         </Modal>
 
         <Pressable onPress={() => setImageModaVisible(true)}>
-          <Image source={profPic} style={styles.profPic} />
+          <Image source={avatarUrl} style={styles.profPic} />
+        </Pressable> 
+
+        <Pressable onPress={handleSignOut}>
+          <Text>Sign Out</Text>
         </Pressable>
+        </View>
+        ) : (
+          
+        <Image source={avatarUrl} style={styles.profPic}/>
+          )
+          
+}
+
 
         <View style={styles.body}>
           <View style={styles.bodyContent}>
