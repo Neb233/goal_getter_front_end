@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  Dimensions,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -121,11 +122,11 @@ const Subgoals = ({ setFriendPosts }) => {
         </View>
       </Modal>
       <Text style={styles.text}>Tell us what progress you've made today</Text>
-      <View style={styles.page}>
+      <View style={{ flex: 1 }}>
         <ScrollView
           horizontal={true}
           pagingEnabled={true}
-          style={{ flexDirection: "column", padding: 5 }}
+          style={{ flex: 1, flexDirection: "row", padding: 5 }}
         >
           {goals.map((goal) => {
             const type = goal.type === "progress";
@@ -169,18 +170,26 @@ const Subgoals = ({ setFriendPosts }) => {
                       </View>
                     </View>
                   ) : (
-                    <View style={[styles.progress, styles.checkBox]}>
+                    // <View style={[styles.progress, styles.checkBox]}>
+                    <View>
+                    <View style={{ flexDirection: "column" }}>
                       {/* <Text>Complete?</Text> */}
                       <BouncyCheckbox
                         text={goal.objective}
+                        size={30}
+                        fillColor="#19e63b"
+                        unfillColor="#FFFFFF"
+                        iconStyle={{ borderColor: "blue" }}
                         textStyle={{
                           color: "white",
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: "bold",
                         }}
-                        style={styles.checkBox}
+                        style={{marginBottom: 30, flexDirection: 'row'}}
+                        // style={styles.checkBox}
                         onPress={() => handleCheckBoxClick(goal)}
                       />
+                        </View>
                       <PostStatus
                         goal={goal}
                         subgoal={goal.subgoal_id}
@@ -201,6 +210,9 @@ const Subgoals = ({ setFriendPosts }) => {
 
 export default Subgoals;
 
+const { width } = Dimensions.get("screen");
+const subgoalWidth = width * 1;
+
 const styles = StyleSheet.create({
   text: {
     padding: 10,
@@ -212,8 +224,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   subGoal: {
-    padding: 20,
-    width: "100%",
+    padding: 15,
+    width: subgoalWidth,
     backgroundColor: "#3e4d6e",
     borderRadius: 10,
   },
@@ -236,8 +248,5 @@ const styles = StyleSheet.create({
   },
   duedate: {
     color: "white",
-  },
-  checkBox: {
-    flexDirection: "column",
   },
 });
