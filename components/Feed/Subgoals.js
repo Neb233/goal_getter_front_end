@@ -126,7 +126,7 @@ const Subgoals = ({ setFriendPosts }) => {
         <ScrollView
           horizontal={true}
           pagingEnabled={true}
-          style={{ flex: 1, flexDirection: "row", padding: 5 }}
+          style={{ flex: 1, flexDirection: "row", padding: 0 }}
         >
           {goals.map((goal) => {
             const type = goal.type === "progress";
@@ -224,10 +224,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   subGoal: {
-    padding: 15,
+    padding: 20,
     width: subgoalWidth,
     backgroundColor: "#3e4d6e",
-    borderRadius: 10,
+    // borderRadius: 10,
+    // marginRight: 1
   },
   pageContent: {
     marginTop: 10,

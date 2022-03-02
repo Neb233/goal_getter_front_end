@@ -81,7 +81,8 @@ style={{ width: 98 }}
       headerStyle: {
         backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
         }}>
-        <UserStack.Screen name="UserPage" component={Goals} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
+
+        <UserStack.Screen name="Your Profile" component={Goals} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
         <UserStack.Screen name="GoalPage" component={GoalPage} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
         {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
       </UserStack.Navigator>

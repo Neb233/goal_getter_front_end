@@ -172,7 +172,7 @@ const GoalPage = ({ navigation, route }) => {
         <FlatList
           data={subgoals}
           renderItem={({ item }) => (
-            <View style={styles.item}>
+            <View style={styles.subgoalItem}>
               <View>
                 <Text style={styles.title}>{item.objective}</Text>
               </View>
@@ -215,14 +215,14 @@ const GoalPage = ({ navigation, route }) => {
                         new Date(item.end_date).getDate() + 1
                       )
                     ).getTime() ? (
-                    <View style={styles.progress}>
-                      <Text style={styles.unit}>Made progress?</Text>
+                    <View style={{marginTop: 15}}>
+                      {/* <Text style={styles.unit}>Made progress?</Text> */}
                       <PatchSubGoal
                         goal={item}
                         goalUnit={item.unit}
                         goalPageId={item.goal_id}
                       />
-                      <Text style={styles.unit}>{item.unit}</Text>
+                      {/* <Text style={styles.unit}>{item.unit}</Text> */}
                     </View>
                   ) : null}
                 </View>
@@ -274,10 +274,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 15,
   },
+  subgoalItem: {
+    backgroundColor: "#5b72a4",
+    borderRadius: 5,
+    flex: 1,
+    margin: 2,
+    marginTop: 10,
+    padding: 15,
+  },
   title: {
     fontWeight: "bold",
-    marginTop: 15,
     margin: 5,
+    fontSize: 18,
     color: "white",
   },
   duedate: {
@@ -287,9 +295,9 @@ const styles = StyleSheet.create({
 
   subGoalTitle: {
     fontSize: 20,
-
     fontWeight: "bold",
     padding: 10,
+    marginTop: 10,
     color: "#3e4d6e",
   },
   checkBox: { color: "#015c53" },
