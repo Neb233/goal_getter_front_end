@@ -208,251 +208,264 @@ const Goals = ({ navigation, route }) => {
           <View style={styles.bodyContent}>
             <Text style={styles.userName}>{user.displayName}</Text>
 
-            <Text {{ fontWeight: "bold" }}>{userDetails ? userDetails.profile : ""}</Text>
-        </View>
-      </View>
-      <View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            setShowGoals((oldShowGoals) => {
-              return !oldShowGoals;
-            });
-          }}
-        >
-          <Text style={{ color: "white" }}>
-            {showGoals ? "Show Social Feed" : "Show Goals"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      {showGoals ? (
-        <View>
-          <View style={styles.goalContainer}>
-            <Text
-              style={{
-                color: "#3e4d6e",
-                fontWeight: "bold",
-                fontSize: 16,
-                alignSelf: "center",
-              }}
-            >
-              Current Goals
+            <Text style={{ fontWeight: "bold" }}>
+              {userDetails ? userDetails.profile : ""}
             </Text>
-            <FlatList
-              data={goals}
-              renderItem={({ item }) => (
-                <View style={styles.item}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("GoalPage", {
-                        goal_id: item.goal_id,
-                      });
-                    }}
-                  >
-                    <View>
-                      <Text style={styles.title}>{item.objective}</Text>
-                    </View>
-                    <View>
-                      <Text
-                        style={{
-                          color: "white",
-                          fontWeight: "500",
-                          marginBottom: 5,
-                        }}
-                      >
-                        {item.description}
-                      </Text>
-                      <Text style={styles.duedate}>
-                        Start date:{" "}
-                        {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
-                      </Text>
-                      <Text style={styles.duedate}>
-                        End date:{" "}
-                        {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
-                      </Text>
-                      {item.type === "progress" ? (
-                        <Text style={styles.duedate}>
-                          Current Progress:{" "}
-                          {`${
-                            item.progress.length === 0
-                              ? 0
-                              : Math.round(
-                                  100 *
-                                    item.progress[item.progress.length - 1][1]
-                                ) / 100
-                          } / ${Math.round(100 * item.target_value)} ${
-                            item.unit
-                          }`}
-                        </Text>
-                      ) : (
-                        <Text style={styles.duedate}>
-                          Current Progress:{" "}
-                          {subgoals[item.goal_id]
-                            ? `${
-                                subgoals[item.goal_id].filter((subgoal) => {
-                                  return subgoal.status === "completed";
-                                }).length
-                              } / ${
-                                subgoals[item.goal_id].length
-                              } subgoals achieved`
-                            : null}
-                        </Text>
-                      )}
-                      {item.progress || subgoals[item.goal_id] ? (
-                        <ProgressBar
-                          progress={item.progress}
-                          target_value={item.target_value}
-                          subgoals={subgoals[item.goal_id]}
-                        />
-                      ) : null}
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
-          </View>
-          <View style={styles.goalContainer}>
-            <Text
-              style={{
-                alignSelf: "center",
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "#3e4d6e",
-              }}
-            >
-              Past Goals
-            </Text>
-            <FlatList
-              data={oldGoals}
-              renderItem={({ item }) => (
-                <View style={styles.item}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("GoalPage", {
-                        goal_id: item.goal_id,
-                      });
-                    }}
-                  >
-                    <View>
-                      <Text style={styles.title}>{item.objective}</Text>
-                    </View>
-                    <View>
-                      <Text style={{ color: "white", fontWeight: '500', marginBottom: 10 }}>{item.description}</Text>
-                      <Text style={styles.duedate}>
-                        Start date:{" "}
-                        {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
-                      </Text>
-                      <Text style={styles.duedate}>
-                        End date:{" "}
-                        {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
-                      </Text>
-                      {item.type === "progress" ? (
-                        <Text style={styles.duedate}>
-                          Current Progress:{" "}
-                          {`${
-                            item.progress.length === 0
-                              ? 0
-                              : item.progress[item.progress.length - 1][1]
-                          } / ${item.target_value} ${item.unit}`}
-                        </Text>
-                      ) : (
-                        <Text style={styles.duedate}>
-                          Current Progress:{" "}
-                          {subgoals[item.goal_id]
-                            ? `${
-                                subgoals[item.goal_id].filter((subgoal) => {
-                                  return subgoal.status === "completed";
-                                }).length
-                              } / ${
-                                subgoals[item.goal_id].length
-                              } subgoals achieved`
-                            : null}
-                        </Text>
-                      )}
-                      {item.progress || subgoals[item.goal_id] ? (
-                        <ProgressBar
-                          progress={item.progress}
-                          target_value={item.target_value}
-                          subgoals={subgoals[item.goal_id]}
-                        />
-                      ) : null}
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
-          </View>
-          <View style={styles.goalContainer}>
-            <Text style={styles.currentgoals}>Upcoming Goals:</Text>
-            <FlatList
-              data={futureGoals}
-              renderItem={({ item }) => (
-                <View style={styles.item}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("GoalPage", {
-                        goal_id: item.goal_id,
-                      });
-                    }}
-                  >
-                    <View>
-                      <Text style={styles.title}>{item.objective}</Text>
-                    </View>
-                    <View>
-                      <Text style={{ color: "white" }}>{item.description}</Text>
-                      <Text style={styles.duedate}>
-                        Start date:{" "}
-                        {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
-                      </Text>
-                      <Text style={styles.duedate}>
-                        End date:{" "}
-                        {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
-                      </Text>
-                      {item.type === "progress" ? (
-                        <Text style={styles.duedate}>
-                          Current Progress:{" "}
-                          {`${
-                            item.progress.length === 0
-                              ? 0
-                              : item.progress[item.progress.length - 1][1]
-                          } / ${item.target_value} ${item.unit}`}
-                        </Text>
-                      ) : (
-                        <Text style={styles.duedate}>
-                          Current Progress:{" "}
-                          {subgoals[item.goal_id]
-                            ? `${
-                                subgoals[item.goal_id].filter((subgoal) => {
-                                  return subgoal.status === "completed";
-                                }).length
-                              } / ${
-                                subgoals[item.goal_id].length
-                              } subgoals achieved`
-                            : null}
-                        </Text>
-                      )}
-                      {item.progress || subgoals[item.goal_id] ? (
-                        <ProgressBar
-                          progress={item.progress}
-                          target_value={item.target_value}
-                          subgoals={subgoals[item.goal_id]}
-                        />
-                      ) : null}
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
           </View>
         </View>
-      ) : (
         <View>
-          <FlatList
-            data={userPosts}
-            renderItem={({ item }) => <Social postDetails={item} />}
-          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              setShowGoals((oldShowGoals) => {
+                return !oldShowGoals;
+              });
+            }}
+          >
+            <Text style={{ color: "white" }}>
+              {showGoals ? "Show Social Feed" : "Show Goals"}
+            </Text>
+          </TouchableOpacity>
         </View>
-      )}
+        {showGoals ? (
+          <View>
+            <View style={styles.goalContainer}>
+              <Text
+                style={{
+                  color: "#3e4d6e",
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  alignSelf: "center",
+                }}
+              >
+                Current Goals
+              </Text>
+              <FlatList
+                data={goals}
+                renderItem={({ item }) => (
+                  <View style={styles.item}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate("GoalPage", {
+                          goal_id: item.goal_id,
+                        });
+                      }}
+                    >
+                      <View>
+                        <Text style={styles.title}>{item.objective}</Text>
+                      </View>
+                      <View>
+                        <Text
+                          style={{
+                            color: "white",
+                            fontWeight: "500",
+                            marginBottom: 5,
+                          }}
+                        >
+                          {item.description}
+                        </Text>
+                        <Text style={styles.duedate}>
+                          Start date:{" "}
+                          {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
+                        </Text>
+                        <Text style={styles.duedate}>
+                          End date:{" "}
+                          {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
+                        </Text>
+                        {item.type === "progress" ? (
+                          <Text style={styles.duedate}>
+                            Current Progress:{" "}
+                            {`${
+                              item.progress.length === 0
+                                ? 0
+                                : Math.round(
+                                    100 *
+                                      item.progress[item.progress.length - 1][1]
+                                  ) / 100
+                            } / ${Math.round(100 * item.target_value)} ${
+                              item.unit
+                            }`}
+                          </Text>
+                        ) : (
+                          <Text style={styles.duedate}>
+                            Current Progress:{" "}
+                            {subgoals[item.goal_id]
+                              ? `${
+                                  subgoals[item.goal_id].filter((subgoal) => {
+                                    return subgoal.status === "completed";
+                                  }).length
+                                } / ${
+                                  subgoals[item.goal_id].length
+                                } subgoals achieved`
+                              : null}
+                          </Text>
+                        )}
+                        {item.progress || subgoals[item.goal_id] ? (
+                          <ProgressBar
+                            progress={item.progress}
+                            target_value={item.target_value}
+                            subgoals={subgoals[item.goal_id]}
+                          />
+                        ) : null}
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </View>
+            <View style={styles.goalContainer}>
+              <Text
+                style={{
+                  alignSelf: "center",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  color: "#3e4d6e",
+                }}
+              >
+                Past Goals
+              </Text>
+              <FlatList
+                data={oldGoals}
+                renderItem={({ item }) => (
+                  <View style={styles.item}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate("GoalPage", {
+                          goal_id: item.goal_id,
+                        });
+                      }}
+                    >
+                      <View>
+                        <Text style={styles.title}>{item.objective}</Text>
+                      </View>
+                      <View>
+                        <Text
+                          style={{
+                            color: "white",
+                            fontWeight: "500",
+                            marginBottom: 10,
+                          }}
+                        >
+                          {item.description}
+                        </Text>
+                        <Text style={styles.duedate}>
+                          Start date:{" "}
+                          {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
+                        </Text>
+                        <Text style={styles.duedate}>
+                          End date:{" "}
+                          {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
+                        </Text>
+                        {item.type === "progress" ? (
+                          <Text style={styles.duedate}>
+                            Current Progress:{" "}
+                            {`${
+                              item.progress.length === 0
+                                ? 0
+                                : item.progress[item.progress.length - 1][1]
+                            } / ${item.target_value} ${item.unit}`}
+                          </Text>
+                        ) : (
+                          <Text style={styles.duedate}>
+                            Current Progress:{" "}
+                            {subgoals[item.goal_id]
+                              ? `${
+                                  subgoals[item.goal_id].filter((subgoal) => {
+                                    return subgoal.status === "completed";
+                                  }).length
+                                } / ${
+                                  subgoals[item.goal_id].length
+                                } subgoals achieved`
+                              : null}
+                          </Text>
+                        )}
+                        {item.progress || subgoals[item.goal_id] ? (
+                          <ProgressBar
+                            progress={item.progress}
+                            target_value={item.target_value}
+                            subgoals={subgoals[item.goal_id]}
+                          />
+                        ) : null}
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </View>
+            <View style={styles.goalContainer}>
+              <Text style={styles.currentgoals}>Upcoming Goals:</Text>
+              <FlatList
+                data={futureGoals}
+                renderItem={({ item }) => (
+                  <View style={styles.item}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate("GoalPage", {
+                          goal_id: item.goal_id,
+                        });
+                      }}
+                    >
+                      <View>
+                        <Text style={styles.title}>{item.objective}</Text>
+                      </View>
+                      <View>
+                        <Text style={{ color: "white" }}>
+                          {item.description}
+                        </Text>
+                        <Text style={styles.duedate}>
+                          Start date:{" "}
+                          {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
+                        </Text>
+                        <Text style={styles.duedate}>
+                          End date:{" "}
+                          {dateFormat(item.end_date, "dddd, mmmm dS, yyyy")}
+                        </Text>
+                        {item.type === "progress" ? (
+                          <Text style={styles.duedate}>
+                            Current Progress:{" "}
+                            {`${
+                              item.progress.length === 0
+                                ? 0
+                                : item.progress[item.progress.length - 1][1]
+                            } / ${item.target_value} ${item.unit}`}
+                          </Text>
+                        ) : (
+                          <Text style={styles.duedate}>
+                            Current Progress:{" "}
+                            {subgoals[item.goal_id]
+                              ? `${
+                                  subgoals[item.goal_id].filter((subgoal) => {
+                                    return subgoal.status === "completed";
+                                  }).length
+                                } / ${
+                                  subgoals[item.goal_id].length
+                                } subgoals achieved`
+                              : null}
+                          </Text>
+                        )}
+                        {item.progress || subgoals[item.goal_id] ? (
+                          <ProgressBar
+                            progress={item.progress}
+                            target_value={item.target_value}
+                            subgoals={subgoals[item.goal_id]}
+                          />
+                        ) : null}
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </View>
+          </View>
+        ) : (
+          <View>
+            <FlatList
+              data={userPosts}
+              renderItem={({ item }) => <Social postDetails={item} />}
+            />
+          </View>
+        )}
+      </View>
     </ScrollView>
   );
 };
