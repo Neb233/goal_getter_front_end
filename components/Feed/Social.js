@@ -197,6 +197,7 @@ const Social = (props) => {
           <Text
             style={styles.postUsername}
             onPress={() => {
+              navigation.navigate("Calendar");
               navigation.navigate("UserPage", {
                 user: owner,
               });
@@ -410,6 +411,7 @@ const Social = (props) => {
                   <Text
                     style={styles.username}
                     onPress={() => {
+                      navigation.navigate("Calendar");
                       navigation.navigate("UserPage", {
                         user: item.owner,
                       });

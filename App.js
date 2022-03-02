@@ -20,13 +20,9 @@ import { auth } from "./firebase";
 import { UserContext, UserProvider } from "./context/user";
 import Goals from "./components/Profile/UserPage";
 import GoalPage from "./components/GoalPage/GoalPage";
-import UserPage from './components/Profile/UserPage'
 
 import { Provider as PaperProvider } from "react-native-paper";
 import RootStack from "./components/RootStack/RootStack";
-import Test from "./components/Profile/Test";
-
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -35,74 +31,74 @@ const App = () => {
   const [profile, SetProfile] = useState(false);
 
   useEffect(() => {
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
-            SetProfile(true)
+        SetProfile(true);
       } else {
-        SetProfile(false)
+        SetProfile(false);
       }
-       })
-    }, [])
+    });
+  }, []);
 
+  const FeedStack = createNativeStackNavigator();
+  const UserStack = createNativeStackNavigator();
+  const GoalStack = createNativeStackNavigator();
+  const SearchStack = createNativeStackNavigator();
 
- const FeedStack = createNativeStackNavigator();
- const UserStack = createNativeStackNavigator();
- const GoalStack = createNativeStackNavigator();
- const SearchStack = createNativeStackNavigator();
+  function FeedStackScreen() {
+    return (
+      <FeedStack.Navigator>
+        <FeedStack.Screen name="Feed" component={Feed} />
+        <FeedStack.Screen name="Calendar" component={GoalCalendar} />
+        <FeedStack.Screen name="Profile" component={Profile} />
+        <FeedStack.Screen name="GoalPage" component={GoalPage} />
+        <FeedStack.Screen name="UserPage" component={Goals} />
+      </FeedStack.Navigator>
+    );
+  }
 
+  function UserStackScreen() {
+    return (
+      <UserStack.Navigator>
+        <UserStack.Screen name="UserPage" component={Goals} />
+        <UserStack.Screen name="GoalPage" component={GoalPage} />
+        {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
+      </UserStack.Navigator>
+    );
+  }
 
+  function GoalStackScreen() {
+    return (
+      <GoalStack.Navigator>
+        <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} />
+        <GoalStack.Screen name="SetGoal" component={SetGoal} />
+        {/* <GoalStack.Screen name="" component={} /> */}
+      </GoalStack.Navigator>
+    );
+  }
 
- function FeedStackScreen() {
-   return (
-     <FeedStack.Navigator >
-       <FeedStack.Screen name="Feed" component={Feed}/>
-       <FeedStack.Screen name="Calendar" component={GoalCalendar} />
-       <FeedStack.Screen name="Profile" component={Profile} />
-       <FeedStack.Screen name="GoalPage" component={GoalPage}/>
- </FeedStack.Navigator>
-   )
- }
-
- function UserStackScreen() {
-   return (
-     <UserStack.Navigator>
-    <UserStack.Screen name="UserPage" component={UserPage} />
-    {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
-    </UserStack.Navigator>
-   )
- }
-
-
- function GoalStackScreen() {
-  return (
-    <GoalStack.Navigator>
-      <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro}/>
-      {/* <GoalStack.Screen name="" component={} /> */}
-    </GoalStack.Navigator>
-  )
- }
-
- function SearchStackScreen() {
-   return (
-     <SearchStack.Navigator>
-       <SearchStack.Screen name="Search" component={SearchUsers} />
-       {/* <SearchStack.Screen name="" component={} /> */}
-     </SearchStack.Navigator>
-   )
- }
-
+  function SearchStackScreen() {
+    return (
+      <SearchStack.Navigator>
+        <SearchStack.Screen name="Search" component={SearchUsers} />
+        <SearchStack.Screen name="Calendar" component={GoalCalendar} />
+        <SearchStack.Screen name="GoalPage" component={GoalPage} />
+        <SearchStack.Screen name="UserPage" component={Goals} />
+        {/* <SearchStack.Screen name="" component={} /> */}
+      </SearchStack.Navigator>
+    );
+  }
 
   return (
     <NavigationContainer>
       {profile ? (
-          <Tab.Navigator screenOptions={{headerShown: false}}>
-            <Tab.Screen name="Social" component={FeedStackScreen} />
-            <Tab.Screen name="Set Goals" component={GoalStackScreen } />
-            <Tab.Screen name="UserPage" component={UserStackScreen}/> 
-           
-            <Tab.Screen name="Search Users" component={SearchStackScreen } />
-          </Tab.Navigator>
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+          <Tab.Screen name="Home" component={FeedStackScreen} />
+          <Tab.Screen name="Set Goals" component={GoalStackScreen} />
+          <Tab.Screen name="Profile" component={UserStackScreen} />
+
+          <Tab.Screen name="Search Users" component={SearchStackScreen} />
+        </Tab.Navigator>
       ) : (
         <RootStack />
       )}
@@ -121,27 +117,26 @@ const styles = StyleSheet.create({
   },
 });
 
+{
+  /* <Stack.Navigator>
+        //   <Stack.Screen */
+}
+//     name="Nav"
+//     component={Nav}
+//     options={{ headerShown: false }}
+//   />
 
+//   <Stack.Screen name="Feed" component={Feed} />
+//   <Stack.Screen name="SetGoal" component={SetGoal} />
+//   <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
+//   <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
+//   <Stack.Screen name="Profile" component={Profile} />
+//   <Stack.Screen name="SearchUsers" component={SearchUsers} />
 
+//   <Stack.Screen name="Login" component={LoginScreen} />
 
-{/* <Stack.Navigator>
-        //   <Stack.Screen */}
-        //     name="Nav"
-        //     component={Nav}
-        //     options={{ headerShown: false }}
-        //   />
+//   <Stack.Screen name="UserPage" component={Goals} />
+//   <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
 
-        //   <Stack.Screen name="Feed" component={Feed} />
-        //   <Stack.Screen name="SetGoal" component={SetGoal} />
-        //   <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
-        //   <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
-        //   <Stack.Screen name="Profile" component={Profile} />
-        //   <Stack.Screen name="SearchUsers" component={SearchUsers} />
-
-        //   <Stack.Screen name="Login" component={LoginScreen} />
-
-        //   <Stack.Screen name="UserPage" component={Goals} />
-        //   <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
-
-        //   <Stack.Screen name="Register" component={RegisterScreen} />
-        // </Stack.Navigator>
+//   <Stack.Screen name="Register" component={RegisterScreen} />
+// </Stack.Navigator>
