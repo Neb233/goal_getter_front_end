@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image } from "react-native";
 
 import { TouchableOpacity, FlatList } from "react-native";
 import { useState, useEffect } from "react";
@@ -30,6 +30,8 @@ import { matchRoutes } from "react-router-dom";
 import { Avatar } from "react-native-paper";
 
 const currentUser = "jeff";
+
+let friendPosts = [];
 
 const getReactionCount = (reactions) => {
   const reactionCount = {
@@ -72,9 +74,10 @@ const Social = (props) => {
   });
   const [currentUserReaction, setCurrentUserReaction] = useState();
   const [subgoals, setSubgoals] = useState([]);
-  const [avatarUrl, setAvatarUrl] = useState("account");
+  const [avatarUrl, setAvatarUrl] = useState(
+    "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d"
+  );
 
-  let friendPosts = [];
   if (props.friendPosts) {
     friendPosts = props.friendPosts;
   }
@@ -176,9 +179,19 @@ const Social = (props) => {
     <KeyboardAvoidingView>
       <View style={styles.goalContainer}>
         <View style={styles.userInfo}>
-          <Avatar.Image
-            source={avatarUrl}
-            style={{ backgroundColor: "white" }}
+          <Image
+            source={{
+              uri: avatarUrl,
+              headers: {
+                Accept: "*/*",
+              },
+            }}
+            style={{
+              backgroundColor: "white",
+              width: 50,
+              height: 50,
+              borderRadius: 25,
+            }}
           />
 
           <Text
@@ -260,7 +273,7 @@ const Social = (props) => {
             associatedGoal.progress &&
             associatedGoal.progress[parseInt(progress_point)] ? (
               <ProgressBar
-              style={styles.progress}
+                style={styles.progress}
                 progress={
                   associatedGoal.progress
                     ? associatedGoal.progress.slice(0, progress_point + 1)
@@ -456,7 +469,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   progress: {
-    backgroundColor: 'green',
+    backgroundColor: "green",
   },
   interact: {
     flexDirection: "row",

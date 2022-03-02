@@ -68,7 +68,7 @@ const Goals = ({ route }) => {
     setFutureGoals([]);
     setOldGoals([]);
     setShowGoals(false);
-   
+
     getGoalsByUser(user.displayName).then((goals) => {
       console.log("USERS GOALS", goals);
       goals.forEach((goal) => {
@@ -106,7 +106,8 @@ const Goals = ({ route }) => {
     });
     getUser(user.displayName).then((userDetails) => {
       setUserDetails(userDetails[0]);
-      setAvatarUrl(userDetails[0].avatar_url)
+
+      SetProfPic(userDetails[0].avatar_url);
     });
   }, []);
 
@@ -186,8 +187,17 @@ const Goals = ({ route }) => {
         </Modal>
 
         <Pressable onPress={() => setImageModaVisible(true)}>
-          <Image source={avatarUrl} style={styles.profPic} />
-        </Pressable> 
+
+          <Image
+            source={{
+              uri: profPic,
+              headers: {
+                Accept: "*/*",
+              },
+            }}
+            style={styles.profPic}
+          />
+</Pressable> 
 
         <Pressable onPress={handleSignOut}>
           <Text>Sign Out</Text>
@@ -416,10 +426,10 @@ const Goals = ({ route }) => {
         </View>
       ) : (
         <View>
-          {/* <FlatList
+          <FlatList
             data={userPosts}
             renderItem={({ item }) => <Social postDetails={item} />}
-          /> */}
+          />
         </View>
       )}
     </ScrollView>
