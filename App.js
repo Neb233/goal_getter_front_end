@@ -24,6 +24,7 @@ import UserPage from './components/Profile/UserPage'
 
 import { Provider as PaperProvider } from "react-native-paper";
 import RootStack from "./components/RootStack/RootStack";
+import Test from "./components/Profile/Test";
 
 
 
@@ -57,7 +58,8 @@ const App = () => {
      <FeedStack.Navigator >
        <FeedStack.Screen name="Feed" component={Feed}/>
        <FeedStack.Screen name="Calendar" component={GoalCalendar} />
-       <FeedStack.Screen name="UserPage" component={UserPage} />
+       <FeedStack.Screen name="Profile" component={Profile} />
+       <FeedStack.Screen name="GoalPage" component={GoalPage}/>
  </FeedStack.Navigator>
    )
  }
@@ -65,7 +67,7 @@ const App = () => {
  function UserStackScreen() {
    return (
      <UserStack.Navigator>
-    <UserStack.Screen name="SetGoal" component={Profile} />
+    <UserStack.Screen name="UserPage" component={UserPage} />
     {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
     </UserStack.Navigator>
    )
@@ -75,7 +77,7 @@ const App = () => {
  function GoalStackScreen() {
   return (
     <GoalStack.Navigator>
-      <GoalStack.Screen name="Goals" componenent={GoalPage}/>
+      <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro}/>
       {/* <GoalStack.Screen name="" component={} /> */}
     </GoalStack.Navigator>
   )
@@ -98,8 +100,9 @@ const App = () => {
       {profile ? (
           <Tab.Navigator screenOptions={{headerShown: false}}>
             <Tab.Screen name="Social" component={FeedStackScreen} />
-            <Tab.Screen name="UserPage" component={UserStackScreen}/> 
             <Tab.Screen name="Set Goals" component={GoalStackScreen } />
+            <Tab.Screen name="UserPage" component={UserStackScreen}/> 
+           
             <Tab.Screen name="Search Users" component={SearchStackScreen } />
           </Tab.Navigator>
         
