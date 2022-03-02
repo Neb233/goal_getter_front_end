@@ -37,9 +37,12 @@ const Goals = ({ navigation, route }) => {
   const [imagemodalVisible, setImageModaVisible] = useState("");
   const [profPic, SetProfPic] = useState("");
 
-
   // const user = auth.currentUser;
-  const user = { displayName: "jeff", photoURL: null };
+  let user = { displayName: "jeff", photoURL: null };
+
+  if (route.params) {
+    user = { displayName: route.params.user };
+  }
 
   const default_url =
     "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
@@ -53,14 +56,16 @@ const Goals = ({ navigation, route }) => {
     setOldGoals([]);
     setShowGoals(false);
     if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user}: Profile Picture`)).then((url) => {
-        console.log(url);
-        SetProfPic(url);
-      });
+      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
+        (url) => {
+          console.log(url);
+          SetProfPic(url);
+        }
+      );
     } else {
       SetProfPic(default_url);
     }
-    getGoalsByUser(user).then((goals) => {
+    getGoalsByUser(user.displayName).then((goals) => {
       console.log("USERS GOALS", goals);
       goals.forEach((goal) => {
         getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
@@ -91,14 +96,14 @@ const Goals = ({ navigation, route }) => {
         })
       );
     });
-    getPostsByUser(user).then((posts) => {
+    getPostsByUser(user.displayName).then((posts) => {
       console.log("USERS POSTS", posts);
       setUserPosts(posts);
     });
-    getUser(user).then((userDetails) => {
+    getUser(user.displayName).then((userDetails) => {
       setUserDetails(userDetails[0]);
     });
-  }, [user]);
+  }, []);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -152,8 +157,7 @@ const Goals = ({ navigation, route }) => {
         </Modal>
 
         <Pressable onPress={() => setImageModaVisible(true)}>
-          <Image source={userDetails.avatar_url} style={styles.profPic} />
-
+          <Image source={profPic} style={styles.profPic} />
         </Pressable>
 
         <View style={styles.body}>
@@ -371,10 +375,10 @@ const Goals = ({ navigation, route }) => {
         </View>
       ) : (
         <View>
-          <FlatList
+          {/* <FlatList
             data={userPosts}
             renderItem={({ item }) => <Social postDetails={item} />}
-          />
+          /> */}
         </View>
       )}
     </ScrollView>
