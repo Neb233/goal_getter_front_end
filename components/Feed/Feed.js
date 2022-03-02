@@ -85,7 +85,7 @@ export default Feed;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#cfd0dd",
+    backgroundColor: "#fdf9e6",
   },
   personalWrapper: {
     borderRadius: 10,

@@ -25,6 +25,7 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 import ProgressBar from "../../shared/ProgressBar";
+import { matchRoutes } from "react-router-dom";
 
 const currentUser = "jeff";
 
@@ -185,6 +186,7 @@ const Social = (props) => {
         <View style={styles.post}>
           <View style={styles.boxed}>
             <Text
+            style={styles.objective}
               onPress={() => {
                 navigation.navigate("GoalPage", {
                   goal_id: associatedGoal.goal_id,
@@ -266,41 +268,61 @@ const Social = (props) => {
         <View style={styles.flexRow}>
           {reactionCount.awesome > 0 ? (
             <View style={styles.reaction}>
-              <View style={styles.awesome} />
+              {/* <View style={styles.awesome} /> */}
+              <Text style={styles.awesome}>⭐</Text>
               {currentUserReaction && currentUserReaction[0] === "awesome" ? (
-                <Text style={styles.blueText}>{reactionCount.awesome}</Text>
+                <View style={styles.redCircle}>
+                <Text style={styles.count}>{reactionCount.awesome}</Text>
+                </View>
               ) : (
-                <Text>{reactionCount.awesome}</Text>
+                <View style={styles.redCircle}>
+                <Text style={styles.count}>{reactionCount.awesome}</Text>
+                </View>
               )}
             </View>
           ) : null}
           {reactionCount.congrats > 0 ? (
             <View style={styles.reaction}>
-              <View style={styles.congrats} />
+              {/* <View style={styles.congrats} /> */}
+              <Text style={styles.congrats}>🥳</Text>
               {currentUserReaction && currentUserReaction[0] === "congrats" ? (
-                <Text style={styles.blueText}>{reactionCount.congrats}</Text>
+                <View style={styles.redCircle}>
+                <Text style={styles.count}>{reactionCount.congrats}</Text>
+                </View>
               ) : (
-                <Text>{reactionCount.congrats}</Text>
+                <View style={styles.redCircle}>
+                <Text style={styles.count}>{reactionCount.congrats}</Text>
+                </View>
               )}
             </View>
           ) : null}
           {reactionCount.encourage > 0 ? (
             <View style={styles.reaction}>
-              <View style={styles.encourage} />
+              {/* <View style={styles.encourage} /> */}
+              <Text style={styles.encourage}>🏆</Text>
               {currentUserReaction && currentUserReaction[0] === "encourage" ? (
-                <Text style={styles.blueText}>{reactionCount.encourage}</Text>
+                <View style={styles.redCircle}>
+                <Text style={styles.count}>{reactionCount.encourage}</Text>
+                </View>
               ) : (
-                <Text>{reactionCount.encourage}</Text>
+                <View style={styles.redCircle}>
+                <Text style={styles.count}>{reactionCount.encourage}</Text>
+                </View>
               )}
             </View>
           ) : null}
           {reactionCount.proud > 0 ? (
             <View style={styles.reaction}>
-              <View style={styles.proud} />
+              {/* <View style={styles.proud} /> */}
+              <Text style={styles.proud}>👏</Text>
               {currentUserReaction && currentUserReaction[0] === "proud" ? (
-                <Text style={styles.blueText}>{reactionCount.proud}</Text>
+                <View style={styles.redCircle}>
+                <Text style={styles.count}>{reactionCount.proud}</Text>
+                </View>
               ) : (
-                <Text>{reactionCount.proud}</Text>
+                <View style={styles.redCircle}>
+                <Text style={styles.count}>{reactionCount.proud}</Text>
+                </View>
               )}
             </View>
           ) : null}
@@ -429,34 +451,38 @@ const styles = StyleSheet.create({
   },
 
   awesome: {
-    height: 30,
-    width: 30,
-    backgroundColor: "blue",
+    // height: 30,
+    // width: 30,
+    // backgroundColor: "blue",
     borderRadius: 15,
-    marginRight: 8,
+    marginRight: 2,
+    fontSize: 35
   },
   congrats: {
-    height: 30,
-    width: 30,
-    backgroundColor: "yellow",
-    borderRadius: 15,
-    marginRight: 8,
+    // height: 30,
+    // width: 30,
+    // backgroundColor: "yellow",
+    // borderRadius: 15,
+    // marginRight: 8,
+    fontSize: 35
   },
   encourage: {
-    height: 30,
-    width: 30,
-    backgroundColor: "green",
-    borderRadius: 15,
-    marginRight: 8,
+    // height: 30,
+    // width: 30,
+    // backgroundColor: "green",
+    // borderRadius: 15,
+    // marginRight: 8,
+    fontSize: 35
   },
   proud: {
-    height: 30,
-    width: 30,
-    backgroundColor: "pink",
-    borderRadius: 15,
-    marginRight: 8,
+    // height: 30,
+    // width: 30,
+    // backgroundColor: "pink",
+    // borderRadius: 15,
+    // marginRight: 8,
+    fontSize: 35
   },
-
+  
   profilePic: {
     height: 40,
     width: 40,
@@ -471,7 +497,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 10,
   },
-
+  
   goal: {
     alignItems: "center",
     justifyContent: "center",
@@ -505,7 +531,7 @@ const styles = StyleSheet.create({
   comButton: {
     backgroundColor: "#4892b7",
     borderRadius: 8,
-
+    
     marginTop: 40,
     marginLeft: 10,
     marginBottom: 30,
@@ -531,7 +557,7 @@ const styles = StyleSheet.create({
     borderColor: "grey",
     borderRadius: 50,
   },
-
+  
   redText: {
     color: "red",
   },
@@ -540,14 +566,31 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   boxed: {
-    borderWidth: 1,
-    borderColor: "black",
+    // borderWidth: 1,
+    // borderColor: "black",
+  },
+  objective: {
+    fontWeight: 'bold',
+    color: '#00b12c',
+    fontSize: 18,
+    marginBottom: 8,
+    alignSelf: 'center'
   },
   reaction: {
-    paddingLeft: 5,
-    paddingRight: 5,
-    flexDirection: "row",
-    alignItems: "center",
+    // paddingLeft: 5,
+    // paddingRight: 5,
+    // flexDirection: "row",
+    // alignItems: "center",
+  },
+  redCircle: {
+    height: 18,
+    width: 20,
+    backgroundColor: 'blue',
+    borderRadius: 50,
+  },
+  count: {
+    alignSelf: 'center',
+    color: 'white'
   },
   text: {
     color: 'white'
