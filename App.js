@@ -20,13 +20,9 @@ import { auth } from "./firebase";
 import { UserContext, UserProvider } from "./context/user";
 import Goals from "./components/Profile/UserPage";
 import GoalPage from "./components/GoalPage/GoalPage";
-import UserPage from './components/Profile/UserPage'
 
 import { Provider as PaperProvider } from "react-native-paper";
 import RootStack from "./components/RootStack/RootStack";
-import Test from "./components/Profile/Test";
-
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -35,21 +31,20 @@ const App = () => {
   const [profile, SetProfile] = useState(false);
 
   useEffect(() => {
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
-            SetProfile(true)
+        SetProfile(true);
       } else {
-        SetProfile(false)
+        SetProfile(false);
       }
-       })
-    }, [])
 
+    });
+  }, []);
 
- const FeedStack = createNativeStackNavigator();
- const UserStack = createNativeStackNavigator();
- const GoalStack = createNativeStackNavigator();
- const SearchStack = createNativeStackNavigator();
+  const FeedStack = createNativeStackNavigator();
+  const UserStack = createNativeStackNavigator();
+  const GoalStack = createNativeStackNavigator();
+  const SearchStack = createNativeStackNavigator();
 
  function Logo() {
   return (<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%'}}>
@@ -63,70 +58,72 @@ style={{ width: 98 }}
   }
 
 
-
- function FeedStackScreen() {
-   return (
-     <FeedStack.Navigator screenOptions={{
+  function FeedStackScreen() {
+    return (
+           <FeedStack.Navigator screenOptions={{
       headerStyle: {
         backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
         }} >
-       <FeedStack.Screen name="Feed" component={Feed}/>
-       <FeedStack.Screen name="Calendar" component={GoalCalendar} />
-       <FeedStack.Screen name="Profile" component={Profile} />
-       <FeedStack.Screen name="GoalPage" component={GoalPage}/>
- </FeedStack.Navigator>
-   )
- }
+        <FeedStack.Screen name="Feed" component={Feed} />
+        <FeedStack.Screen name="Calendar" component={GoalCalendar} />
+        <FeedStack.Screen name="Profile" component={Profile} />
+        <FeedStack.Screen name="GoalPage" component={GoalPage} />
+        <FeedStack.Screen name="UserPage" component={Goals} />
+      </FeedStack.Navigator>
+    );
+  }
 
- function UserStackScreen() {
-   return (
-     <UserStack.Navigator screenOptions={{
+  function UserStackScreen() {
+    return (
+      <UserStack.Navigator screenOptions={{
       headerStyle: {
         backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
         }}>
-    <UserStack.Screen name="UserPage" component={UserPage} />
-    {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
-    </UserStack.Navigator>
-   )
- }
+        <UserStack.Screen name="UserPage" component={Goals} />
+        <UserStack.Screen name="GoalPage" component={GoalPage} />
+        {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
+      </UserStack.Navigator>
+    );
+  }
 
-
- function GoalStackScreen() {
-  return (
-    <GoalStack.Navigator screenOptions={{
+  function GoalStackScreen() {
+    return (
+      <GoalStack.Navigator screenOptions={{
       headerStyle: {
         backgroundColor: '#5B72A4', paddingHorizontal: 80  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center", flexGrow: 1,},
         }}>
-      <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro}/>
-      {/* <GoalStack.Screen name="" component={} /> */}
-    </GoalStack.Navigator>
-  )
- }
+        <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} />
+        <GoalStack.Screen name="SetGoal" component={SetGoal} />
+        {/* <GoalStack.Screen name="" component={} /> */}
+      </GoalStack.Navigator>
+    );
+  }
 
- function SearchStackScreen() {
-   return (
-     <SearchStack.Navigator screenOptions={{
+  function SearchStackScreen() {
+    return (
+      <SearchStack.Navigator screenOptions={{
       headerStyle: {
         backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
         }}>
-       <SearchStack.Screen name="Search" component={SearchUsers} />
-       {/* <SearchStack.Screen name="" component={} /> */}
-     </SearchStack.Navigator>
-   )
- }
-
+        <SearchStack.Screen name="Search" component={SearchUsers} />
+        <SearchStack.Screen name="Calendar" component={GoalCalendar} />
+        <SearchStack.Screen name="GoalPage" component={GoalPage} />
+        <SearchStack.Screen name="UserPage" component={Goals} />
+        {/* <SearchStack.Screen name="" component={} /> */}
+      </SearchStack.Navigator>
+    );
+  }
 
   return (
     <NavigationContainer>
       {profile ? (
-          <Tab.Navigator screenOptions={{headerShown: false}}>
-            <Tab.Screen name="Social" component={FeedStackScreen} />
-            <Tab.Screen name="Set Goals" component={GoalStackScreen } />
-            <Tab.Screen name="UserPage" component={UserStackScreen}/> 
-           
-            <Tab.Screen name="Search Users" component={SearchStackScreen } />
-          </Tab.Navigator>
-        
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+          <Tab.Screen name="Home" component={FeedStackScreen} />
+          <Tab.Screen name="Set Goals" component={GoalStackScreen} />
+          <Tab.Screen name="Profile" component={UserStackScreen} />
+
+          <Tab.Screen name="Search Users" component={SearchStackScreen} />
+        </Tab.Navigator>
       ) : (
         <RootStack />
       )}
@@ -144,8 +141,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-
 
 
 {/* <Stack.Navigator>
@@ -171,5 +166,3 @@ const styles = StyleSheet.create({
         // </Stack.Navigator>
 
 
-
-  

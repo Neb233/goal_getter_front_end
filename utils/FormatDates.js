@@ -63,8 +63,8 @@ const formatGoalsForCalendar = (goals) => {
     const startDate = formatDate(goal.start_date)
     const endDate = formatDate(goal.end_date)
 
-    formattedGoals[startDate] = [{ name: `FIRST DAY ${goal.objective}` }];
-    formattedGoals[endDate] = [{ name: `LAST DAY ${goal.objective}` }];
+    formattedGoals[startDate] = [{ name: `🟢🟢 FIRST DAY of ${goal.objective} 🟢🟢` }];
+    formattedGoals[endDate] = [{ name: `🎉🎉 LAST DAY of ${goal.objective} 🎉🎉` }];
   })
 
   return formattedGoals;

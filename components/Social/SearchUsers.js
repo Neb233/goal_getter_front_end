@@ -3,55 +3,125 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
   Alert,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { KeyboardAvoidingView } from "react-native";
-import { Searchbar, List } from "react-native-paper";
+import { Searchbar, List, Button, Avatar } from "react-native-paper";
 import {
   searchUsers,
   addFriend,
   getFriends,
-  deleteFriend,
+  deleteFriendship,
+  getUser,
 } from "../../utils/api";
+import { auth } from "../../firebase";
 
+// const SearchUsers = ({ navigation, route }) => {
 const SearchUsers = () => {
+  const user = {};
+  // if (route.params) {
+  //   user.displayName = route.params.user;
+  // } else {
+  //   user.displayName = auth.currentUser.displayName;
+  // }
+
   const [queryState, setQueryState] = useState({
     query: "",
   });
   const [resultState, setResultState] = useState([]);
 
   const [friends, setFriends] = useState([]);
+  const [isFriend, setIsFriend] = useState([]);
+  const [userAvatars, setUserAvatars] = useState([]);
 
+  const navigation = useNavigation();
+
+  //RUN WHEN PAGE IS FIRST LOADED
   useEffect(() => {
-    return getFriends("martina").then((friendsRes) => {
-      setFriends(friendsRes);
-      console.log("friends result state", friendsRes);
+    searchUsers(queryState.query).then((results) => {
+      const filteredResults = results.filter((user) => {
+        return user.username !== user.displayName;
+      });
+      console.log(results);
+      setResultState(filteredResults);
+    });
+
+    getFriends(user.displayName).then((friends) => {
+      setFriends(friends);
     });
   }, []);
 
   useEffect(() => {
+    setIsFriend(
+      resultState.map((user) => {
+        return !(friends.indexOf(user.username) === -1);
+      })
+    );
+
+    console.log(resultState);
+    const userPromises = resultState.map((user) => {
+      return getUser(user.username);
+    });
+    return Promise.all(userPromises).then((userArray) => {
+      console.log(userArray);
+      userArray.forEach((user, index) => {
+        setUserAvatars((oldUserAvatars) => {
+          const newUserAvatars = [...oldUserAvatars];
+          newUserAvatars[index] = user[0].avatar_url;
+          return newUserAvatars;
+        });
+      });
+    });
+  }, [resultState]);
+
+  useEffect(() => {
+    setIsFriend(
+      resultState.map((user) => {
+        return !(friends.indexOf(user.username) === -1);
+      })
+    );
+  }, [friends]);
+
+  //RUN WHEN SEARCH IS CHANGED
+  useEffect(() => {
     return searchUsers(queryState.query).then((results) => {
-      setResultState(results);
-      console.log("result state", resultState);
+      const filteredResults = results.filter((user) => {
+        return user.username !== user.displayName;
+      });
+      setResultState(filteredResults);
     });
   }, [queryState]);
 
   const addFriendClick = (userToAdd) => {
-    console.log(userToAdd);
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return addFriend("loggedInUser", "usertoadd").catch((err) => {
           */
-    return addFriend("martina", userToAdd)
-      .then((res) => {
-        console.log(res);
+    return addFriend(user.displayName, userToAdd)
+      .then(() => {
+        const ind = resultState.findIndex(
+          (user) => user.username === userToAdd
+        );
+        setFriends((oldFriends) => {
+          const newFriends = [...oldFriends, resultState[ind].username];
+          return newFriends;
+        });
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
+        return Alert.alert("Friend Added", "", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
       })
       .catch((err) => {
-        return getFriends("martina").then((friends) => {
-          if (friends.indexOf(!userToAdd === -1)) {
+        return getFriends(user.displayName).then((friends) => {
+          if (friends.indexOf(userToAdd !== -1)) {
             return Alert.alert("Error", "Already friends", [
               { text: "OK", onPress: () => console.log("OK Pressed") },
             ]);
@@ -65,17 +135,27 @@ const SearchUsers = () => {
   };
 
   const removeFriendClick = (userToRemove) => {
-    console.log(userToRemove);
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return RemoveFriend("loggedInUser", "usertoRemove").catch((err) => {
           */
-    return deleteFriend("martina", userToRemove)
+    return deleteFriendship(user.displayName, userToRemove)
       .then(() => {
         console.log("friend removed");
+
         const ind = friends.indexOf(userToRemove);
-        const newFriends = [...friends].splice(ind, 1);
-        setFriends(newFriends);
-        return Alert.alert("Friend removed", "Friend remove", [
+        setFriends((oldFriends) => {
+          const newFriends = [
+            ...oldFriends.slice(0, ind),
+            ...oldFriends.slice(ind + 1, oldFriends.length),
+          ];
+          return newFriends;
+        });
+        setIsFriend(
+          resultState.map((user) => {
+            return !(friends.indexOf(user.username) === -1);
+          })
+        );
+        return Alert.alert("Friend Removed", "", [
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
       })
@@ -85,7 +165,7 @@ const SearchUsers = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.searchStyle}>
+    <ScrollView>
       <View>
         <Searchbar
           placeholder="Search"
@@ -93,71 +173,132 @@ const SearchUsers = () => {
             setQueryState({ query: query });
           }}
           value={queryState.query}
+          style={styles.searchBar}
         />
       </View>
-      <ScrollView>
-        {/* <List.Section>
-          <List.Subheader>Results</List.Subheader>
 
-          {resultState ? (
-            resultState.map((item) => {
-              console.log(
-                "item.username",
-                item.username,
-                typeof loggedInUsersFriends
+      <List.Section style={styles.list}>
+        <List.Subheader>Results</List.Subheader>
+
+        {resultState ? (
+          resultState.map((item, index) => {
+            if (!isFriend[index]) {
+              return (
+                <View style={styles.viewStyle}>
+                  <List.Item
+                    style={styles.listItem}
+                    key={item.username}
+                    title={item.username}
+                    color="#fdf9e6"
+                    onPress={() => {
+                      navigation.navigate("UserPage", {
+                        user: item.username,
+                      });
+                    }}
+                    left={(props) => {
+                      return (
+                        <Image
+                          source={{
+                            uri: userAvatars[index]
+                              ? userAvatars[index]
+                              : "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d",
+                            headers: {
+                              Accept: "*/*",
+                            },
+                          }}
+                          style={{
+                            backgroundColor: "white",
+                            width: 50,
+                            height: 50,
+                            borderRadius: 25,
+                          }}
+                        />
+                      );
+                    }}
+                  />
+
+                  <Button
+                    style={styles.button}
+                    mode="contained"
+                    color="green"
+                    onPress={() => {
+                      addFriendClick(item.username);
+                    }}
+                  >
+                    Add Friend
+                  </Button>
+                </View>
               );
-              if (friends.indexOf(item.username) === -1) {
-                return (
-                  <>
-                    <List.Item
-                      style={styles.listItem}
-                      key={item.username}
-                      title={item.username}
-                      left={(props) => <List.Icon {...props} icon="account" />}
-                    />
-                    <TouchableOpacity
-                      onPress={() => addFriendClick(item.username)}
-                    >
-                      <Text>Add Friend</Text>
-                    </TouchableOpacity>
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <List.Item
-                      style={styles.listItem}
-                      key={item.username}
-                      title={item.username}
-                      left={(props) => <List.Icon {...props} icon="account" />}
-                    />
-                    <TouchableOpacity
-                      onPress={() => removeFriendClick(item.username)}
-                    >
-                      <Text>Remove Friend</Text>
-                    </TouchableOpacity>
-                  </>
-                );
-              }
-            })
-          ) : (
-            <Text>""</Text>
-          )}
-        </List.Section> */}
-      </ScrollView>
-    </KeyboardAvoidingView>
+            } else {
+              return (
+                <>
+                  <List.Item
+                    style={styles.listItem}
+                    key={item.username}
+                    title={item.username}
+                    color="#fdf9e6"
+                    left={(props) => {
+                      return (
+                        <Image
+                          source={{
+                            uri: userAvatars[index]
+                              ? userAvatars[index]
+                              : "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d",
+                            headers: {
+                              Accept: "*/*",
+                            },
+                          }}
+                          style={{
+                            backgroundColor: "white",
+                            width: 50,
+                            height: 50,
+                            borderRadius: 25,
+                          }}
+                        />
+                      );
+                    }}
+                    onPress={() => {
+                      navigation.navigate("GoalPage", { goal_id: 1 });
+                      navigation.navigate("UserPage", {
+                        user: item.username,
+                      });
+                    }}
+                  />
+
+                  <Button
+                    mode="contained"
+                    color="red"
+                    onPress={() => {
+                      removeFriendClick(item.username);
+                    }}
+                    style={styles.button}
+                  >
+                    Remove Friend
+                  </Button>
+                </>
+              );
+            }
+          })
+        ) : (
+          <Text>""</Text>
+        )}
+      </List.Section>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  buttons: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-evenly",
+  searchBar: {
+    backgroundColor: "#fdf9e6",
   },
-  listItem: {
-    justifyContent: "flex-end",
+  list: {
+    flex: 1,
+    backgroundColor: "#fdf9e6",
+    justifyContent: "center",
   },
+  viewStyle: { padding: 30 },
+  listItem: { backgroundColor: "#fdf9e6", alignSelf: "center" },
+  button: { width: "50%", alignSelf: "center" },
 });
 
 export default SearchUsers;
