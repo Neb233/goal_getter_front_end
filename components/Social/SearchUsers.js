@@ -10,12 +10,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { KeyboardAvoidingView } from "react-native";
-import { Searchbar, List, Button } from "react-native-paper";
+import { Searchbar, List, Button, Avatar } from "react-native-paper";
 import {
   searchUsers,
   addFriend,
   getFriends,
   deleteFriendship,
+  getUser,
 } from "../../utils/api";
 
 const SearchUsers = () => {
@@ -26,47 +27,59 @@ const SearchUsers = () => {
 
   const [friends, setFriends] = useState([]);
   const [isFriend, setIsFriend] = useState([]);
+  const [userAvatars, setUserAvatars] = useState([]);
 
   const navigation = useNavigation();
 
-  console.log(friends, "Friend Render State");
-  console.log(resultState, "result Render State");
-  console.log(isFriend, "isFriend Render State");
-
   //RUN WHEN PAGE IS FIRST LOADED
   useEffect(() => {
-    return getFriends("jeff")
-      .then((friendsRes) => {
-        setFriends([...friendsRes]);
-      })
-      .then(() => {
-        searchUsers(queryState.query).then((results) => {
-          setResultState([...results]);
-        });
-      })
-      .then(() => {
-        setIsFriend(
-          resultState.map((user) => {
-            return !(friends.indexOf(user.username) === -1);
-          })
-        );
-      });
+    searchUsers(queryState.query).then((results) => {
+      console.log(results);
+      setResultState(results);
+    });
+
+    getFriends("jeff").then((friends) => {
+      setFriends(friends);
+    });
   }, []);
+
+  useEffect(() => {
+    setIsFriend(
+      resultState.map((user) => {
+        return !(friends.indexOf(user.username) === -1);
+      })
+    );
+
+    console.log(resultState);
+    const userPromises = resultState.map((user) => {
+      return getUser(user.username);
+    });
+    return Promise.all(userPromises).then((userArray) => {
+      console.log(userArray);
+      userArray.forEach((user, index) => {
+        setUserAvatars((oldUserAvatars) => {
+          const newUserAvatars = [...oldUserAvatars];
+          newUserAvatars[index] = user[0].avatar_url;
+          return newUserAvatars;
+        });
+      });
+    });
+  }, [resultState]);
+
+  useEffect(() => {
+    setIsFriend(
+      resultState.map((user) => {
+        return !(friends.indexOf(user.username) === -1);
+      })
+    );
+  }, [friends]);
 
   //RUN WHEN SEARCH IS CHANGED
   useEffect(() => {
-    return searchUsers(queryState.query)
-      .then((results) => {
-        setResultState(results);
-      })
-      .then(() => {
-        setIsFriend(
-          resultState.map((user) => {
-            return !(friends.indexOf(user.username) === -1);
-          })
-        );
-      });
-  }, [queryState, friends]);
+    return searchUsers(queryState.query).then((results) => {
+      setResultState(results);
+    });
+  }, [queryState]);
 
   const addFriendClick = (userToAdd) => {
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
@@ -78,7 +91,6 @@ const SearchUsers = () => {
           (user) => user.username === userToAdd
         );
         setFriends((oldFriends) => {
-          console.log("INDEX", ind);
           const newFriends = [...oldFriends, resultState[ind].username];
           return newFriends;
         });
@@ -87,7 +99,7 @@ const SearchUsers = () => {
             return !(friends.indexOf(user.username) === -1);
           })
         );
-        return Alert.alert("Friend Added", "Friend Added", [
+        return Alert.alert("Friend Added", "", [
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
       })
@@ -127,7 +139,7 @@ const SearchUsers = () => {
             return !(friends.indexOf(user.username) === -1);
           })
         );
-        return Alert.alert("Friend removed", "Friend remove", [
+        return Alert.alert("Friend Removed", "", [
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
       })
@@ -137,7 +149,7 @@ const SearchUsers = () => {
   };
 
   return (
-    <KeyboardAvoidingView>
+    <ScrollView>
       <View>
         <Searchbar
           placeholder="Search"
@@ -163,7 +175,17 @@ const SearchUsers = () => {
                     onPress={() => {
                       navigation.navigate("UserPage", item.username);
                     }}
-                    left={(props) => <List.Icon {...props} icon="account" />}
+                    left={(props) => {
+                      return (
+                        <Avatar.Image
+                          {...props}
+                          source={
+                            userAvatars[index] ? userAvatars[index] : "account"
+                          }
+                          style={{ backgroundColor: "white" }}
+                        />
+                      );
+                    }}
                   />
 
                   <Button
@@ -185,7 +207,17 @@ const SearchUsers = () => {
                     style={styles.listItem}
                     key={item.username}
                     title={item.username}
-                    left={(props) => <List.Icon {...props} icon="account" />}
+                    left={(props) => {
+                      return (
+                        <Avatar.Image
+                          {...props}
+                          source={
+                            userAvatars[index] ? userAvatars[index] : "account"
+                          }
+                          style={{ backgroundColor: "white" }}
+                        />
+                      );
+                    }}
                     onPress={() => {
                       navigation.navigate("UserPage", item.username);
                     }}
@@ -209,7 +241,7 @@ const SearchUsers = () => {
           <Text>""</Text>
         )}
       </List.Section>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
