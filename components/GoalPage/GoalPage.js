@@ -28,8 +28,9 @@ import { useFocusEffect } from "@react-navigation/native";
 const GoalPage = ({ navigation, route }) => {
   const [goal, setGoal] = useState();
   const [subgoals, setSubgoals] = useState([]);
-  const { goal_id } = route.params;
   const currentUser = "jeff";
+  const { goal_id } = route.params;
+
   const [isChecked, setIsChecked] = useState(false);
   const [congratsModalVisible, setCongratsModalVisible] = useState(false);
   const [goalObjective, setGoalObjective] = useState("");
@@ -47,7 +48,7 @@ const GoalPage = ({ navigation, route }) => {
         });
         setSubgoals(subgoals);
       });
-    }, [goal_id])
+    }, [route.params])
   );
 
   const handleCheckBoxClick = (subgoal) => {
@@ -71,22 +72,29 @@ const GoalPage = ({ navigation, route }) => {
                 allSubgoalsCompleted = false;
               }
             }
-            if (allSubgoalsCompleted) {
+            if (allSubgoalsCompleted && supergoal.type === "boolean") {
               console.log("adsadsdasads");
               setCongratsModalVisible(true);
               return patchGoalStatusById(supergoal.goal_id, "completed");
             }
             return null;
+          })
+          .then((patchedGoal) => {
+            if (!patchedGoal) {
+              navigation.navigate("SetGoalIntro");
+              navigation.navigate("GoalPage", { goal_id: goal.goal_id });
+            }
           });
       });
   };
 
   const handleCongratsMessageSubmit = () => {
     setCongratsModalVisible(!congratsModalVisible);
+    navigation.navigate("SetGoalIntro");
+    navigation.navigate("GoalPage", { goal_id: goal.goal_id });
   };
-
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: "#fdf9e6" }}>
       <Modal
         animaitonType="slide"
         transparent={true}
@@ -94,10 +102,11 @@ const GoalPage = ({ navigation, route }) => {
         onRequestClose={() => {
           setCongratsModalVisible(!congratsModalVisible);
         }}
+        style={styles.congratsModal}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text>
+            <Text style={styles.congratsText}>
               Congratulations! You completed your goal "{goalObjective}"!
             </Text>
             <Pressable
@@ -109,8 +118,8 @@ const GoalPage = ({ navigation, route }) => {
           </View>
         </View>
       </Modal>
-      <View style={styles.header}>
-        <View style={styles.item}>
+      <View>
+        <View style={[styles.item, styles.mainItem]}>
           <View>
             <Text style={styles.title}>{goal ? goal.objective : ""}</Text>
           </View>
@@ -159,7 +168,7 @@ const GoalPage = ({ navigation, route }) => {
         </View>
       </View>
       <View style={styles.goalContainer}>
-        <Text style={styles.currentgoals}>Subgoals:</Text>
+        <Text style={styles.subGoalTitle}>Your goal break down:</Text>
         <FlatList
           data={subgoals}
           renderItem={({ item }) => (
@@ -234,13 +243,10 @@ const GoalPage = ({ navigation, route }) => {
                 <View style={styles.progress}>
                   <BouncyCheckbox
                     text={item.objective}
-                    textStyle={{
-                      color: "white",
-                      fontSize: 24,
-                      fontWeight: "bold",
-                    }}
+                    textStyle={styles.duedate}
                     style={styles.checkBox}
                     onPress={() => handleCheckBoxClick(item)}
+                    fillColor={"#015c53"}
                   />
                   <PostStatus
                     goal={item}
@@ -259,130 +265,35 @@ const GoalPage = ({ navigation, route }) => {
 export default GoalPage;
 
 const styles = StyleSheet.create({
-  goalContainer: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: "white",
-    borderRadius: 10,
-    marginTop: 20,
-    marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
+  goalContainer: {},
   item: {
-    backgroundColor: "#abbabe",
+    backgroundColor: "#3e4d6e",
     borderRadius: 5,
     flex: 1,
     margin: 2,
     marginTop: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 3.84,
-    elevation: 5,
+    padding: 15,
   },
   title: {
     fontWeight: "bold",
-    color: "white",
     marginTop: 15,
     margin: 5,
+    color: "white",
   },
   duedate: {
+    margin: 5,
     color: "white",
-    marginLeft: 130,
-    marginRight: 5,
-    marginBottom: 2,
   },
-  currentgoals: {
+
+  subGoalTitle: {
+    fontSize: 20,
+
     fontWeight: "bold",
-    margin: 5,
-  },
-  header: {
-    backgroundColor: "#5df542",
-    height: 160,
-  },
-  profPic: {
-    width: 130,
-    height: 130,
-    borderRadius: 63,
-    borderWidth: 4,
-    borderColor: "white",
-    marginBottom: 10,
-    alignSelf: "center",
-    position: "absolute",
-    marginTop: 30,
-  },
-  userName: {
-    fontSize: 22,
-    color: "#fc03ba",
-    fontWeight: "600",
-    marginBottom: 40,
-  },
-  body: {
-    marginTop: 150,
-  },
-  bodyContent: {
-    flex: 1,
-    alignItems: "center",
-    padding: 30,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "90%",
-    padding: 25,
-    borderRadius: 10,
-    alignItems: "center",
-    margin: 20,
-    marginTop: 200,
-  },
-  progress: {
-    flexDirection: "row",
-    margin: 20,
-  },
-  unit: {
-    marginLeft: 5,
-    padding: 3,
-    fontWeight: "bold",
-    color: "green",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  modalView: {
-    margin: 40,
-    backgroundColor: "white",
-    borderRadius: 20,
-    paddingVertical: 35,
-    paddingHorizontal: 70,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-  },
-  button: {
-    borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    color: "#3e4d6e",
   },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-    margin: 5,
-  },
+  checkBox: { color: "#015c53" },
+  congratsModal: {},
+  congratsText: {},
+  background: { backgroundColor: "#015c53" },
 });

@@ -10,7 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Formik, useField } from "formik";
+import { ErrorMessage, Formik, useField } from "formik";
 import * as yup from "yup";
 import DatePicker from "../../shared/DatePicker";
 import { prodErrorMap } from "firebase/auth";
@@ -20,6 +20,7 @@ import dateFormat from "dateformat"
 
 
 const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEndDate }) => {
+
   const [hideProgressOptions, setHideProgressOptions] = useState(true);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
@@ -41,7 +42,8 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEnd
         initialValues={{
           objective: "",
           start_date: "",
-          end_date: "",
+
+          end_date: new Date(goalEndDate),
           target_value: "",
           unit: "",
         }}
@@ -53,14 +55,22 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEnd
         {(props) => (
           <ScrollView>
             <View style={styles.container}>
-              {/* <Text>Objective</Text> */}
+
+              <Text>Objective</Text>
+
               <TextInput
                 style={styles.objectiveinput}
                 multiline
                 placeholder="Objective"
                 onChangeText={props.handleChange("objective")}
                 value={props.values.objective}
+                name="objective"
               />
+              <ErrorMessage name="objective">
+                {() => {
+                  return <Text>Objective is required</Text>;
+                }}
+              </ErrorMessage>
             </View>
             <Text style={styles.errorText}>
               {props.touched.objective && props.errors.objective}
@@ -78,7 +88,10 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEnd
               {props.touched.end_date && props.errors.end_date}
             </Text>
             <View style={styles.switchcontainer}>
-              <Text style={styles.header}>Set Numerical Values</Text>
+              <Text style={styles.header}>
+                If this subgoal has a numerical target value associated with it,
+                let us know and we'll help you track your progress.
+              </Text>
               <Switch
                 trackColor={{ false: "#767577", true: "#81b0ff" }}
                 thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -186,6 +199,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "white",
     padding: 5
+
   },
   switch: {
     marginLeft: 180,

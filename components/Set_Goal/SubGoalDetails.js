@@ -53,6 +53,14 @@ const SubGoalDetails = ({
         <Text style={styles.title}>Objective</Text>
         <Text style={styles.value}>{item.objective}</Text>
       </View>
+      {item.start_date ? (
+        <View style={styles.fieldcontainer}>
+          <Text style={styles.title}>Start date</Text>
+          <Text style={styles.value}>
+            {dateFormat(item.start_date, "dddd dS mmmm yyyy")}
+          </Text>{" "}
+        </View>
+      ) : null}
       <View style={styles.fieldcontainer}>
         <Text style={styles.title}>End date</Text>
         <Text style={styles.value}>
@@ -76,6 +84,7 @@ const SubGoalDetails = ({
             deleteSubGoal(item.objective);
           }}
         ><Text style={styles.deleteSubGoalText}>Delete Subgoal</Text></TouchableOpacity>
+
       </View>
     </ScrollView>
     // </KeyboardAvoidingView>

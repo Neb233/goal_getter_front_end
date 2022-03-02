@@ -168,6 +168,12 @@ export const postGoal = (goalProperties, owner = "jeff") => {
   goalProperties.owner = owner;
   goalProperties.start_date = new Date(goalProperties.start_date);
   goalProperties.end_date = new Date(goalProperties.end_date);
+  if (goalProperties.target_value === "") {
+    goalProperties.target_value = null;
+  }
+  if (goalProperties.unit === "") {
+    goalProperties.unit = null;
+  }
   return goalgetterApi
     .post("/goals", goalProperties)
     .then(({ data }) => {
@@ -186,9 +192,23 @@ export const getPostsByUser = (user) => {
 
 export const postSubgoal = (subgoal, goal_id, owner = "jeff") => {
   subgoal.owner = owner;
-  if (subgoal.start_date) {
-    subgoal.start_date = new Date(subgoal.start_date);
+  if (subgoal.target_value === "") {
+    subgoal.target_value = null;
   }
+  if (subgoal.unit === "") {
+    subgoal.unit = null;
+  }
+  if (subgoal.start_date === "") {
+    subgoal.start_date = null;
+  }
+  if (subgoal.start_date) {
+    if (subgoal.target_value === null) {
+      subgoal.start_date = new Date(subgoal.end_date);
+    } else {
+      subgoal.start_date = new Date(subgoal.start_date);
+    }
+  }
+
   subgoal.end_date = new Date(subgoal.end_date);
   return goalgetterApi
     .post(`/goals/${goal_id}/subgoals`, subgoal)
@@ -272,3 +292,12 @@ export const postComment = (post_id, owner, message) => {
       console.log(err.response.data);
     });
 };
+
+
+
+export const patchAvatar = (username, url) => {
+  const patchObject = {username: username, avatar_url: url};
+  return goalgetterApi.patch('/users', patchObject).then(({data}) => {
+    return data
+  })
+}

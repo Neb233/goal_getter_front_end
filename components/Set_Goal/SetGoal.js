@@ -41,9 +41,6 @@ const SetGoal = ({ navigation, route }) => {
     if (!route.params) {
       route.params = { goalProperties: {}, clickCounter: 0 };
     } else {
-      route.params.goalProperties.start_date = new Date(2022, 0, 1);
-      route.params.goalProperties.end_date = new Date(2022, 11, 31);
-
       console.warn(route.params.goalProperties.target_value);
 
       if (route.params.goalProperties.target_value !== "") {
@@ -179,6 +176,8 @@ const SetGoal = ({ navigation, route }) => {
   };
 
   const handleAddGoal = () => {
+    console.log(subGoals);
+    console.log(goalProperties);
     postGoal(goalProperties)
       .then((goal_id) => {
         subGoals.forEach((subgoal) => {
@@ -209,6 +208,7 @@ const SetGoal = ({ navigation, route }) => {
           goalStartDate={route.params.goalProperties.start_date}
             addSubGoal={addSubGoal}
             setShowSubGoalDetails={setShowSubGoalDetails}
+            goalEndDate={goalProperties.end_date}
           />
         </ScrollView>
       </Modal>
