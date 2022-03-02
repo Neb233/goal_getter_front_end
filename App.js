@@ -92,8 +92,7 @@ const App = () => {
    )
  }
 
-
-
+=
 
   return (
     <NavigationContainer>
