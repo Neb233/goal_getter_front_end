@@ -278,10 +278,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 15,
     margin: 5,
-    color: "#034c52",
+    color: "white",
   },
   duedate: {
-    color: "white
     margin: 5,
     color: "white",
   },
