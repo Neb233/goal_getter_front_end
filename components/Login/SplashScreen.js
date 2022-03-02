@@ -57,7 +57,7 @@ const height_logo = height * 0.2;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#009387",
+    backgroundColor: "#fdf9e6",
   },
   header: {
     flex: 2,
@@ -76,14 +76,15 @@ const styles = StyleSheet.create({
     width: height_logo,
     height: height_logo,
     borderRadius: 20,
+    backgroundColor: "#fdf9e6",
   },
   title: {
-    color: "#05375a",
+    color: "#3e4d6e",
     fontSize: 30,
     fontWeight: "bold",
   },
   text: {
-    color: "grey",
+    color: "#3e4d6e",
     marginTop: 5,
   },
   buttonContainer: {
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: "#009387",
+    backgroundColor: "#3e4d6e",
     alignItems: "flex-start",
     marginTop: 10,
     padding: 15,

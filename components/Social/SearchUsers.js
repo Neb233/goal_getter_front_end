@@ -19,8 +19,17 @@ import {
   deleteFriendship,
   getUser,
 } from "../../utils/api";
+import { auth } from "../../firebase";
 
+// const SearchUsers = ({ navigation, route }) => {
 const SearchUsers = () => {
+  const user = {};
+  // if (route.params) {
+  //   user.displayName = route.params.user;
+  // } else {
+  //   user.displayName = auth.currentUser.displayName;
+  // }
+
   const [queryState, setQueryState] = useState({
     query: "",
   });
@@ -35,11 +44,14 @@ const SearchUsers = () => {
   //RUN WHEN PAGE IS FIRST LOADED
   useEffect(() => {
     searchUsers(queryState.query).then((results) => {
+      const filteredResults = results.filter((user) => {
+        return user.username !== user.displayName;
+      });
       console.log(results);
-      setResultState(results);
+      setResultState(filteredResults);
     });
 
-    getFriends("jeff").then((friends) => {
+    getFriends(user.displayName).then((friends) => {
       setFriends(friends);
     });
   }, []);
@@ -78,7 +90,10 @@ const SearchUsers = () => {
   //RUN WHEN SEARCH IS CHANGED
   useEffect(() => {
     return searchUsers(queryState.query).then((results) => {
-      setResultState(results);
+      const filteredResults = results.filter((user) => {
+        return user.username !== user.displayName;
+      });
+      setResultState(filteredResults);
     });
   }, [queryState]);
 
@@ -86,7 +101,7 @@ const SearchUsers = () => {
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return addFriend("loggedInUser", "usertoadd").catch((err) => {
           */
-    return addFriend("jeff", userToAdd)
+    return addFriend(user.displayName, userToAdd)
       .then(() => {
         const ind = resultState.findIndex(
           (user) => user.username === userToAdd
@@ -105,7 +120,7 @@ const SearchUsers = () => {
         ]);
       })
       .catch((err) => {
-        return getFriends("jeff").then((friends) => {
+        return getFriends(user.displayName).then((friends) => {
           if (friends.indexOf(userToAdd !== -1)) {
             return Alert.alert("Error", "Already friends", [
               { text: "OK", onPress: () => console.log("OK Pressed") },
@@ -123,7 +138,7 @@ const SearchUsers = () => {
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return RemoveFriend("loggedInUser", "usertoRemove").catch((err) => {
           */
-    return deleteFriendship("jeff", userToRemove)
+    return deleteFriendship(user.displayName, userToRemove)
       .then(() => {
         console.log("friend removed");
 
@@ -158,6 +173,7 @@ const SearchUsers = () => {
             setQueryState({ query: query });
           }}
           value={queryState.query}
+          style={styles.searchBar}
         />
       </View>
 
@@ -173,8 +189,11 @@ const SearchUsers = () => {
                     style={styles.listItem}
                     key={item.username}
                     title={item.username}
+                    color="#fdf9e6"
                     onPress={() => {
-                      navigation.navigate("UserPage", item.username);
+                      navigation.navigate("UserPage", {
+                        user: owner,
+                      });
                     }}
                     left={(props) => {
                       return (
@@ -217,6 +236,7 @@ const SearchUsers = () => {
                     style={styles.listItem}
                     key={item.username}
                     title={item.username}
+                    color="#fdf9e6"
                     left={(props) => {
                       return (
                         <Image
@@ -238,7 +258,9 @@ const SearchUsers = () => {
                       );
                     }}
                     onPress={() => {
-                      navigation.navigate("UserPage", item.username);
+                      navigation.navigate("UserPage", {
+                        user: owner,
+                      });
                     }}
                   />
 
@@ -265,13 +287,17 @@ const SearchUsers = () => {
 };
 
 const styles = StyleSheet.create({
-  // list: {
-  // //   flex: 1,
-  // //   // flexDirection: "column",
-  // // },
-  // viewStyle: { flex: 1, flexDirection: "column" },
-  // // listItem: { flexDirection: "column" },
-  // button: { color: "red" },
+  searchBar: {
+    backgroundColor: "#fdf9e6",
+  },
+  list: {
+    flex: 1,
+    backgroundColor: "#fdf9e6",
+    justifyContent: "center",
+  },
+  viewStyle: { padding: 30 },
+  listItem: { backgroundColor: "#fdf9e6", alignSelf: "center" },
+  button: { width: "50%", alignSelf: "center" },
 });
 
 export default SearchUsers;

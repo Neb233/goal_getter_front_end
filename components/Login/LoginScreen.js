@@ -5,13 +5,17 @@ import {
   Text,
   View,
   TextInput,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../context/user";
 import { StatusBar } from "expo-status-bar";
 
 import { auth } from "../../firebase";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "@firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "@firebase/auth";
 
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
@@ -22,36 +26,29 @@ import * as Animatable from "react-native-animatable";
 const LoginScreen = () => {
   const navigation = useNavigation();
 
-  const [email, SetEmail] = useState("")
-  const [password, SetPassword] = useState("")
-
-
-
-
+  const [email, SetEmail] = useState("");
+  const [password, SetPassword] = useState("");
 
   const handleLogin = () => {
-
-    valSchema.isValid({
+    valSchema
+      .isValid({
         email: email,
-        password: password
-})
-.then((valid) => {
-  
-  if (valid) {
-
-signInWithEmailAndPassword(auth, email, password)
-.then((userCredentials) => {
-  const user = userCredentials.user
-  navigation.navigate("Feed")
-  return user
-  
-})
-.catch((error) => {
-  console.warn(error.message)
-})
-  }
-})
-  }
+        password: password,
+      })
+      .then((valid) => {
+        if (valid) {
+          signInWithEmailAndPassword(auth, email, password)
+            .then((userCredentials) => {
+              const user = userCredentials.user;
+              navigation.navigate("Feed");
+              return user;
+            })
+            .catch((error) => {
+              console.warn(error.message);
+            });
+        }
+      });
+  };
 
   // // const handleTest = (values) => {
   // //   navigation.navigate("Profile")
@@ -70,7 +67,7 @@ signInWithEmailAndPassword(auth, email, password)
   });
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light" />
 
       {/* <Formik
@@ -93,62 +90,62 @@ signInWithEmailAndPassword(auth, email, password)
         }}
       >
         {({ values, handleChange, handleSubmit, errors, touched }) => ( */}
-          <KeyboardAvoidingView behaviour="padding">
-            <View style={styles.header}>
-              <Text style={styles.text_header}>Welcome Back</Text>
-            </View>
+      <KeyboardAvoidingView behaviour="padding">
+        <View style={styles.header}>
+          <Text style={styles.text_header}>Welcome Back</Text>
+        </View>
 
-            <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-              <View style={styles.action}>
-                <Text style={styles.text_footer}>Email</Text>
-                <TextInput
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChangeText={(text) => SetEmail(text) }
-                  style={styles.textInput}
-                />
-                {/* <Text style={styles.errorMsg}>
+        <Animatable.View animation="fadeInUpBig" style={styles.footer}>
+          <View style={styles.action}>
+            <Text style={styles.text_footer}>Email</Text>
+            <TextInput
+              id="email"
+              name="email"
+              value={email}
+              onChangeText={(text) => SetEmail(text)}
+              style={styles.textInput}
+            />
+            {/* <Text style={styles.errorMsg}>
                   {touched.email && errors.email}
                 </Text> */}
-              </View>
+          </View>
 
-              <View style={styles.action}>
-                <Text style={styles.action}>Password</Text>
-                <TextInput
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChangeText={(text)=> SetPassword(text)}
-                  style={styles.textInput}
-                  secureTextEntry
-                />
-                {/* <Text style={styles.errorMsg}>
+          <View style={styles.action}>
+            <Text style={styles.action}>Password</Text>
+            <TextInput
+              id="password"
+              name="password"
+              value={password}
+              onChangeText={(text) => SetPassword(text)}
+              style={styles.textInput}
+              secureTextEntry
+            />
+            {/* <Text style={styles.errorMsg}>
                   {touched.password && touched.email}
                 </Text> */}
-              </View>
+          </View>
 
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleLogin} style={styles.button}>
-                  <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={handleLogin} style={styles.button}>
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
 
-                <Text style={styles.register_text}>
-                  Don't have an account? Click to create one
-                </Text>
+            <Text style={styles.register_text}>
+              Don't have an account? Click to create one
+            </Text>
 
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("RegisterScreen")}
-                  style={styles.button}
-                >
-                  <Text style={styles.buttonText}>Register</Text>
-                </TouchableOpacity>
-              </View>
-            </Animatable.View>
-          </KeyboardAvoidingView>
-        {/* )}
+            <TouchableOpacity
+              onPress={() => navigation.navigate("RegisterScreen")}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
+          </View>
+        </Animatable.View>
+      </KeyboardAvoidingView>
+      {/* )}
       </Formik> */}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -157,7 +154,7 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#009387",
+    backgroundColor: "#fdf9e6",
   },
   header: {
     // flex: 1,
@@ -165,6 +162,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 50,
     marginTop: 50,
+    color: "#5b72a4",
   },
   footer: {
     // flex: 3,
@@ -176,7 +174,8 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   text_header: {
-    color: "#fff",
+    color: "#3e4d6e",
+    // color: "#fff",
     fontWeight: "bold",
     fontSize: 30,
   },
@@ -207,7 +206,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   button: {
-    backgroundColor: "#009387",
+    backgroundColor: "#3e4d6e",
     alignItems: "flex-start",
     marginTop: 40,
     padding: 15,

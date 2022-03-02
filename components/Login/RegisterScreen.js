@@ -30,52 +30,45 @@ import Feed from "../Feed/Feed";
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
-  const [email, SetEmail] = useState('')
-  const [password, SetPassword] = useState('')
-  const [profile, SetProfile] = useState('')
-  const [username, SetUsername] = useState('')
-
+  const [email, SetEmail] = useState("");
+  const [password, SetPassword] = useState("");
+  const [profile, SetProfile] = useState("");
+  const [username, SetUsername] = useState("");
 
   const handleRegister = () => {
-    valSchema.isValid({
-      email: email,
-      username: username,
-      password: password,
-      profile: profile
+    valSchema
+      .isValid({
+        email: email,
+        username: username,
+        password: password,
+        profile: profile,
+      })
 
-    })
-    
-    .then((valid) => {
-     if (valid) {
-     
-      createUserWithEmailAndPassword(auth, email, password)
-    .then(async (userCredentials) => {
-      const user = userCredentials.user;
+      .then((valid) => {
+        if (valid) {
+          createUserWithEmailAndPassword(auth, email, password)
+            .then(async (userCredentials) => {
+              const user = userCredentials.user;
 
-      await updateProfile(user, { displayName: username });
+              await updateProfile(user, { displayName: username });
 
-      var body = { username: username, profile: profile };
+              var body = { username: username, profile: profile };
 
-      await axios({
-        method: "post",
-        url: "https://goalgetter-backend.herokuapp.com/api/users",
-        data: body,
-      }).catch(function (error) {
-        console.log(error);
+              await axios({
+                method: "post",
+                url: "https://goalgetter-backend.herokuapp.com/api/users",
+                data: body,
+              }).catch(function (error) {
+                console.log(error);
+              });
+              navigation.navigate("Feed");
+              return user;
+            })
+
+            .catch((error) => alert(error.message));
+        }
       });
-      navigation.navigate("Feed")
-      return user;
-    })
-
-    .catch((error) => alert(error.message))
-  }
-    })
-  
-}
-  
-
-
-
+  };
 
   // const { setLoggedInUser, loggedInUser } = useContext(UserContext);
 
@@ -97,7 +90,7 @@ const RegisterScreen = () => {
 
   return (
     <View style={styles.container}>
-       {/* <Formik
+      {/* <Formik
         initialValues={{
           firstName: "",
           profile: "",
@@ -129,83 +122,83 @@ const RegisterScreen = () => {
             .catch((error) => alert(error.message))
         }
       > */}
-        {/* {({  errors, touched }) => (  */}
-          <KeyboardAvoidingView behaviour="padding">
-            <View style={styles.header}>
-              <Text style={styles.title_text}>Register Your Account</Text>
-            </View>
+      {/* {({  errors, touched }) => (  */}
+      <KeyboardAvoidingView behaviour="padding">
+        <View style={styles.header}>
+          <Text style={styles.title_text}>Register Your Account</Text>
+        </View>
 
-            <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-              <View style={styles.action}>
-                <Text style={styles.text_footer}>Email</Text>
-                <TextInput
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChangeText={(text)=> SetEmail(text)}
-                  style={styles.textInput}
-                />
-                {/* <Text style={styles.errorMsg}>
+        <Animatable.View animation="fadeInUpBig" style={styles.footer}>
+          <View style={styles.action}>
+            <Text style={styles.text_footer}>Email</Text>
+            <TextInput
+              id="email"
+              name="email"
+              value={email}
+              onChangeText={(text) => SetEmail(text)}
+              style={styles.textInput}
+            />
+            {/* <Text style={styles.errorMsg}>
                   {touched.email && errors.email}
                 </Text> */}
-              </View>
+          </View>
 
-              <View style={styles.action}>
-                <Text style={styles.text_footer}>Username</Text>
-                <TextInput
-                  id="username"
-                  name="username"
-                  value={username}
-                  onChangeText={(text) => SetUsername(text)}
-                  style={styles.textInput}
-                />
-                {/* <Text style={styles.errorMsg}>
+          <View style={styles.action}>
+            <Text style={styles.text_footer}>Username</Text>
+            <TextInput
+              id="username"
+              name="username"
+              value={username}
+              onChangeText={(text) => SetUsername(text)}
+              style={styles.textInput}
+            />
+            {/* <Text style={styles.errorMsg}>
                   {touched.username && errors.username}
                 </Text> */}
-              </View>
+          </View>
 
-              <View style={styles.action}>
-                <Text style={styles.text_footer}>Profile</Text>
-                <TextInput
-                  id="profile"
-                  name="profile"
-                  value={profile}
-                  onChangeText={(text) => SetProfile(text)}
-                  style={styles.textInput}
-                ></TextInput>
-              </View>
+          <View style={styles.action}>
+            <Text style={styles.text_footer}>Profile</Text>
+            <TextInput
+              id="profile"
+              name="profile"
+              value={profile}
+              onChangeText={(text) => SetProfile(text)}
+              style={styles.textInput}
+            ></TextInput>
+          </View>
 
-              <View style={styles.action}>
-                <Text style={styles.text_footer}>Password</Text>
-                <TextInput
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChangeText={(text) => SetPassword(text)}
-                  style={styles.textInput}
-                  secureTextEntry
-                ></TextInput>
-              </View>
+          <View style={styles.action}>
+            <Text style={styles.text_footer}>Password</Text>
+            <TextInput
+              id="password"
+              name="password"
+              value={password}
+              onChangeText={(text) => SetPassword(text)}
+              style={styles.textInput}
+              secureTextEntry
+            ></TextInput>
+          </View>
 
-              <Text>
-                {`
+          <Text>
+            {`
         Password should have:    One Capital letter
                                  One Number 
                                 At least 4 characters Login
                                  Maximum 10 characters
                 `}
-              </Text>
-              {/* <Text>{touched.password && errors.password}</Text> */}
+          </Text>
+          {/* <Text>{touched.password && errors.password}</Text> */}
 
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleRegister} style={styles.button}>
-                  <Text style={styles.buttonText}>Sign Up</Text>
-                </TouchableOpacity>
-              </View>
-            </Animatable.View>
-          </KeyboardAvoidingView>
-         {/* )} */}
-      {/* </Formik> */} 
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={handleRegister} style={styles.button}>
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+        </Animatable.View>
+      </KeyboardAvoidingView>
+      {/* )} */}
+      {/* </Formik> */}
     </View>
   );
 };
@@ -215,7 +208,7 @@ export default RegisterScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#009387",
+    backgroundColor: "#fdf9e6",
   },
 
   header: {
@@ -225,7 +218,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   title_text: {
-    color: "#fff",
+    color: "#3e4d6e",
     fontWeight: "bold",
     fontSize: 30,
   },
@@ -270,7 +263,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   button: {
-    backgroundColor: "#009387",
+    backgroundColor: "#3e4d6e",
     alignItems: "flex-start",
     marginTop: 40,
     padding: 15,

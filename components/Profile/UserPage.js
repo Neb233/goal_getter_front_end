@@ -60,8 +60,6 @@ const Goals = ({ route }) => {
 
   
 
-  
-
   useEffect(() => {
     setSubgoals({});
     setGoals([]);
@@ -187,6 +185,7 @@ const Goals = ({ route }) => {
         </Modal>
 
         <Pressable onPress={() => setImageModaVisible(true)}>
+
 
           <Image
             source={{
