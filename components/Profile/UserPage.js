@@ -137,7 +137,7 @@ const Goals = ({ route }) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: "#fdf9e6" }}>
       <View style={styles.header}>
         <Modal
           animationType="fade"
@@ -166,13 +166,13 @@ const Goals = ({ route }) => {
         </Modal>
 
         <Pressable onPress={() => setImageModaVisible(true)}>
-          <Image source={profPic} style={styles.profPic} />
+          <Image source={{ uri: profPic }} style={styles.profPic} />
         </Pressable>
 
         <View style={styles.body}>
           <View style={styles.bodyContent}>
             <Text style={styles.userName}>{user.displayName}</Text>
-            <Text>{userDetails.profile}</Text>
+            <Text style={{ fontWeight: "bold" }}>{userDetails.profile}</Text>
           </View>
         </View>
       </View>
@@ -185,13 +185,24 @@ const Goals = ({ route }) => {
             });
           }}
         >
-          <Text>{showGoals ? "Show Social Feed" : "Show Goals"}</Text>
+          <Text style={{ color: "white" }}>
+            {showGoals ? "Show Social Feed" : "Show Goals"}
+          </Text>
         </TouchableOpacity>
       </View>
       {showGoals ? (
         <View>
           <View style={styles.goalContainer}>
-            <Text style={styles.currentgoals}>Current Goals:</Text>
+            <Text
+              style={{
+                color: "#3e4d6e",
+                fontWeight: "bold",
+                fontSize: 16,
+                alignSelf: "center",
+              }}
+            >
+              Current Goals
+            </Text>
             <FlatList
               data={goals}
               renderItem={({ item }) => (
@@ -207,7 +218,15 @@ const Goals = ({ route }) => {
                       <Text style={styles.title}>{item.objective}</Text>
                     </View>
                     <View>
-                      <Text>{item.description}</Text>
+                      <Text
+                        style={{
+                          color: "white",
+                          fontWeight: "500",
+                          marginBottom: 5,
+                        }}
+                      >
+                        {item.description}
+                      </Text>
                       <Text style={styles.duedate}>
                         Start date:{" "}
                         {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
@@ -258,7 +277,16 @@ const Goals = ({ route }) => {
             />
           </View>
           <View style={styles.goalContainer}>
-            <Text style={styles.currentgoals}>Past Goals:</Text>
+            <Text
+              style={{
+                alignSelf: "center",
+                fontSize: 16,
+                fontWeight: "bold",
+                color: "#3e4d6e",
+              }}
+            >
+              Past Goals
+            </Text>
             <FlatList
               data={oldGoals}
               renderItem={({ item }) => (
@@ -274,7 +302,7 @@ const Goals = ({ route }) => {
                       <Text style={styles.title}>{item.objective}</Text>
                     </View>
                     <View>
-                      <Text>{item.description}</Text>
+                      <Text style={{ color: "white", fontWeight: '500', marginBottom: 10 }}>{item.description}</Text>
                       <Text style={styles.duedate}>
                         Start date:{" "}
                         {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
@@ -336,7 +364,7 @@ const Goals = ({ route }) => {
                       <Text style={styles.title}>{item.objective}</Text>
                     </View>
                     <View>
-                      <Text>{item.description}</Text>
+                      <Text style={{ color: "white" }}>{item.description}</Text>
                       <Text style={styles.duedate}>
                         Start date:{" "}
                         {dateFormat(item.start_date, "dddd, mmmm dS, yyyy")}
@@ -412,25 +440,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   item: {
-    backgroundColor: "#abbabe",
+    backgroundColor: "#3e4d6e",
     borderRadius: 5,
-    flex: 1,
-    margin: 2,
     marginTop: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 3.84,
-    elevation: 5,
+    padding: 10,
   },
   title: {
     fontWeight: "bold",
     color: "white",
-    marginTop: 15,
-    margin: 5,
+    fontSize: 18,
   },
   duedate: {
     color: "white",
@@ -443,8 +461,8 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   header: {
-    backgroundColor: "#5df542",
-    height: 100,
+    // backgroundColor: "#5df542",
+    // height: 100,
   },
   profPic: {
     width: 130,
@@ -452,33 +470,41 @@ const styles = StyleSheet.create({
     borderRadius: 63,
     borderWidth: 4,
     borderColor: "white",
-    marginBottom: 10,
+    marginBottom: 0,
     alignSelf: "center",
     position: "absolute",
-    marginTop: 30,
+    marginTop: 50,
   },
   userName: {
     fontSize: 22,
     color: "#fc03ba",
-    fontWeight: "600",
-    marginBottom: 40,
+    fontWeight: "bold",
+    marginBottom: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
   },
   body: {
-    marginTop: 150,
+    marginTop: 200,
+    alignItems: "center",
+    // fontWeight: 'bold'
+    // justifyContent: 'center',
+    // alignSelf: 'center'
   },
   bodyContent: {
-    flex: 1,
-    alignItems: "center",
-    padding: 30,
+    // flex: 1,
+    // alignItems: "center",
+    // padding: 30,
   },
   button: {
-    backgroundColor: "#0782F9",
-    width: "90%",
-    padding: 25,
+    backgroundColor: "#5B72A4",
+    // width: "90%",
+    padding: 15,
     borderRadius: 10,
+    alignSelf: "center",
     alignItems: "center",
-    margin: 20,
-    marginTop: 200,
+    // margin: 20,
+    marginTop: 20,
   },
   centeredView: {
     flex: 1,

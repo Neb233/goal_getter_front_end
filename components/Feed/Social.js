@@ -177,7 +177,8 @@ const Social = (props) => {
       <View style={styles.goalContainer}>
         <View style={styles.userInfo}>
           <Avatar.Image
-            source={avatarUrl}
+
+            source={{uri: avatarUrl}}
             style={{ backgroundColor: "white" }}
           />
 
