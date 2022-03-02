@@ -9,6 +9,7 @@ import {
   formatGoalsForCalendar,
   formatSubgoalsForCalendar,
 } from "../../utils/FormatDates";
+import Nav from "../Nav/Nav";
 
 const GoalCalendar = () => {
   const [items, setItems] = useState({});
@@ -43,20 +44,23 @@ const GoalCalendar = () => {
 
   const renderItem = (items) => {
     return (
-      <View style={{ margin: 50 }}>
-        <Text>{items.name}</Text>
-      </View>
+      <Card style={{ marginTop: 35 }}>
+        <Card.Content>
+          <Text>{items.name}</Text>
+        </Card.Content>
+      </Card>
     );
   };
 
-  // const renderGoal = (goals) => {
-  //   <View style={{ margin: 50 }}>
-  //       <Text>{goals.name}</Text>
-  //     </View>
-  // }
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
-      <Agenda selected={"2022-02-25"} items={items} renderItem={renderItem} />
+      <Agenda
+        selected={"2022-02-25"}
+        items={items}
+        renderItem={renderItem}
+        pastScrollRange={12}
+        futureScrollRange={12}
+      />
     </View>
   );
 };

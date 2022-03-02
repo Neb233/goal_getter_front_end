@@ -6,15 +6,32 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Modal,
+  Pressable,
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import {
+  getGoalByGoalId,
+  patchSubgoalStatusById,
+  patchSubGoalbyId,
+  patchGoalStatusById,
+  patchGoalbyId,
+} from "../../utils/api";
+import { useNavigation } from "@react-navigation/native";
 
 import PostStatus from "./PostStatus";
-
-import { patchGoalbyId, patchSubGoalbyId } from "../../utils/api";
-
-const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
+const PatchSubGoal = ({
+  goal,
+  goals,
+  goalUnit,
+  setFriendPosts,
+  goalPageId,
+}) => {
   const [progress, setProgress] = useState(0);
+  const [congratsModalVisible, setCongratsModalVisible] = useState(false);
+  const [goalObjective, setGoalObjective] = useState("");
+
+  const navigation = useNavigation();
 
   const submitTime = new Date(Date.now());
 
@@ -24,8 +41,6 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
     submitTime.getDate()
   );
 
-  console.log(submitDate);
-
   let patchObject = {
     date: submitDate,
     value: 0,
@@ -34,30 +49,108 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
   useEffect(() => {
     patchObject = {
       date: submitDate,
-      value: parseInt(progress),
+      value: parseFloat(progress),
     };
+    getGoalByGoalId(goal.goal_id).then((supergoal) => {
+      setGoalObjective(supergoal.objective);
+    });
   }, [progress]);
 
   const onSubmit = () => {
-    patchSubGoalbyId(goal.subgoal_id, patchObject);
-    patchGoalbyId(goal.goal_id, patchObject);
-    console.warn(goal);
+    if (!isNaN(parseFloat(progress)) && progress > 0) {
+      const patchObject = {
+        date: new Date(
+          new Date(Date.now()).getFullYear(),
+          new Date(Date.now()).getMonth(),
+          new Date(Date.now()).getDate()
+        ),
+        value: parseFloat(progress),
+      };
+      patchSubGoalbyId(goal.subgoal_id, patchObject)
+        .then((subgoal) => {
+          if (
+            subgoal.progress[subgoal.progress.length - 1][1] >=
+              subgoal.target_value &&
+            subgoal.status === "active"
+          ) {
+            return patchSubgoalStatusById(subgoal.subgoal_id, "completed");
+          }
+          return;
+        })
+        .then(() => {
+          return getGoalByGoalId(goal.goal_id);
+        })
+        .then((supergoal) => {
+          if (supergoal.type === "progress" && goal.unit === supergoal.unit) {
+            return patchGoalbyId(goal.goal_id, patchObject);
+          }
+          return;
+        })
+        .then((patchedGoal) => {
+          setProgress("");
+          if (
+            patchedGoal &&
+            patchedGoal.progress[patchedGoal.progress.length - 1][1] >=
+              patchedGoal.target_value &&
+            patchedGoal.status === "active"
+          ) {
+            console.log("hello");
+            setCongratsModalVisible(true);
+            return patchGoalStatusById(patchedGoal.goal_id, "completed");
+          }
+          return;
+        })
+        .then(() => {
+          if (goalPageId) {
+            navigation.navigate("SetGoalIntro");
+            navigation.navigate("GoalPage", { goal_id: goalPageId });
+          }
+        });
+    }
+  };
+
+  const handleCongratsMessageSubmit = () => {
+    setCongratsModalVisible(!congratsModalVisible);
   };
 
   return (
     <View>
-      <View>
+      <Modal
+        animaitonType="slide"
+        transparent={true}
+        visible={congratsModalVisible}
+        onRequestClose={() => {
+          setCongratsModalVisible(!congratsModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text>
+              Congratulations! You completed your goal "{goalObjective}"!
+            </Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={handleCongratsMessageSubmit}
+            >
+              <Text style={styles.textStyle}>Great News!</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.madeProgress}>Made progress?</Text>
         <TextInput
           style={styles.input}
           keyboardType="numeric"
           placeholder="completed..."
           onChangeText={setProgress}
-          value={progress}
+          value={progress.toString()}
         />
+        <Text style={styles.goalUnit}>{goal.unit}</Text>
       </View>
-      <View>
+      <View style={{ flexDirection: "row" }}>
         <TouchableOpacity style={styles.update} onPress={onSubmit}>
-          <Text style={styles.updateText}>Submit progress</Text>
+          <Text style={styles.updateText}>Submit privately</Text>
         </TouchableOpacity>
 
         <PostStatus
@@ -76,65 +169,32 @@ const PatchSubGoal = ({ goal, goals, goalUnit, setFriendPosts }) => {
 export default PatchSubGoal;
 
 const styles = StyleSheet.create({
-  subGoal: {
-    height: 200,
-    maxWidth: 400,
-    minWidth: 330,
-    marginLeft: 10,
-    marginRight: 5,
-    backgroundColor: "#abbabe",
-    borderRadius: 5,
+  subGoal: {},
+  madeProgress: {
+    marginLeft: 5,
+    padding: 3,
+    fontWeight: "bold",
+    color: "white",
   },
-  // page: {
-  //     height: 170,
-  //     width: 200,
-  //     margin: 10
-  // },
+  goalUnit: {
+    marginLeft: 5,
+    padding: 3,
+    fontWeight: "bold",
+    color: "white",
+  },
   update: {
-    backgroundColor: "#4892b7",
+    backgroundColor: "#c68df7",
     borderRadius: 8,
     padding: 5,
-    margin: 10,
+    margin: 15,
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
+    // position: "relative",
   },
   updateText: {
-    padding: 2,
     alignItems: "center",
     justifyContent: "center",
     color: "white",
-  },
-  pageContent: {
-    marginTop: 10,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  goalObj: {
-    flexDirection: "column",
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  goalDescription: {
-    flexDirection: "column",
-    padding: 10,
-    fontSize: 24,
-    color: "white",
-  },
-
-  updateText: {
-    padding: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-  },
-  progress: {
-    flexDirection: "row",
-    margin: 20,
   },
   input: {
     backgroundColor: "white",
@@ -142,18 +202,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     borderRadius: 10,
     padding: 3,
-  },
-  unit: {
-    marginLeft: 5,
-    padding: 3,
-    fontWeight: "bold",
-    color: "green",
-  },
-  input: {
-    backgroundColor: "white",
-    flexDirection: "column",
-    marginLeft: 5,
-    borderRadius: 10,
-    padding: 3,
+    width: 50,
   },
 });

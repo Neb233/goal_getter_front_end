@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image } from "react-native";
 
 import { TouchableOpacity, FlatList } from "react-native";
 import { useState, useEffect } from "react";
@@ -15,6 +15,7 @@ import {
   deleteReaction,
   postComment,
   getSubgoalsByGoalId,
+  getUser,
 } from "../../utils/api";
 import { formatDatetime } from "../../utils/format";
 import {
@@ -25,8 +26,12 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 import ProgressBar from "../../shared/ProgressBar";
+import { matchRoutes } from "react-router-dom";
+import { Avatar } from "react-native-paper";
 
 const currentUser = "jeff";
+
+let friendPosts = [];
 
 const getReactionCount = (reactions) => {
   const reactionCount = {
@@ -69,6 +74,13 @@ const Social = (props) => {
   });
   const [currentUserReaction, setCurrentUserReaction] = useState();
   const [subgoals, setSubgoals] = useState([]);
+  const [avatarUrl, setAvatarUrl] = useState(
+    "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d"
+  );
+
+  if (props.friendPosts) {
+    friendPosts = props.friendPosts;
+  }
 
   const {
     owner,
@@ -119,7 +131,10 @@ const Social = (props) => {
         }
       });
     });
-  }, [owner]);
+    getUser(owner).then((user) => {
+      setAvatarUrl(user[0].avatar_url);
+    });
+  }, [owner, friendPosts]);
 
   const handleCommentClick = () => {
     setIsShowing((currValue) => {
@@ -164,11 +179,25 @@ const Social = (props) => {
     <KeyboardAvoidingView>
       <View style={styles.goalContainer}>
         <View style={styles.userInfo}>
-          <View style={styles.profilePic} />
+          <Image
+            source={{
+              uri: avatarUrl,
+              headers: {
+                Accept: "*/*",
+              },
+            }}
+            style={{
+              backgroundColor: "white",
+              width: 50,
+              height: 50,
+              borderRadius: 25,
+            }}
+          />
 
           <Text
-            style={styles.username}
+            style={styles.postUsername}
             onPress={() => {
+              navigation.navigate("Calendar");
               navigation.navigate("UserPage", {
                 user: owner,
               });
@@ -180,13 +209,17 @@ const Social = (props) => {
         <View style={styles.post}>
           <View style={styles.boxed}>
             <Text
+              style={styles.objective}
               onPress={() => {
                 navigation.navigate("GoalPage", {
                   goal_id: associatedGoal.goal_id,
                 });
               }}
             >
-              {associatedGoal.objective}
+              {associatedGoal.objective +
+                (associatedGoal.type === "boolean" && associatedGoal.subgoal_id
+                  ? " - COMPLETED"
+                  : "")}
             </Text>
             {progress_point !== null &&
             Object.keys(associatedGoal).length !== 0 ? (
@@ -198,17 +231,24 @@ const Social = (props) => {
                     });
                   }}
                 >
-                  {associatedGoal.progress
+                  {associatedGoal.progress &&
+                  associatedGoal.progress[parseInt(progress_point)]
                     ? `Added ${
-                        associatedGoal.progress[parseInt(progress_point)][1] -
-                        (associatedGoal.progress.length > 1
-                          ? associatedGoal.progress[
-                              parseInt(progress_point) - 1
-                            ][1]
-                          : 0)
+                        Math.round(
+                          100 *
+                            associatedGoal.progress[
+                              parseInt(progress_point)
+                            ][1] -
+                            (parseInt(progress_point) > 0
+                              ? 100 *
+                                associatedGoal.progress[
+                                  parseInt(progress_point) - 1
+                                ][1]
+                              : 0)
+                        ) / 100
                       } ${associatedGoal.unit} to ${
-                        associatedGoal.target_value
-                      }  ${associatedGoal.unit} target`
+                        Math.round(100 * associatedGoal.target_value) / 100
+                      } ${associatedGoal.unit} target`
                     : null}
                 </Text>
                 <Text
@@ -218,16 +258,23 @@ const Social = (props) => {
                     });
                   }}
                 >
-                  {associatedGoal.progress
-                    ? `New progress: ${associatedGoal.progress[progress_point][1]} ${associatedGoal.unit}`
+                  {associatedGoal.progress &&
+                  associatedGoal.progress[parseInt(progress_point)]
+                    ? `New progress: ${
+                        Math.round(
+                          100 * associatedGoal.progress[progress_point][1]
+                        ) / 100
+                      } ${associatedGoal.unit}`
                     : null}
                 </Text>
               </View>
             ) : null}
             {Object.keys(associatedGoal).length !== 0 &&
-            (!associatedGoal.subgoal_id ||
-              associatedGoal.type !== "boolean") ? (
+            (!associatedGoal.subgoal_id || associatedGoal.type !== "boolean") &&
+            associatedGoal.progress &&
+            associatedGoal.progress[parseInt(progress_point)] ? (
               <ProgressBar
+                style={styles.progress}
                 progress={
                   associatedGoal.progress
                     ? associatedGoal.progress.slice(0, progress_point + 1)
@@ -239,47 +286,67 @@ const Social = (props) => {
             ) : null}
           </View>
 
-          <Text>{message}</Text>
+          <Text style={styles.message}>{message}</Text>
           <Text>{formatDatetime(datetime)}</Text>
         </View>
         <View style={styles.flexRow}>
           {reactionCount.awesome > 0 ? (
             <View style={styles.reaction}>
-              <View style={styles.awesome} />
+              {/* <View style={styles.awesome} /> */}
+              <Text style={styles.awesome}>⭐</Text>
               {currentUserReaction && currentUserReaction[0] === "awesome" ? (
-                <Text style={styles.blueText}>{reactionCount.awesome}</Text>
+                <View style={styles.redCircle}>
+                  <Text style={styles.count}>{reactionCount.awesome}</Text>
+                </View>
               ) : (
-                <Text>{reactionCount.awesome}</Text>
+                <View style={styles.redCircle}>
+                  <Text style={styles.count}>{reactionCount.awesome}</Text>
+                </View>
               )}
             </View>
           ) : null}
           {reactionCount.congrats > 0 ? (
             <View style={styles.reaction}>
-              <View style={styles.congrats} />
+              {/* <View style={styles.congrats} /> */}
+              <Text style={styles.congrats}>🥳</Text>
               {currentUserReaction && currentUserReaction[0] === "congrats" ? (
-                <Text style={styles.blueText}>{reactionCount.congrats}</Text>
+                <View style={styles.redCircle}>
+                  <Text style={styles.count}>{reactionCount.congrats}</Text>
+                </View>
               ) : (
-                <Text>{reactionCount.congrats}</Text>
+                <View style={styles.redCircle}>
+                  <Text style={styles.count}>{reactionCount.congrats}</Text>
+                </View>
               )}
             </View>
           ) : null}
           {reactionCount.encourage > 0 ? (
             <View style={styles.reaction}>
-              <View style={styles.encourage} />
+              {/* <View style={styles.encourage} /> */}
+              <Text style={styles.encourage}>🏆</Text>
               {currentUserReaction && currentUserReaction[0] === "encourage" ? (
-                <Text style={styles.blueText}>{reactionCount.encourage}</Text>
+                <View style={styles.redCircle}>
+                  <Text style={styles.count}>{reactionCount.encourage}</Text>
+                </View>
               ) : (
-                <Text>{reactionCount.encourage}</Text>
+                <View style={styles.redCircle}>
+                  <Text style={styles.count}>{reactionCount.encourage}</Text>
+                </View>
               )}
             </View>
           ) : null}
           {reactionCount.proud > 0 ? (
             <View style={styles.reaction}>
-              <View style={styles.proud} />
+              {/* <View style={styles.proud} /> */}
+              <Text style={styles.proud}>👏</Text>
               {currentUserReaction && currentUserReaction[0] === "proud" ? (
-                <Text style={styles.blueText}>{reactionCount.proud}</Text>
+                <View style={styles.redCircle}>
+                  <Text style={styles.count}>{reactionCount.proud}</Text>
+                </View>
               ) : (
-                <Text>{reactionCount.proud}</Text>
+                <View style={styles.redCircle}>
+                  <Text style={styles.count}>{reactionCount.proud}</Text>
+                </View>
               )}
             </View>
           ) : null}
@@ -344,6 +411,7 @@ const Social = (props) => {
                   <Text
                     style={styles.username}
                     onPress={() => {
+                      navigation.navigate("Calendar");
                       navigation.navigate("UserPage", {
                         user: item.owner,
                       });
@@ -391,46 +459,59 @@ const styles = StyleSheet.create({
   },
 
   username: {
+    color: "white",
+    marginBottom: 15,
+    fontWeight: "bold",
+    margin: 10,
+  },
+  postUsername: {
     color: "black",
     marginBottom: 15,
     fontWeight: "bold",
     margin: 10,
   },
   progress: {
-    marginTop: 10,
+    backgroundColor: "green",
   },
   interact: {
     flexDirection: "row",
     borderRadius: 10,
   },
-
+  message: {
+    margin: 15,
+    fontSize: 20,
+  },
   awesome: {
-    height: 30,
-    width: 30,
-    backgroundColor: "blue",
+    // height: 30,
+    // width: 30,
+    // backgroundColor: "blue",
     borderRadius: 15,
-    marginRight: 8,
+    marginRight: 2,
+    fontSize: 35,
   },
   congrats: {
-    height: 30,
-    width: 30,
-    backgroundColor: "yellow",
-    borderRadius: 15,
-    marginRight: 8,
+    // height: 30,
+    // width: 30,
+    // backgroundColor: "yellow",
+    // borderRadius: 15,
+    // marginRight: 8,
+    fontSize: 35,
   },
   encourage: {
-    height: 30,
-    width: 30,
-    backgroundColor: "green",
-    borderRadius: 15,
-    marginRight: 8,
+    // height: 30,
+    // width: 30,
+    // backgroundColor: "green",
+    // borderRadius: 15,
+    // marginRight: 8,
+    fontSize: 35,
   },
   proud: {
-    height: 30,
-    width: 30,
-    backgroundColor: "pink",
-    borderRadius: 15,
-    marginRight: 8,
+    // height: 30,
+    // width: 30,
+    // backgroundColor: "pink",
+    // borderRadius: 15,
+    // marginRight: 8,
+    fontSize: 35,
   },
 
   profilePic: {
@@ -460,6 +541,8 @@ const styles = StyleSheet.create({
     color: "white",
     padding: 2,
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   unreact: {
     backgroundColor: "red",
@@ -468,6 +551,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 30,
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   button: {
     backgroundColor: "#468705",
@@ -482,6 +567,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 30,
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 3,
   },
   flexRow: {
     flexDirection: "row",
@@ -509,14 +597,34 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   boxed: {
-    borderWidth: 1,
-    borderColor: "black",
+    // borderWidth: 1,
+    // borderColor: "black",
+  },
+  objective: {
+    fontWeight: "bold",
+    color: "#00b12c",
+    fontSize: 18,
+    marginBottom: 8,
+    alignSelf: "center",
   },
   reaction: {
-    paddingLeft: 5,
-    paddingRight: 5,
-    flexDirection: "row",
-    alignItems: "center",
+    // paddingLeft: 5,
+    // paddingRight: 5,
+    // flexDirection: "row",
+    // alignItems: "center",
+  },
+  redCircle: {
+    height: 18,
+    width: 20,
+    backgroundColor: "blue",
+    borderRadius: 50,
+  },
+  count: {
+    alignSelf: "center",
+    color: "white",
+  },
+  text: {
+    color: "white",
   },
 });
 

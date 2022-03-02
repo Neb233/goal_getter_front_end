@@ -6,10 +6,19 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Modal,
+  Pressable,
+  Dimensions,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getSubGoalsByUser } from "../../utils/api";
+import {
+  getSubGoalsByUser,
+  getGoalByGoalId,
+  getSubgoalsByGoalId,
+  patchSubgoalStatusById,
+  patchGoalStatusById,
+} from "../../utils/api";
 import PatchSubGoal from "./PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import PostStatus from "./PostStatus";
@@ -19,24 +28,106 @@ import dateFormat from "dateformat";
 
 const Subgoals = ({ setFriendPosts }) => {
   const navigation = useNavigation();
-
   const [goals, setGoals] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState("jeff");
   const { owner } = useParams();
   const [isChecked, setIsChecked] = useState(false);
+  const [congratsModalVisible, setCongratsModalVisible] = useState(false);
+  const [goalObjective, setGoalObjective] = useState("");
 
   useEffect(() => {
-    getSubGoalsByUser("jeff").then((res) => {
-      setGoals(res);
+    getSubGoalsByUser(loggedInUser).then((subgoals) => {
+      const currentSubgoals = subgoals.filter((subgoal) => {
+        const currentDate = new Date(Date.now());
+        const endDate = new Date(subgoal.end_date);
+        if (subgoal.type === "boolean") {
+          return (
+            endDate.getDate() === currentDate.getDate() &&
+            endDate.getMonth() === currentDate.getMonth() &&
+            endDate.getFullYear() === currentDate.getFullYear() &&
+            subgoal.status === "active"
+          );
+        } else {
+          const startDate = new Date(subgoal.start_date);
+          const dayAfterEndDate = new Date(
+            new Date(endDate).setDate(endDate.getDate() + 1)
+          );
+          return (
+            startDate.getTime() < Date.now() &&
+            dayAfterEndDate.getTime() > Date.now()
+          );
+        }
+      });
+      setGoals(currentSubgoals);
     });
   }, [loggedInUser]);
 
+  const handleCheckBoxClick = (subgoal) => {
+    setIsChecked((currVal) => !currVal);
+    getGoalByGoalId(subgoal.goal_id)
+      .then((supergoal) => {
+        setGoalObjective(supergoal.objective);
+      })
+      .then(() => {
+        patchSubgoalStatusById(subgoal.subgoal_id, "completed")
+          .then(() => {
+            const subgoalPromise = getSubgoalsByGoalId(subgoal.goal_id);
+            const goalPromise = getGoalByGoalId(subgoal.goal_id);
+            return Promise.all([subgoalPromise, goalPromise]);
+          })
+          .then(([subgoals, supergoal]) => {
+            let allSubgoalsCompleted = true;
+            for (const subgoal of subgoals) {
+              if (subgoal.status === "active") {
+                allSubgoalsCompleted = false;
+              }
+            }
+            if (allSubgoalsCompleted) {
+              console.log("adsadsdasads");
+              setCongratsModalVisible(true);
+              return patchGoalStatusById(supergoal.goal_id, "completed");
+            }
+            return null;
+          });
+      });
+  };
+
+  const handleCongratsMessageSubmit = () => {
+    setCongratsModalVisible(!congratsModalVisible);
+  };
+
   return (
-    <View style={styles.cont}>
-      <Text style={styles.text}>Current subgoals:</Text>
-      <View style={styles.page}>
-        {/* pagingEnabled={true} */}
-        <ScrollView horizontal={true}>
+    // style={styles.cont}
+    <View>
+      <Modal
+        animaitonType="slide"
+        transparent={true}
+        visible={congratsModalVisible}
+        onRequestClose={() => {
+          setCongratsModalVisible(!congratsModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text>
+              Congratulations! You completed your goal "{goalObjective}"!
+            </Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={handleCongratsMessageSubmit}
+            >
+              <Text style={styles.textStyle}>Great News!</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <Text style={styles.text}>Tell us what progress you've made today</Text>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          horizontal={true}
+          pagingEnabled={true}
+          style={{ flex: 1, flexDirection: "row", padding: 5 }}
+        >
           {goals.map((goal) => {
             const type = goal.type === "progress";
             return (
@@ -62,12 +153,12 @@ const Subgoals = ({ setFriendPosts }) => {
                         End date:{" "}
                         {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
                       </Text>
-                      <ProgressBar
+                      {/* <ProgressBar
                         progress={goal.progress}
                         target_value={goal.target_value}
-                      />
+                      /> */}
                       <View style={styles.progress}>
-                        <Text style={styles.unit}>Made progress?</Text>
+                        {/* <Text style={styles.unit}>Made progress?</Text> */}
                         <PatchSubGoal
                           goals={goals}
                           setGoals={setGoals}
@@ -75,21 +166,35 @@ const Subgoals = ({ setFriendPosts }) => {
                           goalUnit={goal.unit}
                           setFriendPosts={setFriendPosts}
                         />
-                        <Text style={styles.unit}>{goal.unit}</Text>
+                        {/* <Text style={styles.unit}>{goal.unit}</Text> */}
                       </View>
                     </View>
                   ) : (
-                    <View style={styles.progress}>
+                    // <View style={[styles.progress, styles.checkBox]}>
+                    <View>
+                    <View style={{ flexDirection: "column" }}>
                       {/* <Text>Complete?</Text> */}
                       <BouncyCheckbox
                         text={goal.objective}
+                        size={30}
+                        fillColor="#19e63b"
+                        unfillColor="#FFFFFF"
+                        iconStyle={{ borderColor: "blue" }}
                         textStyle={{
                           color: "white",
-                          fontSize: 24,
+                          fontSize: 18,
                           fontWeight: "bold",
                         }}
-                        style={styles.checkBox}
-                        onPress={() => setIsChecked((currVal) => !currVal)}
+                        style={{marginBottom: 30, flexDirection: 'row'}}
+                        // style={styles.checkBox}
+                        onPress={() => handleCheckBoxClick(goal)}
+                      />
+                        </View>
+                      <PostStatus
+                        goal={goal}
+                        subgoal={goal.subgoal_id}
+                        ownerP={goal.owner}
+                        setFriendPosts={setFriendPosts}
                       />
                     </View>
                   )}
@@ -105,113 +210,43 @@ const Subgoals = ({ setFriendPosts }) => {
 
 export default Subgoals;
 
-const styles = StyleSheet.create({
-  cont: {
-    flex: 1,
-    backgroundColor: "white",
-    height: 260,
-    margin: 10,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 3.84,
+const { width } = Dimensions.get("screen");
+const subgoalWidth = width * 1;
 
-    elevation: 5,
-  },
+const styles = StyleSheet.create({
   text: {
     padding: 10,
     fontSize: 24,
     fontWeight: "bold",
-  },
-  page: {
-    height: 200,
-    width: 335,
-    marginLeft: 5,
-    marginRight: 5,
-    backgroundColor: "#abbabe",
-    borderRadius: 5,
+    color: "#3e4d6e",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
   },
   subGoal: {
-    height: 200,
-    maxWidth: 400,
-    minWidth: 330,
-    marginLeft: 10,
-    marginRight: 5,
-    backgroundColor: "#abbabe",
-    borderRadius: 5,
-  },
-  // page: {
-  //     height: 170,
-  //     width: 200,
-  //     margin: 10
-  // },
-  update: {
-    backgroundColor: "#4892b7",
-    borderRadius: 8,
-    padding: 5,
-    margin: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
-  updateText: {
-    padding: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
+    padding: 15,
+    width: subgoalWidth,
+    backgroundColor: "#3e4d6e",
+    borderRadius: 10,
   },
   pageContent: {
     marginTop: 10,
-    flexDirection: "column",
-    justifyContent: "center",
     alignItems: "center",
   },
   goalObj: {
     flexDirection: "column",
-    fontSize: 24,
+    fontSize: 20,
+    marginBottom: 10,
     fontWeight: "bold",
     color: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  goalDescription: {
-    flexDirection: "column",
-    padding: 10,
-    fontSize: 24,
-    color: "white",
-  },
-
-  updateText: {
-    padding: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
+    alignSelf: "center",
   },
   progress: {
     flexDirection: "row",
-    margin: 20,
-  },
-  input: {
-    backgroundColor: "white",
-    flexDirection: "column",
-    marginLeft: 5,
-    borderRadius: 10,
-    padding: 3,
-  },
-  unit: {
-    marginLeft: 5,
-    padding: 3,
-    fontWeight: "bold",
-    color: "green",
+    margin: 5,
+    padding: 10,
   },
   duedate: {
     color: "white",
-    marginLeft: -30,
-    marginRight: 5,
-    marginBottom: 2,
   },
 });

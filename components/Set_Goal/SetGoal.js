@@ -21,31 +21,12 @@ import SubGoalDetails from "./SubGoalDetails";
 import { KeyboardAvoidingView } from "react-native-web";
 
 const SetGoal = ({ navigation, route }) => {
+  const currentUser = "jeff";
   if (!route.params) {
     route.params = { goalProperties: {}, clickCounter: 0 };
-  } else {
-    route.params.goalProperties.start_date = new Date(2022, 0, 1);
-    route.params.goalProperties.end_date = new Date(2022, 11, 31);
-
-    route.params.goalProperties.target_value = parseFloat(
-      route.params.goalProperties.target_value
-    );
-    if (isNaN(route.params.goalProperties.target_value)) {
-      route.params.goalProperties.target_value = "";
-    }
-    if (route.params.goalProperties.unit === "") {
-      route.params.goalProperties.unit = null;
-    }
-    if (route.params.goalProperties.subgoalPeriod === "") {
-      route.params.goalProperties.subgoalPeriod = null;
-    }
-    if (!route.params.goalProperties.subgoals) {
-      route.params.goalProperties.subgoals = [];
-    }
   }
 
-  const currentUser = "jeff";
-  const { goalProperties } = route.params;
+  let { goalProperties } = route.params;
 
   const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
 
@@ -57,6 +38,27 @@ const SetGoal = ({ navigation, route }) => {
   );
 
   useEffect(() => {
+    if (!route.params) {
+      route.params = { goalProperties: {}, clickCounter: 0 };
+    } else {
+      console.warn(route.params.goalProperties.target_value);
+
+      if (route.params.goalProperties.target_value !== "") {
+        route.params.goalProperties.target_value = parseFloat(
+          route.params.goalProperties.target_value
+        );
+      }
+
+      if (route.params.goalProperties.subgoalPeriod !== "") {
+        route.params.goalProperties.subgoalPeriod = parseFloat(
+          route.params.goalProperties.subgoalPeriod
+        );
+      }
+      if (!route.params.goalProperties.subgoals) {
+        route.params.goalProperties.subgoals = [];
+      }
+    }
+    goalProperties = route.params.goalProperties;
     console.log(goalProperties);
     setSubGoals([]);
     if (goalProperties.target_value) {
@@ -174,6 +176,8 @@ const SetGoal = ({ navigation, route }) => {
   };
 
   const handleAddGoal = () => {
+    console.log(subGoals);
+    console.log(goalProperties);
     postGoal(goalProperties)
       .then((goal_id) => {
         subGoals.forEach((subgoal) => {
@@ -201,6 +205,7 @@ const SetGoal = ({ navigation, route }) => {
           <SubGoalForm
             addSubGoal={addSubGoal}
             setShowSubGoalDetails={setShowSubGoalDetails}
+            goalEndDate={goalProperties.end_date}
           />
         </View>
       </Modal>
@@ -229,6 +234,9 @@ const SetGoal = ({ navigation, route }) => {
       <Button
         title="Edit Goal"
         onPress={() => {
+          goalProperties.target_value = "";
+          goalProperties.unit = "";
+          goalProperties.subgoalPeriod = "";
           navigation.navigate("SetGoalIntro", {
             goalProperties,
           });
