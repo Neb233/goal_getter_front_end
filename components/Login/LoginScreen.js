@@ -11,7 +11,7 @@ import { UserContext } from "../../context/user";
 import { StatusBar } from "expo-status-bar";
 
 import { auth } from "../../firebase";
-import { signInWithEmailAndPassword } from "@firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "@firebase/auth";
 
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
@@ -22,10 +22,41 @@ import * as Animatable from "react-native-animatable";
 const LoginScreen = () => {
   const navigation = useNavigation();
 
-  // const handleTest = (values) => {
-  //   navigation.navigate("Profile")
+  const [email, SetEmail] = useState("")
+  const [password, SetPassword] = useState("")
 
-  // }
+
+
+
+
+  const handleLogin = () => {
+
+    valSchema.isValid({
+        email: email,
+        password: password
+})
+.then((valid) => {
+  
+  if (valid) {
+
+signInWithEmailAndPassword(auth, email, password)
+.then((userCredentials) => {
+  const user = userCredentials.user
+  navigation.navigate("Feed")
+  return user
+  
+})
+.catch((error) => {
+  console.warn(error.message)
+})
+  }
+})
+  }
+
+  // // const handleTest = (values) => {
+  // //   navigation.navigate("Profile")
+
+  // // }
 
   const valSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
@@ -42,7 +73,7 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light" />
 
-      <Formik
+      {/* <Formik
         initialValues={{
           email: "",
           password: "",
@@ -61,7 +92,7 @@ const LoginScreen = () => {
             });
         }}
       >
-        {({ values, handleChange, handleSubmit, errors, touched }) => (
+        {({ values, handleChange, handleSubmit, errors, touched }) => ( */}
           <KeyboardAvoidingView behaviour="padding">
             <View style={styles.header}>
               <Text style={styles.text_header}>Welcome Back</Text>
@@ -73,13 +104,13 @@ const LoginScreen = () => {
                 <TextInput
                   id="email"
                   name="email"
-                  value={values.email}
-                  onChange={handleChange("email")}
+                  value={email}
+                  onChangeText={(text) => SetEmail(text) }
                   style={styles.textInput}
                 />
-                <Text style={styles.errorMsg}>
+                {/* <Text style={styles.errorMsg}>
                   {touched.email && errors.email}
-                </Text>
+                </Text> */}
               </View>
 
               <View style={styles.action}>
@@ -87,18 +118,18 @@ const LoginScreen = () => {
                 <TextInput
                   id="password"
                   name="password"
-                  value={values.password}
-                  onChange={handleChange("password")}
+                  value={password}
+                  onChangeText={(text)=> SetPassword(text)}
                   style={styles.textInput}
                   secureTextEntry
                 />
-                <Text style={styles.errorMsg}>
+                {/* <Text style={styles.errorMsg}>
                   {touched.password && touched.email}
-                </Text>
+                </Text> */}
               </View>
 
               <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+                <TouchableOpacity onPress={handleLogin} style={styles.button}>
                   <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
 
@@ -115,8 +146,8 @@ const LoginScreen = () => {
               </View>
             </Animatable.View>
           </KeyboardAvoidingView>
-        )}
-      </Formik>
+        {/* )}
+      </Formik> */}
     </View>
   );
 };

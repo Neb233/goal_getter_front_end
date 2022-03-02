@@ -23,14 +23,15 @@ import { UserContext, UserProvider } from "../../context/user";
 
 import { useNavigation } from "@react-navigation/native";
 
-const Profile = () => {
+const Profile = (props) => {
   const [details, SetDetails] = useState({});
   const [image, setImage] = useState(null);
   const [profPic, SetProfPic] = useState("");
   const [modalVisible, setModaVisible] = useState("");
-
-  const user = auth.currentUser;
   
+  console.log(props.route.params)
+
+  const displayName=props.route.params;
 
   const default_url =
     "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
@@ -39,19 +40,20 @@ const Profile = () => {
   const storage = getStorage();
 
   useEffect(() => {
-    getUser(user.displayName).then((res) => {
+    getUser(displayName).then((res) => {
+
       SetDetails(res[0]);
     });
-    if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
-        (url) => {
-          console.log(url);
-          SetProfPic(url);
-        }
-      );
-    } else {
-      SetProfPic(default_url);
-    }
+    // if (user.photoURL !== null) {
+    //   getDownloadURL(ref(storage, `${displayName}: Profile Picture`)).then(
+    //     (url) => {
+    //       console.log(url);
+    //       SetProfPic(url);
+    //     }
+    //   );
+    // } else {
+    //   SetProfPic(default_url);
+    // }
   }, []);
 
   const handleSignOut = () => {
@@ -75,14 +77,14 @@ const Profile = () => {
     if (!result.cancelled) {
       SetProfPic(result.uri);
       const storage = getStorage();
-      const refo = ref(storage, `${user.displayName}: Profile Picture`);
+      const refo = ref(storage, `${displayName}: Profile Picture`);
 
       const img = await fetch(result.uri);
       const bytes = await img.blob();
 
       await uploadBytes(refo, bytes);
     }
-    updateProfile(user, { photoURL: `${user.displayName}: Profile Picture` });
+    updateProfile(user, { photoURL: `${displayName}: Profile Picture` });
     setModaVisible(!modalVisible);
   };
 

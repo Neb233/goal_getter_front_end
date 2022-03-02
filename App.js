@@ -48,6 +48,11 @@ const App = () => {
             component={Nav}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="GoalPage"
+            component={GoalPage}
+            route={{ goal_id: 3 }}
+          />
 
           <Stack.Screen name="Feed" component={Feed} />
           <Stack.Screen name="SetGoal" component={SetGoal} />

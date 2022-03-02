@@ -33,6 +33,7 @@ const ProgressBar = ({ progress, target_value, subgoals }) => {
           progress={progressRatio}
           width={300}
           height={15}
+          color={"#017075"}
         />
         <Text style={styles.flex}>{Math.round(progressRatio * 100)}%</Text>
       </View>
@@ -42,5 +43,10 @@ const ProgressBar = ({ progress, target_value, subgoals }) => {
 export default ProgressBar;
 
 const styles = StyleSheet.create({
-  progress: { flexDirection: "row", justifyContent: "space-evenly" },
+  progress: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 4,
+  },
+  flex: { color: "#015c53" },
 });

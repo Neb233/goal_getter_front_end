@@ -114,21 +114,22 @@ export const addFriend = (loggedInUser, userToAdd) => {
   return goalgetterApi
     .post(`/friendships`, { user_1: loggedInUser, user_2: userToAdd })
     .then((res) => {
+      console.log("API", res.data);
       return res.data;
     });
 };
 
-export const deleteFriend = (loggedInUser, userToDelete) => {
+export const deleteFriendship = (loggedInUser, userToDelete) => {
   console.log("DELETEPARAMs", loggedInUser, userToDelete);
   //FRIENDSHIPS ARE STORED AS IDs
   return goalgetterApi
     .get(`/users/${loggedInUser}/friendships`)
     .then((friendships) => {
-      console.log(friendships.data.friendships);
+      console.log("HERE", friendships.data.friendships[0]["user_1"]);
       for (let i = 0; friendships.data.friendships.length; i++) {
         if (
-          friendships.data.friendships[i]["user_1"] == userToDelete ||
-          friendships.data.friendships[i]["user_2"] == userToDelete
+          friendships.data.friendships[i]["user_1"] === userToDelete ||
+          friendships.data.friendships[i]["user_2"] === userToDelete
         ) {
           return friendships.data.friendships[i]["friendship_id"];
         }
@@ -167,6 +168,12 @@ export const postGoal = (goalProperties, owner = "jeff") => {
   goalProperties.owner = owner;
   goalProperties.start_date = new Date(goalProperties.start_date);
   goalProperties.end_date = new Date(goalProperties.end_date);
+  if (goalProperties.target_value === "") {
+    goalProperties.target_value = null;
+  }
+  if (goalProperties.unit === "") {
+    goalProperties.unit = null;
+  }
   return goalgetterApi
     .post("/goals", goalProperties)
     .then(({ data }) => {
@@ -185,9 +192,23 @@ export const getPostsByUser = (user) => {
 
 export const postSubgoal = (subgoal, goal_id, owner = "jeff") => {
   subgoal.owner = owner;
-  if (subgoal.start_date) {
-    subgoal.start_date = new Date(subgoal.start_date);
+  if (subgoal.target_value === "") {
+    subgoal.target_value = null;
   }
+  if (subgoal.unit === "") {
+    subgoal.unit = null;
+  }
+  if (subgoal.start_date === "") {
+    subgoal.start_date = null;
+  }
+  if (subgoal.start_date) {
+    if (subgoal.target_value === null) {
+      subgoal.start_date = new Date(subgoal.end_date);
+    } else {
+      subgoal.start_date = new Date(subgoal.start_date);
+    }
+  }
+
   subgoal.end_date = new Date(subgoal.end_date);
   return goalgetterApi
     .post(`/goals/${goal_id}/subgoals`, subgoal)

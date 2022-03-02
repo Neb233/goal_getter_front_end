@@ -37,8 +37,10 @@ const Goals = ({ navigation, route }) => {
   const [imagemodalVisible, setImageModaVisible] = useState("");
   const [profPic, SetProfPic] = useState("");
 
+
   // const user = auth.currentUser;
   const user = { displayName: "jeff", photoURL: null };
+
   const default_url =
     "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
 
@@ -51,16 +53,15 @@ const Goals = ({ navigation, route }) => {
     setOldGoals([]);
     setShowGoals(false);
     if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
-        (url) => {
-          console.log(url);
-          SetProfPic(url);
-        }
-      );
+      getDownloadURL(ref(storage, `${user}: Profile Picture`)).then((url) => {
+        console.log(url);
+        SetProfPic(url);
+      });
     } else {
       SetProfPic(default_url);
     }
-    getGoalsByUser(user.displayName).then((goals) => {
+    getGoalsByUser(user).then((goals) => {
+      console.log("USERS GOALS", goals);
       goals.forEach((goal) => {
         getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
           setSubgoals((oldSubgoals) => {
@@ -90,10 +91,11 @@ const Goals = ({ navigation, route }) => {
         })
       );
     });
-    getPostsByUser(user.displayName).then((posts) => {
+    getPostsByUser(user).then((posts) => {
+      console.log("USERS POSTS", posts);
       setUserPosts(posts);
     });
-    getUser(user.displayName).then((userDetails) => {
+    getUser(user).then((userDetails) => {
       setUserDetails(userDetails[0]);
     });
   }, [user]);
@@ -150,7 +152,8 @@ const Goals = ({ navigation, route }) => {
         </Modal>
 
         <Pressable onPress={() => setImageModaVisible(true)}>
-          <Image source={{ uri: profPic }} style={styles.profPic} />
+          <Image source={userDetails.avatar_url} style={styles.profPic} />
+
         </Pressable>
 
         <View style={styles.body}>

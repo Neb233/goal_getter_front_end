@@ -28,8 +28,9 @@ import { useFocusEffect } from "@react-navigation/native";
 const GoalPage = ({ navigation, route }) => {
   const [goal, setGoal] = useState();
   const [subgoals, setSubgoals] = useState([]);
-  const { goal_id } = route.params;
   const currentUser = "jeff";
+  const { goal_id } = route.params;
+
   const [isChecked, setIsChecked] = useState(false);
   const [congratsModalVisible, setCongratsModalVisible] = useState(false);
   const [goalObjective, setGoalObjective] = useState("");
@@ -47,7 +48,7 @@ const GoalPage = ({ navigation, route }) => {
         });
         setSubgoals(subgoals);
       });
-    }, [goal_id])
+    }, [route.params])
   );
 
   const handleCheckBoxClick = (subgoal) => {
@@ -71,20 +72,27 @@ const GoalPage = ({ navigation, route }) => {
                 allSubgoalsCompleted = false;
               }
             }
-            if (allSubgoalsCompleted) {
+            if (allSubgoalsCompleted && supergoal.type === "boolean") {
               console.log("adsadsdasads");
               setCongratsModalVisible(true);
               return patchGoalStatusById(supergoal.goal_id, "completed");
             }
             return null;
+          })
+          .then((patchedGoal) => {
+            if (!patchedGoal) {
+              navigation.navigate("SetGoalIntro");
+              navigation.navigate("GoalPage", { goal_id: goal.goal_id });
+            }
           });
       });
   };
 
   const handleCongratsMessageSubmit = () => {
     setCongratsModalVisible(!congratsModalVisible);
+    navigation.navigate("SetGoalIntro");
+    navigation.navigate("GoalPage", { goal_id: goal.goal_id });
   };
-
   return (
     <ScrollView style={{ backgroundColor: "#fdf9e6" }}>
       <Modal
@@ -94,10 +102,11 @@ const GoalPage = ({ navigation, route }) => {
         onRequestClose={() => {
           setCongratsModalVisible(!congratsModalVisible);
         }}
+        style={styles.congratsModal}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text>
+            <Text style={styles.congratsText}>
               Congratulations! You completed your goal "{goalObjective}"!
             </Text>
             <Pressable
@@ -109,8 +118,8 @@ const GoalPage = ({ navigation, route }) => {
           </View>
         </View>
       </Modal>
-      <View style={styles.header}>
-        <View style={styles.item}>
+      <View>
+        <View style={[styles.item, styles.mainItem]}>
           <View>
             <Text style={styles.title}>{goal ? goal.objective : ""}</Text>
           </View>
@@ -208,7 +217,11 @@ const GoalPage = ({ navigation, route }) => {
                     ).getTime() ? (
                     <View style={styles.progress}>
                       <Text style={styles.unit}>Made progress?</Text>
-                      <PatchSubGoal goal={item} goalUnit={item.unit} />
+                      <PatchSubGoal
+                        goal={item}
+                        goalUnit={item.unit}
+                        goalPageId={item.goal_id}
+                      />
                       <Text style={styles.unit}>{item.unit}</Text>
                     </View>
                   ) : null}
@@ -230,13 +243,10 @@ const GoalPage = ({ navigation, route }) => {
                 <View style={styles.progress}>
                   <BouncyCheckbox
                     text={item.objective}
-                    textStyle={{
-                      color: "white",
-                      fontSize: 24,
-                      fontWeight: "bold",
-                    }}
+                    textStyle={styles.duedate}
                     style={styles.checkBox}
                     onPress={() => handleCheckBoxClick(item)}
+                    fillColor={"#015c53"}
                   />
                   <PostStatus
                     goal={item}
@@ -266,18 +276,25 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    color: "white",
     marginTop: 15,
     margin: 5,
+    color: "#034c52",
   },
   duedate: {
-    color: "white",
+    color: "white
     margin: 5,
+    color: "white",
   },
+
   subGoalTitle: {
     fontSize: 20,
+
     fontWeight: "bold",
     padding: 10,
     color: "#3e4d6e",
   },
+  checkBox: { color: "#015c53" },
+  congratsModal: {},
+  congratsText: {},
+  background: { backgroundColor: "#015c53" },
 });
