@@ -281,7 +281,6 @@ const styles = StyleSheet.create({
     color: "#034c52",
   },
   duedate: {
-    color: "white
     margin: 5,
     color: "white",
   },
