@@ -57,7 +57,7 @@ const Feed = ({ navigation }) => {
           <View>
             <TouchableOpacity
               style={styles.takeToCalendar}
-              onPress={() => navigation.navigate("GoalCalendar")}
+              onPress={() => navigation.navigate("Calendar")}
             >
               <Text>Check out your calendar</Text>
             </TouchableOpacity>
