@@ -100,7 +100,7 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
               />
               </View>
               <View style={styles.switchcontainer}>
-              <Text>Units</Text>
+              <Text style={styles.leftlabel}>Units</Text>
               <TextInput
                 style={styles.valueinput}
                 multiline
@@ -151,7 +151,7 @@ padding: 5
   input: {
     marginTop: 20,
     marginBottom: 20,
-
+padding: 3,
     backgroundColor: "white",
    
   },
@@ -201,6 +201,9 @@ padding: 5
 
     backgroundColor: "white",
     marginLeft: 150
+  },
+  leftlabel: {
+    textAlignVertical:"center"
   }
 });
 

@@ -196,7 +196,7 @@ const SetGoal = ({ navigation, route }) => {
     <ScrollView style={styles.container}>
       <Modal visible={addSubGoalModalOpen} animationType="slide"
       style={styles.subgoalformmodal}>
-        <View style={styles.modalContainer}>
+        <ScrollView style={styles.modalContainer}>
           <IconButton 
           icon="close"
           color="black"
@@ -208,7 +208,7 @@ const SetGoal = ({ navigation, route }) => {
             addSubGoal={addSubGoal}
             setShowSubGoalDetails={setShowSubGoalDetails}
           />
-        </View>
+        </ScrollView>
       </Modal>
       <TouchableOpacity
       style={styles.editgoalbutton}
@@ -221,8 +221,9 @@ const SetGoal = ({ navigation, route }) => {
           });
         }}
       ><Text style={styles.buttontext}>Edit Goal</Text></TouchableOpacity>
+       <Text style={styles.header}>Goal Details</Text>
 <View style={styles.goaldetailscontainer}>
-      <Text style={styles.goaltext}>Goal Details</Text>
+     
       <Text style={styles.goaltext}>Objective - {goalProperties.objective}</Text>
       <Text style={styles.goaltext}>Description - {goalProperties.description}</Text>
       <Text style={styles.goaltext}>
@@ -277,7 +278,7 @@ const SetGoal = ({ navigation, route }) => {
                 animationType="fade"
                 
               >
-                <View style={styles.modalContainer}>
+                <ScrollView style={styles.modalContainer}>
                   <IconButton
                      icon="close"
                      color="black"
@@ -298,7 +299,7 @@ const SetGoal = ({ navigation, route }) => {
                     subGoals={subGoals}
                     item={item}
                   />
-                </View>
+                </ScrollView>
               </Modal>
               <Card>
                 <Text style={styles.text}>{item.objective}</Text>
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
   goaldetailscontainer: {
     flex: 1,
     
-    backgroundColor: "#3e4d6e",
+    backgroundColor: "white",
     height: 300,
     margin: 5,
     padding: 5,
@@ -496,8 +497,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   goaltext: {
-    color: "white",
-    fontWeight: "bold"
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   subgoalformmodal: {
 margin: 10,
