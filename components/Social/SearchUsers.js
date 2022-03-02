@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
@@ -177,12 +178,21 @@ const SearchUsers = () => {
                     }}
                     left={(props) => {
                       return (
-                        <Avatar.Image
-                          {...props}
-                          source={
-                            userAvatars[index] ? userAvatars[index] : "account"
-                          }
-                          style={{ backgroundColor: "white" }}
+                        <Image
+                          source={{
+                            uri: userAvatars[index]
+                              ? userAvatars[index]
+                              : "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d",
+                            headers: {
+                              Accept: "*/*",
+                            },
+                          }}
+                          style={{
+                            backgroundColor: "white",
+                            width: 50,
+                            height: 50,
+                            borderRadius: 25,
+                          }}
                         />
                       );
                     }}
@@ -209,12 +219,21 @@ const SearchUsers = () => {
                     title={item.username}
                     left={(props) => {
                       return (
-                        <Avatar.Image
-                          {...props}
-                          source={
-                            userAvatars[index] ? userAvatars[index] : "account"
-                          }
-                          style={{ backgroundColor: "white" }}
+                        <Image
+                          source={{
+                            uri: userAvatars[index]
+                              ? userAvatars[index]
+                              : "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d",
+                            headers: {
+                              Accept: "*/*",
+                            },
+                          }}
+                          style={{
+                            backgroundColor: "white",
+                            width: 50,
+                            height: 50,
+                            borderRadius: 25,
+                          }}
                         />
                       );
                     }}
