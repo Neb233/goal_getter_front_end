@@ -31,7 +31,7 @@ export const patchSubGoalbyId = (subgoal_id, patchObject) => {
   return goalgetterApi
     .patch(`/subgoals/${subgoal_id}/progress`, patchObject)
     .then(({ data }) => {
-      return data;
+      return data.subgoal;
     })
     .catch((err) => {
       console.log(err.response);
@@ -43,10 +43,46 @@ export const patchGoalbyId = (goal_id, patchObject) => {
   return goalgetterApi
     .patch(`/goals/${goal_id}/progress`, patchObject)
     .then(({ data }) => {
-      return data;
+      return data.goal;
     })
     .catch((err) => {
       console.log(err.response);
+    });
+};
+
+export const patchSubgoalStatusById = (subgoal_id, status) => {
+  const currentTime = new Date(Date.now());
+  const currentDate = new Date(
+    currentTime.getFullYear(),
+    currentTime.getMonth(),
+    currentTime.getDate()
+  );
+  const patchObject = {
+    status,
+    date: currentDate,
+  };
+  return goalgetterApi
+    .patch(`/subgoals/${subgoal_id}/status`, patchObject)
+    .then(({ data }) => {
+      return data;
+    });
+};
+
+export const patchGoalStatusById = (goal_id, status) => {
+  const currentTime = new Date(Date.now());
+  const currentDate = new Date(
+    currentTime.getFullYear(),
+    currentTime.getMonth(),
+    currentTime.getDate()
+  );
+  const patchObject = {
+    status,
+    date: currentDate,
+  };
+  return goalgetterApi
+    .patch(`/goals/${goal_id}/status`, patchObject)
+    .then(({ data }) => {
+      return data;
     });
 };
 

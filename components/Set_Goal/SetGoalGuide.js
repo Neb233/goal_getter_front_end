@@ -1,9 +1,16 @@
 import React from "react";
-import { StyleSheet, Button, TextInput, View, Text } from "react-native";
+import {
+  StyleSheet,
+  Button,
+  TextInput,
+  View,
+  Text,
+  ScrollView,
+} from "react-native";
 
 const SetGoalGuide = () => {
   return (
-    <View>
+    <ScrollView>
       <Text>
         When setting goals, it is helpful to check whether they follow the SMART
         acronym:
@@ -64,7 +71,7 @@ const SetGoalGuide = () => {
         setting goals using these principles today to see self-improvement
         tomorrow.
       </Text>
-    </View>
+    </ScrollView>
   );
 };
 

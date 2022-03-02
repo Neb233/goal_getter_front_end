@@ -70,6 +70,11 @@ const Social = (props) => {
   const [currentUserReaction, setCurrentUserReaction] = useState();
   const [subgoals, setSubgoals] = useState([]);
 
+  let friendPosts = [];
+  if (props.friendPosts) {
+    friendPosts = props.friendPosts;
+  }
+
   const {
     owner,
     datetime,
@@ -119,7 +124,7 @@ const Social = (props) => {
         }
       });
     });
-  }, [owner]);
+  }, [owner, friendPosts]);
 
   const handleCommentClick = () => {
     setIsShowing((currValue) => {
@@ -167,7 +172,7 @@ const Social = (props) => {
           <View style={styles.profilePic} />
 
           <Text
-            style={styles.username}
+            style={styles.postUsername}
             onPress={() => {
               navigation.navigate("UserPage", {
                 user: owner,
@@ -186,7 +191,10 @@ const Social = (props) => {
                 });
               }}
             >
-              {associatedGoal.objective}
+              {associatedGoal.objective +
+                (associatedGoal.type === "boolean" && associatedGoal.subgoal_id
+                  ? " - COMPLETED"
+                  : "")}
             </Text>
             {progress_point !== null &&
             Object.keys(associatedGoal).length !== 0 ? (
@@ -198,17 +206,24 @@ const Social = (props) => {
                     });
                   }}
                 >
-                  {associatedGoal.progress
+                  {associatedGoal.progress &&
+                  associatedGoal.progress[parseInt(progress_point)]
                     ? `Added ${
-                        associatedGoal.progress[parseInt(progress_point)][1] -
-                        (associatedGoal.progress.length > 1
-                          ? associatedGoal.progress[
-                              parseInt(progress_point) - 1
-                            ][1]
-                          : 0)
+                        Math.round(
+                          100 *
+                            associatedGoal.progress[
+                              parseInt(progress_point)
+                            ][1] -
+                            (parseInt(progress_point) > 0
+                              ? 100 *
+                                associatedGoal.progress[
+                                  parseInt(progress_point) - 1
+                                ][1]
+                              : 0)
+                        ) / 100
                       } ${associatedGoal.unit} to ${
-                        associatedGoal.target_value
-                      }  ${associatedGoal.unit} target`
+                        Math.round(100 * associatedGoal.target_value) / 100
+                      } ${associatedGoal.unit} target`
                     : null}
                 </Text>
                 <Text
@@ -218,15 +233,21 @@ const Social = (props) => {
                     });
                   }}
                 >
-                  {associatedGoal.progress
-                    ? `New progress: ${associatedGoal.progress[progress_point][1]} ${associatedGoal.unit}`
+                  {associatedGoal.progress &&
+                  associatedGoal.progress[parseInt(progress_point)]
+                    ? `New progress: ${
+                        Math.round(
+                          100 * associatedGoal.progress[progress_point][1]
+                        ) / 100
+                      } ${associatedGoal.unit}`
                     : null}
                 </Text>
               </View>
             ) : null}
             {Object.keys(associatedGoal).length !== 0 &&
-            (!associatedGoal.subgoal_id ||
-              associatedGoal.type !== "boolean") ? (
+            (!associatedGoal.subgoal_id || associatedGoal.type !== "boolean") &&
+            associatedGoal.progress &&
+            associatedGoal.progress[parseInt(progress_point)] ? (
               <ProgressBar
                 progress={
                   associatedGoal.progress
@@ -391,11 +412,14 @@ const styles = StyleSheet.create({
   },
 
   username: {
-    color: "black",
+    color: "white",
     marginBottom: 15,
     fontWeight: "bold",
     margin: 10,
   },
+  postUsername: {color: 'black', marginBottom: 15,
+  fontWeight: "bold",
+  margin: 10},
   progress: {
     marginTop: 10,
   },
@@ -460,6 +484,8 @@ const styles = StyleSheet.create({
     color: "white",
     padding: 2,
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   unreact: {
     backgroundColor: "red",
@@ -468,6 +494,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 30,
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   button: {
     backgroundColor: "#468705",
@@ -482,6 +510,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 30,
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 3
   },
   flexRow: {
     flexDirection: "row",
@@ -518,6 +549,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  text: {
+    color: 'white'
+  }
 });
 
 export default Social;

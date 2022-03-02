@@ -32,14 +32,17 @@ const GoalSchema = yup.object({
 
 const SetGoalIntro = ({ navigation, route }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [hideProgressOptions, setHideProgressOptions] = useState(true);
   const [clickCounter, setClickCounter] = useState(0);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [hideProgressOptions, setHideProgressOptions] = useState(!isEnabled);
 
   const handleCheckboxCheck = (isChecked) => {
     setHideProgressOptions(!isChecked);
   };
 
+  if (route.params) {
+    console.log(route.params.goalProperties.target_value);
+  }
   return (
     <ScrollView>
       <SafeAreaView>
@@ -87,27 +90,15 @@ const SetGoalIntro = ({ navigation, route }) => {
               description: route.params
                 ? route.params.goalProperties.description
                 : "",
-              target_value: route.params
-                ? typeof route.params.goalProperties.target_value === "number"
-                  ? route.params.goalProperties.target_value
-                  : ""
-                : "",
-              unit: route.params
-                ? route.params.goalProperties.unit
-                  ? route.params.goalProperties.unit
-                  : ""
-                : "",
+              target_value: "",
+              unit: "",
               start_date: route.params
                 ? route.params.goalProperties.start_date
                 : "",
               end_date: route.params
                 ? route.params.goalProperties.end_date
                 : "",
-              subgoalPeriod: route.params
-                ? route.params.goalProperties.subgoalPeriod
-                  ? route.params.goalProperties.subgoalPeriod
-                  : ""
-                : "",
+              subgoalPeriod: "",
             }}
             onSubmit={(values) => {
               console.log(values.target_value);
@@ -168,9 +159,10 @@ const SetGoalIntro = ({ navigation, route }) => {
                       handleCheckboxCheck(isChecked);
                     }}
                     disabled={
-                      props.values.target_value !== "" ||
-                      props.values.unit !== "" ||
-                      props.values.subgoalPeriod !== ""
+                      (props.values.target_value !== "" ||
+                        props.values.unit !== "" ||
+                        props.values.subgoalPeriod !== "") &&
+                      !hideProgressOptions
                     }
                     value={isEnabled}
                   />
@@ -182,6 +174,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                       placeholder="Target Value"
                       onChangeText={props.handleChange("target_value")}
                       value={props.values.target_value}
+                      keyboardType="numeric"
                     />
                     <Text>What units are the above values measured in?</Text>
                     <TextInput
@@ -202,6 +195,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                       placeholder="Subgoal Period"
                       onChangeText={props.handleChange("subgoalPeriod")}
                       value={props.values.subgoalPeriod}
+                      keyboardType="numeric"
                     />
                     <Text>days</Text>
                   </HideableView>

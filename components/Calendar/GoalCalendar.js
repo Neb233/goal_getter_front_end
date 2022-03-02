@@ -9,6 +9,7 @@ import {
   formatGoalsForCalendar,
   formatSubgoalsForCalendar,
 } from "../../utils/FormatDates";
+import Nav from "../Nav/Nav";
 
 const GoalCalendar = () => {
   const [items, setItems] = useState({});
@@ -57,6 +58,7 @@ const GoalCalendar = () => {
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
       <Agenda selected={"2022-02-25"} items={items} renderItem={renderItem} />
+      {/* <Nav /> */}
     </View>
   );
 };
