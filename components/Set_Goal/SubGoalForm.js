@@ -29,8 +29,8 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEnd
 
   const ReviewSchema = yup.object({
     objective: yup.string().required("Objective is a required field"),
-    start_date: yup.date().min(goalStartDate, "Subgoal start date can't be set earlier than goal start date"),
-    end_date: yup.date().max(goalEndDate, "Subgoal end date can't be set later than goal end date").required("PLease select an end date for this subgoal"),
+    start_date: yup.date().min(goalStartDate, "Subgoal start date can't be earlier than goal start date").max(goalEndDate, "Subgoal start date can't be later than goal end date"),
+    end_date: yup.date().max(goalEndDate, "Subgoal end date can't be later than goal end date").min(goalStartDate, "Subgoal end date can't be earlier than goal start date").required("Please select an end date for this subgoal"),
     target_value: yup.number(),
     unit: yup.string(),
   });
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     backgroundColor: "white",
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "black",
     height: 50,
     borderRadius: 10,
@@ -174,6 +174,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 3,
     backgroundColor: "white",
+    borderWidth: 1,
+    borderCOlor: "black"
+
   },
   switchcontainer: {
     // flex: 1,
@@ -181,6 +184,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     justifyContent: "space-between",
+    backgroundColor: "white",
+    padding: 5
   },
   switch: {
     marginLeft: 180,
@@ -219,6 +224,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     backgroundColor: "white",
+    borderWidth: 1,
+    borderCOlor: "black",
+    padding: 5,
+    borderRadius: 3
   },
   leftlabel: {
     // fontWeight: "bold",

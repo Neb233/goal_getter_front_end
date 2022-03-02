@@ -56,7 +56,7 @@ const SubGoalDetails = ({
       <View style={styles.fieldcontainer}>
         <Text style={styles.title}>End date</Text>
         <Text style={styles.value}>
-          {dateFormat(item.end_date, "dddd dS mmmm yyyy")}
+          {dateFormat(item.end_date, "dd/mm/yyyy")}
         </Text>
       </View>
       <View>
@@ -92,6 +92,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 5,
     marginRight: 5,
+    backgroundColor: "white",
+    borderRadius: 5,
    
     padding: 5,
   },
