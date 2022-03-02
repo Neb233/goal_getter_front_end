@@ -205,6 +205,8 @@ const SetGoal = ({ navigation, route }) => {
             setAddSubGoalModalOpen(false)}}
           ></IconButton>
           <SubGoalForm
+          goalEndDate={route.params.goalProperties.end_date}
+          goalStartDate={route.params.goalProperties.start_date}
             addSubGoal={addSubGoal}
             setShowSubGoalDetails={setShowSubGoalDetails}
           />

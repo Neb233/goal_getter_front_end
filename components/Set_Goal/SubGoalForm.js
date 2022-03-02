@@ -15,22 +15,25 @@ import * as yup from "yup";
 import DatePicker from "../../shared/DatePicker";
 import { prodErrorMap } from "firebase/auth";
 import { HideableView } from "../../shared/HideableView";
+import dateFormat from "dateformat"
 
-const ReviewSchema = yup.object({
-  objective: yup.string().required(),
-  start_date: yup.date(),
-  end_date: yup.date(),
-  target_value: yup.number(),
-  unit: yup.string(),
-});
 
-const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
+
+const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEndDate }) => {
   const [hideProgressOptions, setHideProgressOptions] = useState(true);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
     isEnabled ? setHideProgressOptions(true) : setHideProgressOptions(false);
   };
+
+  const ReviewSchema = yup.object({
+    objective: yup.string().required("Objective is a required field"),
+    start_date: yup.date().min(goalStartDate, "Subgoal start date can't be set earlier than goal start date"),
+    end_date: yup.date().max(goalEndDate, "Subgoal end date can't be set later than goal end date").required("PLease select an end date for this subgoal"),
+    target_value: yup.number(),
+    unit: yup.string(),
+  });
 
   return (
     <View>
@@ -60,7 +63,7 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
               />
             </View>
             <Text style={styles.errorText}>
-              {props.touched.objective && props.errors.end_date}
+              {props.touched.objective && props.errors.objective}
             </Text>
             <View style={styles.switchcontainer}>
               <DatePicker
@@ -68,8 +71,12 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
                 type={"End"}
                 style={styles.datepicker}
               />
-              <Text style={styles.leftlabel}>DATE</Text>
+              
+              <Text style={styles.leftlabel}>{dateFormat(props.values.end_date, "dd/mm/yyyy")}</Text>
             </View>
+            <Text style={styles.errorText}>
+              {props.touched.end_date && props.errors.end_date}
+            </Text>
             <View style={styles.switchcontainer}>
               <Text style={styles.header}>Set Numerical Values</Text>
               <Switch
@@ -92,7 +99,7 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
                   type={"Start"}
                   style={styles.datepicker}
                 />
-                <Text style={styles.leftlabel}>TEXT</Text>
+                <Text style={styles.leftlabel}>{dateFormat(props.values.start_date, "dd/mm/yyyy")}</Text>
               </View>
 
               <Text style={styles.errorText}>
