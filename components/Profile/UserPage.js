@@ -17,7 +17,7 @@ import {
   getPostsByUser,
   getSubgoalsByGoalId,
   getUser,
-  patchAvatar
+  patchAvatar,
 } from "../../utils/api";
 import dateFormat, { masks } from "dateformat";
 import Social from "../Feed/Social";
@@ -29,7 +29,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
 
-const Goals = ({ route }) => {
+const Goals = ({ navigation, route }) => {
   const [goals, setGoals] = useState([]);
   const [oldGoals, setOldGoals] = useState();
   const [futureGoals, setFutureGoals] = useState();
@@ -39,10 +39,7 @@ const Goals = ({ route }) => {
   const [subgoals, setSubgoals] = useState({});
   const [imagemodalVisible, setImageModaVisible] = useState("");
   const [profPic, SetProfPic] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("")
-  const navigation = useNavigation();
-  // const user = auth.currentUser;
-
+  const [avatarUrl, setAvatarUrl] = useState("");
 
   let user = auth.currentUser;
 
@@ -51,14 +48,10 @@ const Goals = ({ route }) => {
   }
 
   useEffect(() => {
-    const onBlur = navigation.addListener("blur", () => {
-      navigation.setParams({ user: "jeff" });
-    });
+    const onBlur = navigation.addListener("blur", () => {});
 
     return onBlur;
   }, [navigation]);
-
-  
 
   useEffect(() => {
     setSubgoals({});
@@ -130,7 +123,7 @@ const Goals = ({ route }) => {
     await updateProfile(user, {
       photoURL: `${user.displayName}: Profile Picture`,
     });
-    const storage= getStorage();
+    const storage = getStorage();
     getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
       (url) => {
         console.log(url);
@@ -155,38 +148,51 @@ const Goals = ({ route }) => {
   return (
     <ScrollView>
       <View style={styles.header}>
-    
-        { !route.params ?  (
+        {user === auth.currentUser ? (
           <View>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={imagemodalVisible}
-          onRequestClose={() => {
-            setImageModaVisible(!imagemodalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={pickImage}
-              >
-                <Text style={styles.textStyle}>Update Profile Picture</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setImageModaVisible(!imagemodalVisible)}
-              >
-                <Text style={styles.textStyle}>Cancel</Text>
-              </Pressable>
-            </View>
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={imagemodalVisible}
+              onRequestClose={() => {
+                setImageModaVisible(!imagemodalVisible);
+              }}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={pickImage}
+                  >
+                    <Text style={styles.textStyle}>Update Profile Picture</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => setImageModaVisible(!imagemodalVisible)}
+                  >
+                    <Text style={styles.textStyle}>Cancel</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </Modal>
+
+            <Pressable onPress={() => setImageModaVisible(true)}>
+              <Image
+                source={{
+                  uri: profPic,
+                  headers: {
+                    Accept: "*/*",
+                  },
+                }}
+                style={styles.profPic}
+              />
+            </Pressable>
+
+            <Pressable onPress={handleSignOut}>
+              <Text>Sign Out</Text>
+            </Pressable>
           </View>
-        </Modal>
-
-        <Pressable onPress={() => setImageModaVisible(true)}>
-
-
+        ) : (
           <Image
             source={{
               uri: profPic,
@@ -196,24 +202,12 @@ const Goals = ({ route }) => {
             }}
             style={styles.profPic}
           />
-</Pressable> 
-
-        <Pressable onPress={handleSignOut}>
-          <Text>Sign Out</Text>
-        </Pressable>
-        </View>
-        ) : (
-          
-        <Image source={avatarUrl} style={styles.profPic}/>
-          )
-          
-}
-
+        )}
 
         <View style={styles.body}>
           <View style={styles.bodyContent}>
             <Text style={styles.userName}>{user.displayName}</Text>
-            <Text>{userDetails.profile}</Text>
+            <Text>{userDetails ? userDetails.profile : ""}</Text>
           </View>
         </View>
       </View>

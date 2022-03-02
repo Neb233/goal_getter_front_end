@@ -192,7 +192,7 @@ const SearchUsers = () => {
                     color="#fdf9e6"
                     onPress={() => {
                       navigation.navigate("UserPage", {
-                        user: owner,
+                        user: item.username,
                       });
                     }}
                     left={(props) => {
@@ -258,8 +258,9 @@ const SearchUsers = () => {
                       );
                     }}
                     onPress={() => {
+                      navigation.navigate("GoalPage", { goal_id: 1 });
                       navigation.navigate("UserPage", {
-                        user: owner,
+                        user: item.username,
                       });
                     }}
                   />
