@@ -51,11 +51,25 @@ const App = () => {
  const GoalStack = createNativeStackNavigator();
  const SearchStack = createNativeStackNavigator();
 
+ function Logo() {
+  return (<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%'}}>
+<Image
+source={require('./components/Profile/blank_avatar.png')}
+resizeMode="contain"
+style={{ width: 98 }}
+/>
+</View>
+  )
+  }
+
 
 
  function FeedStackScreen() {
    return (
-     <FeedStack.Navigator >
+     <FeedStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
+        }} >
        <FeedStack.Screen name="Feed" component={Feed}/>
        <FeedStack.Screen name="Calendar" component={GoalCalendar} />
        <FeedStack.Screen name="Profile" component={Profile} />
@@ -66,7 +80,10 @@ const App = () => {
 
  function UserStackScreen() {
    return (
-     <UserStack.Navigator>
+     <UserStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
+        }}>
     <UserStack.Screen name="UserPage" component={UserPage} />
     {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
     </UserStack.Navigator>
@@ -76,7 +93,10 @@ const App = () => {
 
  function GoalStackScreen() {
   return (
-    <GoalStack.Navigator>
+    <GoalStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
+        }}>
       <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro}/>
       {/* <GoalStack.Screen name="" component={} /> */}
     </GoalStack.Navigator>
@@ -85,7 +105,10 @@ const App = () => {
 
  function SearchStackScreen() {
    return (
-     <SearchStack.Navigator>
+     <SearchStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
+        }}>
        <SearchStack.Screen name="Search" component={SearchUsers} />
        {/* <SearchStack.Screen name="" component={} /> */}
      </SearchStack.Navigator>
@@ -148,3 +171,7 @@ const styles = StyleSheet.create({
 
         //   <Stack.Screen name="Register" component={RegisterScreen} />
         // </Stack.Navigator>
+
+
+
+  
