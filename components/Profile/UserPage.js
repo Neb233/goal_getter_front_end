@@ -45,59 +45,59 @@ const Goals = ({ navigation, route }) => {
 
   const storage = getStorage();
 
-  useEffect(() => {
-    setSubgoals({});
-    setGoals([]);
-    setFutureGoals([]);
-    setOldGoals([]);
-    setShowGoals(false);
-    if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user}: Profile Picture`)).then((url) => {
-        console.log(url);
-        SetProfPic(url);
-      });
-    } else {
-      SetProfPic(default_url);
-    }
-    getGoalsByUser(user).then((goals) => {
-      console.log("USERS GOALS", goals);
-      goals.forEach((goal) => {
-        getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
-          setSubgoals((oldSubgoals) => {
-            const newSubgoals = { ...oldSubgoals };
-            newSubgoals[goal.goal_id] = subgoals;
-            return newSubgoals;
-          });
-        });
-      });
+  // useEffect(() => {
+  //   setSubgoals({});
+  //   setGoals([]);
+  //   setFutureGoals([]);
+  //   setOldGoals([]);
+  //   setShowGoals(false);
+  //   if (user.photoURL !== null) {
+  //     getDownloadURL(ref(storage, `${user}: Profile Picture`)).then((url) => {
+  //       console.log(url);
+  //       SetProfPic(url);
+  //     });
+  //   } else {
+  //     SetProfPic(default_url);
+  //   }
+  //   getGoalsByUser(user).then((goals) => {
+  //     console.log("USERS GOALS", goals);
+  //     goals.forEach((goal) => {
+  //       getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
+  //         setSubgoals((oldSubgoals) => {
+  //           const newSubgoals = { ...oldSubgoals };
+  //           newSubgoals[goal.goal_id] = subgoals;
+  //           return newSubgoals;
+  //         });
+  //       });
+  //     });
 
-      setGoals(
-        goals.filter((goal) => {
-          return (
-            new Date(goal.end_date).getTime() > Date.now() &&
-            new Date(goal.start_date).getTime() < Date.now()
-          );
-        })
-      );
-      setOldGoals(
-        goals.filter((goal) => {
-          return new Date(goal.end_date).getTime() < Date.now();
-        })
-      );
-      setFutureGoals(
-        goals.filter((goal) => {
-          return new Date(goal.start_date).getTime() > Date.now();
-        })
-      );
-    });
-    getPostsByUser(user).then((posts) => {
-      console.log("USERS POSTS", posts);
-      setUserPosts(posts);
-    });
-    getUser(user).then((userDetails) => {
-      setUserDetails(userDetails[0]);
-    });
-  }, [user]);
+  //     setGoals(
+  //       goals.filter((goal) => {
+  //         return (
+  //           new Date(goal.end_date).getTime() > Date.now() &&
+  //           new Date(goal.start_date).getTime() < Date.now()
+  //         );
+  //       })
+  //     );
+  //     setOldGoals(
+  //       goals.filter((goal) => {
+  //         return new Date(goal.end_date).getTime() < Date.now();
+  //       })
+  //     );
+  //     setFutureGoals(
+  //       goals.filter((goal) => {
+  //         return new Date(goal.start_date).getTime() > Date.now();
+  //       })
+  //     );
+  //   });
+  //   getPostsByUser(user).then((posts) => {
+  //     console.log("USERS POSTS", posts);
+  //     setUserPosts(posts);
+  //   });
+  //   getUser(user).then((userDetails) => {
+  //     setUserDetails(userDetails[0]);
+  //   });
+  // }, [user]);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
