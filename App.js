@@ -37,6 +37,7 @@ const App = () => {
       } else {
         SetProfile(false);
       }
+
     });
   }, []);
 
@@ -45,9 +46,24 @@ const App = () => {
   const GoalStack = createNativeStackNavigator();
   const SearchStack = createNativeStackNavigator();
 
+ function Logo() {
+  return (<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%'}}>
+<Image
+source={require('./components/Profile/blank_avatar.png')}
+resizeMode="contain"
+style={{ width: 98 }}
+/>
+</View>
+  )
+  }
+
+
   function FeedStackScreen() {
     return (
-      <FeedStack.Navigator>
+           <FeedStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
+        }} >
         <FeedStack.Screen name="Feed" component={Feed} />
         <FeedStack.Screen name="Calendar" component={GoalCalendar} />
         <FeedStack.Screen name="Profile" component={Profile} />
@@ -59,7 +75,10 @@ const App = () => {
 
   function UserStackScreen() {
     return (
-      <UserStack.Navigator>
+      <UserStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
+        }}>
         <UserStack.Screen name="UserPage" component={Goals} />
         <UserStack.Screen name="GoalPage" component={GoalPage} />
         {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
@@ -69,7 +88,10 @@ const App = () => {
 
   function GoalStackScreen() {
     return (
-      <GoalStack.Navigator>
+      <GoalStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#5B72A4', paddingHorizontal: 80  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center", flexGrow: 1,},
+        }}>
         <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} />
         <GoalStack.Screen name="SetGoal" component={SetGoal} />
         {/* <GoalStack.Screen name="" component={} /> */}
@@ -79,7 +101,10 @@ const App = () => {
 
   function SearchStackScreen() {
     return (
-      <SearchStack.Navigator>
+      <SearchStack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
+        }}>
         <SearchStack.Screen name="Search" component={SearchUsers} />
         <SearchStack.Screen name="Calendar" component={GoalCalendar} />
         <SearchStack.Screen name="GoalPage" component={GoalPage} />
@@ -117,26 +142,27 @@ const styles = StyleSheet.create({
   },
 });
 
-{
-  /* <Stack.Navigator>
-        //   <Stack.Screen */
-}
-//     name="Nav"
-//     component={Nav}
-//     options={{ headerShown: false }}
-//   />
 
-//   <Stack.Screen name="Feed" component={Feed} />
-//   <Stack.Screen name="SetGoal" component={SetGoal} />
-//   <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
-//   <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
-//   <Stack.Screen name="Profile" component={Profile} />
-//   <Stack.Screen name="SearchUsers" component={SearchUsers} />
+{/* <Stack.Navigator>
+        //   <Stack.Screen */}
+        //     name="Nav"
+        //     component={Nav}
+        //     options={{ headerShown: false }}
+        //   />
 
-//   <Stack.Screen name="Login" component={LoginScreen} />
+        //   <Stack.Screen name="Feed" component={Feed} />
+        //   <Stack.Screen name="SetGoal" component={SetGoal} />
+        //   <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
+        //   <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
+        //   <Stack.Screen name="Profile" component={Profile} />
+        //   <Stack.Screen name="SearchUsers" component={SearchUsers} />
 
-//   <Stack.Screen name="UserPage" component={Goals} />
-//   <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
+        //   <Stack.Screen name="Login" component={LoginScreen} />
 
-//   <Stack.Screen name="Register" component={RegisterScreen} />
-// </Stack.Navigator>
+        //   <Stack.Screen name="UserPage" component={Goals} />
+        //   <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
+
+        //   <Stack.Screen name="Register" component={RegisterScreen} />
+        // </Stack.Navigator>
+
+
