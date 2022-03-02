@@ -34,7 +34,7 @@ setFieldValue(field.name, currentDate)
 
 <View>
       <View style={{margin:20}}>
-        <Button title={`Set Date`} onPress={showDatePicker}/>
+        <Button title={`Set ${props.type} Date`} onPress={showDatePicker}/>
       </View>
 
       {show && (

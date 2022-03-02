@@ -5,6 +5,7 @@ import {
   Button,
   KeyboardAvoidingView,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import { Formik, useField } from "formik";
@@ -69,12 +70,12 @@ const SubGoalDetails = ({
         ) : null}
       </View>
       <View>
-        <Button
-          title="Delete SubGoal"
+        <TouchableOpacity
+         style={styles.deleteSubGoal}
           onPress={() => {
             deleteSubGoal(item.objective);
           }}
-        ></Button>
+        ><Text style={styles.deleteSubGoalText}>Delete Subgoal</Text></TouchableOpacity>
       </View>
     </ScrollView>
     // </KeyboardAvoidingView>
@@ -90,7 +91,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     marginLeft: 5,
-    backgroundColor: "red",
+    marginRight: 5,
+   
     padding: 5,
   },
   value: {
@@ -99,4 +101,28 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
   },
+  deleteSubGoal: {
+    margin: 10,
+    padding: 10,
+    height: 50,
+    // width: "100%",
+    backgroundColor: "red",
+    marginTop: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  deleteSubGoalText: {
+    color: "white",
+    fontWeight: "bold"
+  }
 });

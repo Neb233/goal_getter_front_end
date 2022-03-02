@@ -8,6 +8,7 @@ import {
   Switch,
   KeyboardAvoidingView,
   ScrollView,
+  TouchableOpacity
 } from "react-native";
 import { Formik, useField } from "formik";
 import * as yup from "yup";
@@ -16,7 +17,7 @@ import { prodErrorMap } from "firebase/auth";
 import { HideableView } from "../../shared/HideableView";
 
 const ReviewSchema = yup.object({
-  objective: yup.string().required().min(10),
+  objective: yup.string().required(),
   start_date: yup.date(),
   end_date: yup.date(),
   target_value: yup.number(),
@@ -38,7 +39,7 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
           objective: "",
           start_date: "",
           end_date: "",
-          target_value: 0,
+          target_value: "",
           unit: "",
         }}
         onSubmit={(values) => {
@@ -49,8 +50,9 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
         {(props) => (
           <ScrollView>
             <View style={styles.container}>
+              {/* <Text>Objective</Text> */}
               <TextInput
-                style={styles.input}
+                style={styles.objectiveinput}
                 multiline
                 placeholder="Objective"
                 onChangeText={props.handleChange("objective")}
@@ -61,14 +63,11 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
               {props.touched.objective && props.errors.end_date}
             </Text>
 
-            <DatePicker name="start_date" />
-            <Text style={styles.errorText}>
-              {props.touched.start_date && props.errors.start_date}
-            </Text>
 
-            <DatePicker name="end_date" />
+            <DatePicker name="end_date"
+            type={"End"} />
             <View style={styles.switchcontainer}>
-              <Text>Set Numerical Values</Text>
+              <Text style={styles.header}>Set Numerical Values</Text>
               <Switch
                 trackColor={{ false: "#767577", true: "#81b0ff" }}
                 thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -83,8 +82,15 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
               hidden={hideProgressOptions}
               style={styles.HideableView}
             >
+               <DatePicker name="start_date"
+               type={"Start"} />
+            <Text style={styles.errorText}>
+              {props.touched.start_date && props.errors.start_date}
+            </Text>
+            <View style={styles.switchcontainer}>
+              <Text>Target Value</Text>
               <TextInput
-                style={styles.input}
+                style={styles.valueinput}
                 multiline
                 placeholder="Target Value"
                 type="number"
@@ -92,20 +98,24 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails }) => {
                 value={props.values.target_value}
                 keyboardType="numeric"
               />
+              </View>
+              <View style={styles.switchcontainer}>
+              <Text>Units</Text>
               <TextInput
-                style={styles.input}
+                style={styles.valueinput}
                 multiline
                 placeholder="Units"
                 onChangeText={props.handleChange("unit")}
                 value={props.values.unit}
               />
+              </View>
             </HideableView>
 
-            <Button
-              title="Add SubGoal"
-              color="maroon"
+            <TouchableOpacity
+             
+            style={styles.addsubgoalbutton}
               onPress={props.handleSubmit}
-            />
+          ><Text style={styles.addsubgoaltext}>Add Subgoal</Text></TouchableOpacity>
           </ScrollView>
         )}
       </Formik>
@@ -125,9 +135,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 6,
   },
+  header: {
+fontWeight: "bold"
+  },
+  objectiveinput: {
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "black",
+height: 50,
+borderRadius:10,
+padding: 5
+  },
   input: {
     marginTop: 20,
     marginBottom: 20,
+
+    backgroundColor: "white",
+   
   },
   switchcontainer: {
     flex: 1,
@@ -143,8 +169,39 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   addsubgoalbutton: {
-    marginTop: 20,
+   
+    margin: 10,
+    padding: 10,
+    height: 50,
+    // width: "100%",
+    backgroundColor: "green",
+    marginTop: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    
+    
   },
+  addsubgoaltext: {
+    color: "white",
+    fontWeight: "bold"
+  },
+  valueinput: {
+    marginTop: 20,
+    marginBottom: 20,
+
+    backgroundColor: "white",
+    marginLeft: 150
+  }
 });
 
 export default SubGoalForm;
