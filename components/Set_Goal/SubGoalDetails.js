@@ -5,6 +5,7 @@ import {
   Button,
   KeyboardAvoidingView,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import { Formik, useField } from "formik";
@@ -63,7 +64,7 @@ const SubGoalDetails = ({
       <View style={styles.fieldcontainer}>
         <Text style={styles.title}>End date</Text>
         <Text style={styles.value}>
-          {dateFormat(item.end_date, "dddd dS mmmm yyyy")}
+          {dateFormat(item.end_date, "dd/mm/yyyy")}
         </Text>
       </View>
       <View>
@@ -77,14 +78,13 @@ const SubGoalDetails = ({
         ) : null}
       </View>
       <View>
-        {item.core ? null : (
-          <Button
-            title="Delete SubGoal"
-            onPress={() => {
-              deleteSubGoal(item.objective);
-            }}
-          ></Button>
-        )}
+        <TouchableOpacity
+         style={styles.deleteSubGoal}
+          onPress={() => {
+            deleteSubGoal(item.objective);
+          }}
+        ><Text style={styles.deleteSubGoalText}>Delete Subgoal</Text></TouchableOpacity>
+
       </View>
     </ScrollView>
     // </KeyboardAvoidingView>
@@ -100,7 +100,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     marginLeft: 5,
-    backgroundColor: "red",
+    marginRight: 5,
+    backgroundColor: "white",
+    borderRadius: 5,
+   
     padding: 5,
   },
   value: {
@@ -109,4 +112,28 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
   },
+  deleteSubGoal: {
+    margin: 10,
+    padding: 10,
+    height: 50,
+    // width: "100%",
+    backgroundColor: "red",
+    marginTop: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  deleteSubGoalText: {
+    color: "white",
+    fontWeight: "bold"
+  }
 });
