@@ -94,7 +94,7 @@ const GoalPage = ({ navigation, route }) => {
     navigation.navigate("GoalPage", { goal_id: goal.goal_id });
   };
   return (
-    <ScrollView style={styles.background}>
+    <ScrollView style={{ backgroundColor: "#fdf9e6" }}>
       <Modal
         animaitonType="slide"
         transparent={true}
@@ -168,7 +168,7 @@ const GoalPage = ({ navigation, route }) => {
         </View>
       </View>
       <View style={styles.goalContainer}>
-        <Text style={styles.currentgoals}>Subgoals:</Text>
+        <Text style={styles.subGoalTitle}>Your goal break down:</Text>
         <FlatList
           data={subgoals}
           renderItem={({ item }) => (
@@ -265,45 +265,14 @@ const GoalPage = ({ navigation, route }) => {
 export default GoalPage;
 
 const styles = StyleSheet.create({
-  goalContainer: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: "#034c52",
-    borderRadius: 10,
-    marginTop: 20,
-    marginBottom: 10,
-    shadowColor: "#017075",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  mainItem: {
-    borderColor: "#f48079",
-    borderWidth: 2,
-    width: "95%",
-    margin: "auto",
-  },
+  goalContainer: {},
   item: {
-    backgroundColor: "#ffc0b4",
+    backgroundColor: "#3e4d6e",
     borderRadius: 5,
     flex: 1,
     margin: 2,
     marginTop: 10,
-    shadowColor: "#f48d79",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 3.84,
-    elevation: 5,
-    paddingBottom: 5,
-    borderColor: "#f48079",
-    borderWidth: 1,
+    padding: 15,
   },
   title: {
     fontWeight: "bold",
@@ -312,94 +281,17 @@ const styles = StyleSheet.create({
     color: "#034c52",
   },
   duedate: {
-    marginLeft: 130,
-    marginRight: 5,
-    marginBottom: 2,
-    color: "#034c52",
-  },
-  currentgoals: {
-    fontWeight: "bold",
+    color: "white
     margin: 5,
     color: "white",
   },
-  header: {
-    backgroundColor: "#034c52",
-    height: 160,
-  },
-  profPic: {
-    width: 130,
-    height: 130,
-    borderRadius: 63,
-    borderWidth: 4,
-    borderColor: "white",
-    marginBottom: 10,
-    alignSelf: "center",
-    position: "absolute",
-    marginTop: 30,
-  },
-  userName: {
-    fontSize: 22,
-    color: "#fc03ba",
-    fontWeight: "600",
-    marginBottom: 40,
-  },
-  body: {
-    marginTop: 150,
-  },
-  bodyContent: {
-    flex: 1,
-    alignItems: "center",
-    padding: 30,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "90%",
-    padding: 25,
-    borderRadius: 10,
-    alignItems: "center",
-    margin: 20,
-    marginTop: 200,
-  },
-  progress: {
-    flexDirection: "column",
-    margin: 20,
-  },
-  unit: {
-    marginLeft: 5,
-    padding: 3,
+
+  subGoalTitle: {
+    fontSize: 20,
+
     fontWeight: "bold",
-    color: "green",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  modalView: {
-    margin: 40,
-    backgroundColor: "white",
-    borderRadius: 20,
-    paddingVertical: 35,
-    paddingHorizontal: 70,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-  },
-  button: {
-    borderRadius: 20,
     padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-    margin: 5,
+    color: "#3e4d6e",
   },
   checkBox: { color: "#015c53" },
   congratsModal: {},

@@ -173,16 +173,17 @@ const PostStatus = ({
               onChangeText={setMessage}
             />
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              // style={[styles.button, styles.buttonClose]}
+              style={styles.post}
               onPress={handleSubmit}
             >
-              <Text style={styles.textStyle}>Make Status</Text>
+              <Text style={styles.post}>Post</Text>
             </Pressable>
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={styles.cancelPost}
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text style={styles.textStyle}>Cancel Post</Text>
+              <Text style={styles.cancelPost}>Cancel Post</Text>
             </Pressable>
           </View>
         </View>
@@ -211,12 +212,11 @@ const PostStatus = ({
       </Modal>
 
       <Pressable
-        style={[styles.button, styles.buttonOpen]}
+        // style={[styles.button, styles.buttonOpen]}
+        style={styles.submitAndShareButton}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={styles.textStyle}>
-          Submit progress and share it with your friends
-        </Text>
+        <Text style={styles.submitAndShare}>Submit and Share</Text>
       </Pressable>
     </View>
   );
@@ -226,7 +226,7 @@ export default PostStatus;
 
 const styles = StyleSheet.create({
   centeredView: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
@@ -247,32 +247,44 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+  submitAndShareButton: {
+    backgroundColor: "#1fe398",
+    borderRadius: 8,
+    padding: 5,
+    marginLeft: 10,
+    marginBottom: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
   },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-    margin: 5,
-  },
-  textStyle: {
+  submitAndShare: {
+    // padding: 2,
+    alignItems: "center",
+    justifyContent: "center",
     color: "white",
+  },
+  post: {
+    color: "green",
     fontWeight: "bold",
     textAlign: "center",
-    flexWrap: "wrap",
-    width: 150,
+    marginTop: 10,
+    marginBottom: 5,
+    fontSize: 18,
+  },
+
+  cancelPost: {
+    color: "red",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 10,
+    fontSize: 18,
   },
   modalText: {
     marginBottom: 15,
     textAlign: "center",
-    backgroundColor: '#f7f7fa',
-    color: 'white',
+    backgroundColor: "#f7f7fa",
     borderRadius: 20,
-    padding: 5,
-    width: '150%'
+    padding: 10,
+    width: 200,
   },
 });
