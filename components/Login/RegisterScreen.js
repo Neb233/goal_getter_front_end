@@ -70,12 +70,25 @@ const RegisterScreen = () => {
       });
   };
 
-  // const { setLoggedInUser, loggedInUser } = useContext(UserContext);
+  const validateEmail = (valemail) => {
+    const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    return re.test(valemail) 
+    };
+
+    const validatePassword = (valpass) => {
+      const re  = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,10}$/
+      return re.test(valpass)
+    }
+
+    const validateUsername = (valUse) => {
+      const re = /(?!.*[\.\-\_]{2,})^[a-zA-Z0-9\.\-\_]{3,24}$/
+      return re.test(valUse)
+    }
 
   const valSchema = Yup.object({
     username: Yup.string()
       .min(2, "Must be at least 2 characters")
-      .max(8, "no more than 8 characters")
+      .max(24, "no more than 8 characters")
       .required("Required"),
     email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string()
@@ -85,44 +98,12 @@ const RegisterScreen = () => {
       .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
       .matches(/\d/, "Password must have a number")
       .required(),
-    profile: Yup.string().required("Please enter some text"),
+    profile: Yup.string(),
   });
 
   return (
     <View style={styles.container}>
-      {/* <Formik
-        initialValues={{
-          firstName: "",
-          profile: "",
-          username: "",
-          password: "",
-          email: "",
-        }}
-        validationSchema={valSchema}
-        onSubmit={(values) =>
-          createUserWithEmailAndPassword(auth, values.email, values.password)
-            .then(async (userCredentials) => {
-              const user = userCredentials.user;
-
-              await updateProfile(user, { displayName: values.username });
-
-              var body = { username: values.username, profile: values.profile };
-
-              await axios({
-                method: "post",
-                url: "https://goalgetter-backend.herokuapp.com/api/users",
-                data: body,
-              }).catch(function (error) {
-                console.log(error);
-              });
-
-              return user;
-            })
-
-            .catch((error) => alert(error.message))
-        }
-      > */}
-      {/* {({  errors, touched }) => (  */}
+      
       <KeyboardAvoidingView behaviour="padding">
         <View style={styles.header}>
           <Text style={styles.title_text}>Register Your Account</Text>
@@ -130,7 +111,7 @@ const RegisterScreen = () => {
 
         <Animatable.View animation="fadeInUpBig" style={styles.footer}>
           <View style={styles.action}>
-            <Text style={styles.text_footer}>Email</Text>
+            <Text style={styles.text_footer}>Email*</Text>
             <TextInput
               id="email"
               name="email"
@@ -138,13 +119,13 @@ const RegisterScreen = () => {
               onChangeText={(text) => SetEmail(text)}
               style={styles.textInput}
             />
-            {/* <Text style={styles.errorMsg}>
-                  {touched.email && errors.email}
-                </Text> */}
+
+{  !validateEmail(email)  ? null : <Text style={styles.success}>Valid Email</Text>}
+           
           </View>
 
           <View style={styles.action}>
-            <Text style={styles.text_footer}>Username</Text>
+            <Text style={styles.text_footer}>Username*</Text>
             <TextInput
               id="username"
               name="username"
@@ -152,9 +133,7 @@ const RegisterScreen = () => {
               onChangeText={(text) => SetUsername(text)}
               style={styles.textInput}
             />
-            {/* <Text style={styles.errorMsg}>
-                  {touched.username && errors.username}
-                </Text> */}
+          {!validateUsername(username) ? null : <Text style={styles.success}>Valid Username</Text>}
           </View>
 
           <View style={styles.action}>
@@ -169,7 +148,7 @@ const RegisterScreen = () => {
           </View>
 
           <View style={styles.action}>
-            <Text style={styles.text_footer}>Password</Text>
+            <Text style={styles.text_footer}>Password*</Text>
             <TextInput
               id="password"
               name="password"
@@ -178,6 +157,8 @@ const RegisterScreen = () => {
               style={styles.textInput}
               secureTextEntry
             ></TextInput>
+
+{ !validatePassword(password) ? null : <Text style={styles.success}>Valid Password</Text>}
           </View>
 
           <Text>
@@ -197,8 +178,7 @@ const RegisterScreen = () => {
           </View>
         </Animatable.View>
       </KeyboardAvoidingView>
-      {/* )} */}
-      {/* </Formik> */}
+     
     </View>
   );
 };
@@ -279,4 +259,8 @@ const styles = StyleSheet.create({
   register_text: {
     marginTop: 20,
   },
+  success: {
+    fontSize: 15,
+    color: 'green'
+  }
 });
