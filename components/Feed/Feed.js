@@ -13,6 +13,7 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SetGoal from "../Set_Goal/SetGoal";
 import GoalStatus from "./GoalStatus";
+import { auth } from "../../firebase";
 
 import { getFriends, getPostsByUser } from "../../utils/api";
 
@@ -20,6 +21,8 @@ const Feed = ({ navigation }) => {
   const currentUser = "jeff";
 
   const [friendPosts, setFriendPosts] = useState([]);
+
+  
 
   useFocusEffect(
     React.useCallback(() => {
