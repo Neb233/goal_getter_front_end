@@ -79,7 +79,7 @@ style={{ width: 98 }}
       headerStyle: {
         backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
         }}>
-        <UserStack.Screen name="UserPage" component={Goals} />
+        <UserStack.Screen name="Your Profile" component={Goals} />
         <UserStack.Screen name="GoalPage" component={GoalPage} />
         {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
       </UserStack.Navigator>

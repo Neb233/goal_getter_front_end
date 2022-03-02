@@ -187,9 +187,12 @@ const Goals = ({ navigation, route }) => {
                 style={styles.profPic}
               />
             </Pressable>
-
             <Pressable onPress={handleSignOut}>
-              <Text>Sign Out</Text>
+              <Text
+                style={{ color: "red", alignSelf: "center", marginTop: 10 }}
+              >
+                Sign Out
+              </Text>
             </Pressable>
           </View>
         ) : (
@@ -223,7 +226,7 @@ const Goals = ({ navigation, route }) => {
             }}
           >
             <Text style={{ color: "white" }}>
-              {showGoals ? "Show Social Feed" : "Show Goals"}
+              {showGoals ? "My Posts" : "My Goals"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -259,7 +262,7 @@ const Goals = ({ navigation, route }) => {
                           style={{
                             color: "white",
                             fontWeight: "500",
-                            marginBottom: 5,
+                            marginBottom: 20,
                           }}
                         >
                           {item.description}
@@ -393,7 +396,16 @@ const Goals = ({ navigation, route }) => {
               />
             </View>
             <View style={styles.goalContainer}>
-              <Text style={styles.currentgoals}>Upcoming Goals:</Text>
+              <Text
+                style={{
+                  color: "#3e4d6e",
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  alignSelf: "center",
+                }}
+              >
+                Upcoming Goals
+              </Text>
               <FlatList
                 data={futureGoals}
                 renderItem={({ item }) => (
@@ -500,9 +512,10 @@ const styles = StyleSheet.create({
   },
   duedate: {
     color: "white",
-    marginLeft: 130,
-    marginRight: 5,
-    marginBottom: 2,
+    // marginLeft: 130,
+    // marginRight: 5,
+    fontSize: 12,
+    marginBottom: 8,
   },
   currentgoals: {
     fontWeight: "bold",
@@ -527,13 +540,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: "#fc03ba",
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 5,
+    marginTop: 15,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
   },
   body: {
-    marginTop: 200,
+    marginTop: 170,
     alignItems: "center",
     // fontWeight: 'bold'
     // justifyContent: 'center',
@@ -553,6 +567,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // margin: 20,
     marginTop: 20,
+    marginBottom: 20,
   },
   centeredView: {
     flex: 1,

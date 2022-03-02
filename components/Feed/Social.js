@@ -420,7 +420,7 @@ const Social = (props) => {
                     {item.owner}
                   </Text>
                   <Text style={styles.text}>{item.message}</Text>
-                  <Text style={styles.text}>
+                  <Text style={{fontSize: 8, color: 'white', marginTop: 5, alignSelf: 'flex-end'}}>
                     {formatDatetime(item.datetime)}
                   </Text>
                 </Card>
@@ -462,12 +462,14 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 15,
     fontWeight: "bold",
-    margin: 10,
+    // margin: 10,
   },
   postUsername: {
     color: "black",
     marginBottom: 15,
     fontWeight: "bold",
+    fontSize: 16,
+    marginLeft: 20,
     margin: 10,
   },
   progress: {
@@ -590,11 +592,11 @@ const styles = StyleSheet.create({
   },
 
   redText: {
-    color: "red",
-  },
-  blueText: {
-    color: "blue",
-    fontWeight: "bold",
+  //   color: "red",
+  // },
+  // blueText: {
+  //   color: "blue",
+  //   fontWeight: "bold",
   },
   boxed: {
     // borderWidth: 1,
