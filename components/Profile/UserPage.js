@@ -37,7 +37,6 @@ const Goals = ({ navigation, route }) => {
   const [imagemodalVisible, setImageModaVisible] = useState("");
   const [profPic, SetProfPic] = useState("");
 
-
   // const user = auth.currentUser;
   const user = { displayName: "jeff", photoURL: null };
 
@@ -153,7 +152,6 @@ const Goals = ({ navigation, route }) => {
 
         <Pressable onPress={() => setImageModaVisible(true)}>
           <Image source={userDetails.avatar_url} style={styles.profPic} />
-
         </Pressable>
 
         <View style={styles.body}>
