@@ -25,8 +25,9 @@ import { auth } from "../../firebase";
 import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useNavigation } from "@react-navigation/native";
 
-const Goals = ({ navigation, route }) => {
+const Goals = ({ route }) => {
   const [goals, setGoals] = useState([]);
   const [oldGoals, setOldGoals] = useState();
   const [futureGoals, setFutureGoals] = useState();
@@ -36,13 +37,21 @@ const Goals = ({ navigation, route }) => {
   const [subgoals, setSubgoals] = useState({});
   const [imagemodalVisible, setImageModaVisible] = useState("");
   const [profPic, SetProfPic] = useState("");
-
+  const navigation = useNavigation();
   // const user = auth.currentUser;
   let user = { displayName: "jeff", photoURL: null };
 
   if (route.params) {
     user = { displayName: route.params.user };
   }
+
+  useEffect(() => {
+    const onBlur = navigation.addListener("blur", () => {
+      navigation.setParams({ user: "jeff" });
+    });
+
+    return onBlur;
+  }, [navigation]);
 
   const default_url =
     "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d";
