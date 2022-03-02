@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import SetGoalGuide from "./SetGoalGuide";
-import { Formik } from "formik";
+import { Formik, ErrorMessage } from "formik";
 import * as yup from "yup";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { HideableView } from "../../shared/HideableView";
@@ -94,10 +94,18 @@ const SetGoalIntro = ({ navigation, route }) => {
               unit: "",
               start_date: route.params
                 ? route.params.goalProperties.start_date
-                : "",
+                : new Date(
+                    new Date(Date.now()).getFullYear(),
+                    new Date(Date.now()).getMonth(),
+                    new Date(Date.now()).getDate()
+                  ),
               end_date: route.params
                 ? route.params.goalProperties.end_date
-                : "",
+                : new Date(
+                    new Date(Date.now()).getFullYear(),
+                    new Date(Date.now()).getMonth() + 1,
+                    new Date(Date.now()).getDate()
+                  ),
               subgoalPeriod: "",
             }}
             onSubmit={(values) => {
@@ -119,6 +127,7 @@ const SetGoalIntro = ({ navigation, route }) => {
               });
             }}
             validationSchema={GoalSchema}
+            validateOnChange={true}
           >
             {(props) => (
               <View>
@@ -130,7 +139,13 @@ const SetGoalIntro = ({ navigation, route }) => {
                     placeholder="Objective"
                     onChangeText={props.handleChange("objective")}
                     value={props.values.objective}
+                    name="objective"
                   />
+                  <ErrorMessage name="objective">
+                    {() => {
+                      return <Text>Objective is required</Text>;
+                    }}
+                  </ErrorMessage>
                   <Text>Enter a description</Text>
                   <TextInput
                     style={styles.input}
@@ -142,9 +157,27 @@ const SetGoalIntro = ({ navigation, route }) => {
                   <Text>
                     When do you plan on starting working towards you goal?
                   </Text>
-                  <DatePicker name="start_date" type={"Start"} />
+                  <DatePicker
+                    name="start_date"
+                    type={"Start"}
+                    value={props.values.end_date}
+                  />
+                  <Text>
+                    {` ${new Date(props.values.start_date).getFullYear()}-${
+                      new Date(props.values.start_date).getMonth() + 1
+                    }-${new Date(props.values.start_date).getDate()}`}
+                  </Text>
                   <Text>When do you aim to complete your goal by?</Text>
-                  <DatePicker name="end_date" type={"End"} />
+                  <DatePicker
+                    name="end_date"
+                    type={"End"}
+                    value={props.values.start_date}
+                  />
+                  <Text>
+                    {` ${new Date(props.values.end_date).getFullYear()}-${
+                      new Date(props.values.end_date).getMonth() + 1
+                    }-${new Date(props.values.end_date).getDate()}`}
+                  </Text>
                   <Text>
                     If your final goal has a numeric target value attached to
                     it, that you plan to contribute to gradually (e.g. saving
@@ -175,7 +208,13 @@ const SetGoalIntro = ({ navigation, route }) => {
                       onChangeText={props.handleChange("target_value")}
                       value={props.values.target_value}
                       keyboardType="numeric"
+                      name="target_value"
                     />
+                    <ErrorMessage name="target_value">
+                      {() => {
+                        return <Text>Target value must be a number</Text>;
+                      }}
+                    </ErrorMessage>
                     <Text>What units are the above values measured in?</Text>
                     <TextInput
                       style={styles.input}
@@ -196,13 +235,16 @@ const SetGoalIntro = ({ navigation, route }) => {
                       onChangeText={props.handleChange("subgoalPeriod")}
                       value={props.values.subgoalPeriod}
                       keyboardType="numeric"
+                      name="subgoalPeriod"
                     />
+                    <ErrorMessage name="subgoalPeriod">
+                      {() => {
+                        return <Text>Subgoal period must be a number</Text>;
+                      }}
+                    </ErrorMessage>
                     <Text>days</Text>
                   </HideableView>
                 </View>
-                <Text style={styles.errorText}>
-                  {props.touched.title && props.errors.title}
-                </Text>
                 <Button
                   title="Add SubGoals"
                   color="maroon"
