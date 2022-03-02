@@ -64,16 +64,16 @@ const Goals = ({ route }) => {
     setFutureGoals([]);
     setOldGoals([]);
     setShowGoals(false);
-    if (user.photoURL !== null) {
-      getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
-        (url) => {
-          console.log(url);
-          SetProfPic(url);
-        }
-      );
-    } else {
-      SetProfPic(default_url);
-    }
+    // if (user.photoURL !== null) {
+    //   getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
+    //     (url) => {
+    //       console.log(url);
+    //       SetProfPic(url);
+    //     }
+    //   );
+    // } else {
+    //   SetProfPic(default_url);
+    // }
     getGoalsByUser(user.displayName).then((goals) => {
       console.log("USERS GOALS", goals);
       goals.forEach((goal) => {
@@ -111,6 +111,7 @@ const Goals = ({ route }) => {
     });
     getUser(user.displayName).then((userDetails) => {
       setUserDetails(userDetails[0]);
+      SetProfPic(userDetails[0].avatar_url);
     });
   }, []);
 
@@ -166,7 +167,15 @@ const Goals = ({ route }) => {
         </Modal>
 
         <Pressable onPress={() => setImageModaVisible(true)}>
-          <Image source={profPic} style={styles.profPic} />
+          <Image
+            source={{
+              uri: profPic,
+              headers: {
+                Accept: "*/*",
+              },
+            }}
+            style={styles.profPic}
+          />
         </Pressable>
 
         <View style={styles.body}>
@@ -384,10 +393,10 @@ const Goals = ({ route }) => {
         </View>
       ) : (
         <View>
-          {/* <FlatList
+          <FlatList
             data={userPosts}
             renderItem={({ item }) => <Social postDetails={item} />}
-          /> */}
+          />
         </View>
       )}
     </ScrollView>
