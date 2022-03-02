@@ -95,7 +95,7 @@ style={{ width: 98 }}
   return (
     <GoalStack.Navigator screenOptions={{
       headerStyle: {
-        backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
+        backgroundColor: '#5B72A4', paddingHorizontal: 80  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center", flexGrow: 1,},
         }}>
       <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro}/>
       {/* <GoalStack.Screen name="" component={} /> */}
@@ -114,8 +114,6 @@ style={{ width: 98 }}
      </SearchStack.Navigator>
    )
  }
-
-
 
 
   return (
