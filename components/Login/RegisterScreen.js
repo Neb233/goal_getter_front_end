@@ -7,6 +7,7 @@ import {
   TextInput,
   Button,
   Image,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { auth } from "../../firebase";
