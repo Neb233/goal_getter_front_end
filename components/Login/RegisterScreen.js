@@ -72,18 +72,18 @@ const RegisterScreen = () => {
 
   const validateEmail = (valemail) => {
     const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    return re.test(valemail) 
-    };
+    return re.test(valemail);
+  };
 
-    const validatePassword = (valpass) => {
-      const re  = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,10}$/
-      return re.test(valpass)
-    }
+  const validatePassword = (valpass) => {
+    const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,10}$/;
+    return re.test(valpass);
+  };
 
-    const validateUsername = (valUse) => {
-      const re = /(?!.*[\.\-\_]{2,})^[a-zA-Z0-9\.\-\_]{3,24}$/
-      return re.test(valUse)
-    }
+  const validateUsername = (valUse) => {
+    const re = /(?!.*[\.\-\_]{2,})^[a-zA-Z0-9\.\-\_]{3,24}$/;
+    return re.test(valUse);
+  };
 
   const valSchema = Yup.object({
     username: Yup.string()
@@ -103,7 +103,6 @@ const RegisterScreen = () => {
 
   return (
     <View style={styles.container}>
-      
       <KeyboardAvoidingView behaviour="padding">
         <View style={styles.header}>
           <Text style={styles.title_text}>Register Your Account</Text>
@@ -120,8 +119,9 @@ const RegisterScreen = () => {
               style={styles.textInput}
             />
 
-{  !validateEmail(email)  ? null : <Text style={styles.success}>Valid Email</Text>}
-           
+            {!validateEmail(email) ? null : (
+              <Text style={styles.success}>Valid Email</Text>
+            )}
           </View>
 
           <View style={styles.action}>
@@ -133,7 +133,9 @@ const RegisterScreen = () => {
               onChangeText={(text) => SetUsername(text)}
               style={styles.textInput}
             />
-          {!validateUsername(username) ? null : <Text style={styles.success}>Valid Username</Text>}
+            {!validateUsername(username) ? null : (
+              <Text style={styles.success}>Valid Username</Text>
+            )}
           </View>
 
           <View style={styles.action}>
@@ -158,16 +160,18 @@ const RegisterScreen = () => {
               secureTextEntry
             ></TextInput>
 
-{ !validatePassword(password) ? null : <Text style={styles.success}>Valid Password</Text>}
+            {!validatePassword(password) ? null : (
+              <Text style={styles.success}>Valid Password</Text>
+            )}
           </View>
 
-          <Text>
+          <Text style={{ color: "#555" }}>
             {`
-        Password should have:    One Capital letter
-                                 One Number 
-                                At least 4 characters Login
-                                 Maximum 10 characters
-                `}
+        Your password should have:    
+        - At least one capital letter
+        - At least one number 
+        - At least 4 characters
+        - At most 10 characters`}
           </Text>
           {/* <Text>{touched.password && errors.password}</Text> */}
 
@@ -178,7 +182,6 @@ const RegisterScreen = () => {
           </View>
         </Animatable.View>
       </KeyboardAvoidingView>
-     
     </View>
   );
 };
@@ -261,6 +264,6 @@ const styles = StyleSheet.create({
   },
   success: {
     fontSize: 15,
-    color: 'green'
-  }
+    color: "green",
+  },
 });

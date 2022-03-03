@@ -18,11 +18,9 @@ import { auth } from "../../firebase";
 import { getFriends, getPostsByUser } from "../../utils/api";
 
 const Feed = ({ navigation }) => {
-  const currentUser = "jeff";
+  const currentUser = auth.currentUser.displayName;
 
   const [friendPosts, setFriendPosts] = useState([]);
-
-  
 
   useFocusEffect(
     React.useCallback(() => {
@@ -53,7 +51,7 @@ const Feed = ({ navigation }) => {
     return (
       <View>
         <Subgoals setFriendPosts={setFriendPosts} />
-        <View >
+        <View>
           {/* style={styles.personalWrapper} */}
           {/* <Text style={styles.sectionTitle}>Goal Status:</Text>
     <View style={styles.status}><GoalStatus /></View> */}
@@ -78,7 +76,11 @@ const Feed = ({ navigation }) => {
       ListHeaderComponent={<HeaderComponent />}
       data={friendPosts}
       renderItem={({ item }) => (
-        <Social friendPosts={friendPosts} postDetails={item} />
+        <Social
+          friendPosts={friendPosts}
+          postDetails={item}
+          currentUser={currentUser}
+        />
       )}
     />
   );
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     marginBottom: 10,
     marginLeft: 10,
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   status: {
     height: 100,
@@ -147,5 +149,5 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
-  buttonText: {color: 'white', fontWeight: 'bold'}
+  buttonText: { color: "white", fontWeight: "bold" },
 });

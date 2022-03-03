@@ -28,8 +28,7 @@ import {
 import ProgressBar from "../../shared/ProgressBar";
 import { matchRoutes } from "react-router-dom";
 import { Avatar } from "react-native-paper";
-
-const currentUser = "jeff";
+import { auth } from "../../firebase";
 
 let friendPosts = [];
 
@@ -77,6 +76,8 @@ const Social = (props) => {
   const [avatarUrl, setAvatarUrl] = useState(
     "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d"
   );
+
+  let { currentUser } = props;
 
   if (props.friendPosts) {
     friendPosts = props.friendPosts;
@@ -282,6 +283,7 @@ const Social = (props) => {
                 }
                 target_value={associatedGoal.target_value}
                 subgoals={subgoals}
+                color="#5b72a4"
               />
             ) : null}
           </View>
@@ -370,7 +372,9 @@ const Social = (props) => {
               }}
             >
               <Menu onSelect={handlePostReaction}>
-                <MenuTrigger style={styles.react} text="React" />
+                <MenuTrigger style={styles.react}>
+                  <Text style={{ color: "white" }}>React</Text>
+                </MenuTrigger>
                 <MenuOptions>
                   <MenuOption value="awesome" text="Awesome!" />
                   <MenuOption value="congrats" text="Congrats!" />
@@ -420,7 +424,14 @@ const Social = (props) => {
                     {item.owner}
                   </Text>
                   <Text style={styles.text}>{item.message}</Text>
-                  <Text style={{fontSize: 8, color: 'white', marginTop: 5, alignSelf: 'flex-end'}}>
+                  <Text
+                    style={{
+                      fontSize: 8,
+                      color: "white",
+                      marginTop: 5,
+                      alignSelf: "flex-end",
+                    }}
+                  >
                     {formatDatetime(item.datetime)}
                   </Text>
                 </Card>
@@ -539,9 +550,9 @@ const styles = StyleSheet.create({
   react: {
     backgroundColor: "#468705",
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: 10,
     color: "white",
-    padding: 2,
+    padding: 5,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -550,8 +561,8 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     borderRadius: 8,
     marginTop: 40,
-    marginLeft: 10,
     marginBottom: 30,
+    padding: 5,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -592,11 +603,11 @@ const styles = StyleSheet.create({
   },
 
   redText: {
-  //   color: "red",
-  // },
-  // blueText: {
-  //   color: "blue",
-  //   fontWeight: "bold",
+    //   color: "red",
+    // },
+    // blueText: {
+    //   color: "blue",
+    //   fontWeight: "bold",
   },
   boxed: {
     // borderWidth: 1,

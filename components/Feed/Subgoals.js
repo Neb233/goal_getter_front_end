@@ -25,11 +25,14 @@ import PostStatus from "./PostStatus";
 import { useNavigation } from "@react-navigation/native";
 import ProgressBar from "../../shared/ProgressBar";
 import dateFormat from "dateformat";
+import { auth } from "../../firebase";
 
 const Subgoals = ({ setFriendPosts }) => {
   const navigation = useNavigation();
   const [goals, setGoals] = useState([]);
-  const [loggedInUser, setLoggedInUser] = useState("jeff");
+  const [loggedInUser, setLoggedInUser] = useState(
+    auth.currentUser.displayName
+  );
   const { owner } = useParams();
   const [isChecked, setIsChecked] = useState(false);
   const [congratsModalVisible, setCongratsModalVisible] = useState(false);
@@ -172,24 +175,24 @@ const Subgoals = ({ setFriendPosts }) => {
                   ) : (
                     // <View style={[styles.progress, styles.checkBox]}>
                     <View>
-                    <View style={{ flexDirection: "column" }}>
-                      {/* <Text>Complete?</Text> */}
-                      <BouncyCheckbox
-                        text={goal.objective}
-                        size={30}
-                        fillColor="#19e63b"
-                        unfillColor="#FFFFFF"
-                        iconStyle={{ borderColor: "blue" }}
-                        textStyle={{
-                          color: "white",
-                          fontSize: 18,
-                          fontWeight: "bold",
-                        }}
-                        style={{marginBottom: 30, flexDirection: 'row'}}
-                        // style={styles.checkBox}
-                        onPress={() => handleCheckBoxClick(goal)}
-                      />
-                        </View>
+                      <View style={{ flexDirection: "column" }}>
+                        {/* <Text>Complete?</Text> */}
+                        <BouncyCheckbox
+                          text={goal.objective}
+                          size={30}
+                          fillColor="#19e63b"
+                          unfillColor="#FFFFFF"
+                          iconStyle={{ borderColor: "blue" }}
+                          textStyle={{
+                            color: "white",
+                            fontSize: 18,
+                            fontWeight: "bold",
+                          }}
+                          style={{ marginBottom: 30, flexDirection: "row" }}
+                          // style={styles.checkBox}
+                          onPress={() => handleCheckBoxClick(goal)}
+                        />
+                      </View>
                       <PostStatus
                         goal={goal}
                         subgoal={goal.subgoal_id}

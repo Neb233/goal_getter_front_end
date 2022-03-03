@@ -23,7 +23,7 @@ import { auth } from "../../firebase";
 
 // const SearchUsers = ({ navigation, route }) => {
 const SearchUsers = () => {
-  const user = {};
+  const currentUser = auth.currentUser;
   // if (route.params) {
   //   user.displayName = route.params.user;
   // } else {
@@ -45,13 +45,13 @@ const SearchUsers = () => {
   useEffect(() => {
     searchUsers(queryState.query).then((results) => {
       const filteredResults = results.filter((user) => {
-        return user.username !== user.displayName;
+        return user.username !== currentUser.displayName;
       });
       console.log(results);
       setResultState(filteredResults);
     });
 
-    getFriends(user.displayName).then((friends) => {
+    getFriends(currentUser.displayName).then((friends) => {
       setFriends(friends);
     });
   }, []);
@@ -91,7 +91,7 @@ const SearchUsers = () => {
   useEffect(() => {
     return searchUsers(queryState.query).then((results) => {
       const filteredResults = results.filter((user) => {
-        return user.username !== user.displayName;
+        return user.username !== currentUser.displayName;
       });
       setResultState(filteredResults);
     });
@@ -101,7 +101,7 @@ const SearchUsers = () => {
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return addFriend("loggedInUser", "usertoadd").catch((err) => {
           */
-    return addFriend(user.displayName, userToAdd)
+    return addFriend(currentUser.displayName, userToAdd)
       .then(() => {
         const ind = resultState.findIndex(
           (user) => user.username === userToAdd
@@ -120,7 +120,7 @@ const SearchUsers = () => {
         ]);
       })
       .catch((err) => {
-        return getFriends(user.displayName).then((friends) => {
+        return getFriends(currentUser.displayName).then((friends) => {
           if (friends.indexOf(userToAdd !== -1)) {
             return Alert.alert("Error", "Already friends", [
               { text: "OK", onPress: () => console.log("OK Pressed") },
@@ -138,7 +138,7 @@ const SearchUsers = () => {
     /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
     return RemoveFriend("loggedInUser", "usertoRemove").catch((err) => {
           */
-    return deleteFriendship(user.displayName, userToRemove)
+    return deleteFriendship(currentUser.displayName, userToRemove)
       .then(() => {
         console.log("friend removed");
 
@@ -231,7 +231,7 @@ const SearchUsers = () => {
               );
             } else {
               return (
-                <>
+                <View style={styles.viewStyle}>
                   <List.Item
                     style={styles.listItem}
                     key={item.username}
@@ -275,7 +275,7 @@ const SearchUsers = () => {
                   >
                     Remove Friend
                   </Button>
-                </>
+                </View>
               );
             }
           })
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fdf9e6",
     justifyContent: "center",
   },
-  viewStyle: { padding: 30 },
+  viewStyle: { padding: 25 },
   listItem: { backgroundColor: "#fdf9e6", alignSelf: "center" },
   button: { width: "50%", alignSelf: "center" },
 });

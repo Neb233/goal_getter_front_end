@@ -159,18 +159,27 @@ const Goals = ({ navigation, route }) => {
               }}
             >
               <View style={styles.centeredView}>
-                <View style={styles.modalView}>
+                <View
+                  style={[
+                    styles.modalView,
+                    { borderColor: "#CCCCCC", borderWidth: 1 },
+                  ]}
+                >
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={pickImage}
                   >
-                    <Text style={styles.textStyle}>Update Profile Picture</Text>
+                    <Text style={[styles.textStyle, { color: "white" }]}>
+                      Update Profile Picture
+                    </Text>
                   </Pressable>
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => setImageModaVisible(!imagemodalVisible)}
                   >
-                    <Text style={styles.textStyle}>Cancel</Text>
+                    <Text style={[styles.textStyle, { color: "white" }]}>
+                      Cancel
+                    </Text>
                   </Pressable>
                 </View>
               </View>
@@ -189,7 +198,12 @@ const Goals = ({ navigation, route }) => {
             </Pressable>
             <Pressable onPress={handleSignOut}>
               <Text
-                style={{ color: "red", alignSelf: "center", marginTop: 10 }}
+                style={{
+                  color: "crimson",
+                  alignSelf: "flex-end",
+                  marginTop: 10,
+                  marginRight: 10,
+                }}
               >
                 Sign Out
               </Text>
@@ -226,7 +240,7 @@ const Goals = ({ navigation, route }) => {
             }}
           >
             <Text style={{ color: "white" }}>
-              {showGoals ? "My Posts" : "My Goals"}
+              {showGoals ? "See Posts" : "See Goals"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -308,6 +322,7 @@ const Goals = ({ navigation, route }) => {
                             progress={item.progress}
                             target_value={item.target_value}
                             subgoals={subgoals[item.goal_id]}
+                            color="#fdf9e6"
                           />
                         ) : null}
                       </View>
@@ -387,6 +402,7 @@ const Goals = ({ navigation, route }) => {
                             progress={item.progress}
                             target_value={item.target_value}
                             subgoals={subgoals[item.goal_id]}
+                            color="#fdf9e6"
                           />
                         ) : null}
                       </View>
@@ -460,6 +476,7 @@ const Goals = ({ navigation, route }) => {
                             progress={item.progress}
                             target_value={item.target_value}
                             subgoals={subgoals[item.goal_id]}
+                            color="#fdf9e6"
                           />
                         ) : null}
                       </View>
@@ -538,13 +555,18 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 22,
-    color: "#fc03ba",
+    color: "#5B72A4",
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: 10,
     marginTop: 15,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
+    padding: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
+    backgroundColor: "white",
+    borderRadius: 5,
   },
   body: {
     marginTop: 170,

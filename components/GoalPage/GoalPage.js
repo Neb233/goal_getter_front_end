@@ -24,11 +24,12 @@ import PatchSubGoal from "../Feed/PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import PostStatus from "../Feed/PostStatus";
 import { useFocusEffect } from "@react-navigation/native";
+import { auth } from "../../firebase";
 
 const GoalPage = ({ navigation, route }) => {
   const [goal, setGoal] = useState();
   const [subgoals, setSubgoals] = useState([]);
-  const currentUser = "jeff";
+  const currentUser = auth.currentUser.displayName;
   const { goal_id } = route.params;
 
   const [isChecked, setIsChecked] = useState(false);
@@ -161,6 +162,7 @@ const GoalPage = ({ navigation, route }) => {
                   progress={goal.progress}
                   target_value={goal.target_value}
                   subgoals={subgoals}
+                  color="#fdf9e6"
                 />
               </View>
             ) : null}
@@ -206,6 +208,7 @@ const GoalPage = ({ navigation, route }) => {
                   <ProgressBar
                     progress={item.progress}
                     target_value={item.target_value}
+                    color="#fdf9e6"
                   />
                   {currentUser === item.owner &&
                   Date.now() > new Date(item.start_date).getTime() &&
@@ -215,7 +218,7 @@ const GoalPage = ({ navigation, route }) => {
                         new Date(item.end_date).getDate() + 1
                       )
                     ).getTime() ? (
-                    <View style={{marginTop: 15}}>
+                    <View style={{ marginTop: 15 }}>
                       {/* <Text style={styles.unit}>Made progress?</Text> */}
                       <PatchSubGoal
                         goal={item}

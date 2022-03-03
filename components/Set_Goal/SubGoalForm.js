@@ -15,12 +15,14 @@ import * as yup from "yup";
 import DatePicker from "../../shared/DatePicker";
 import { prodErrorMap } from "firebase/auth";
 import { HideableView } from "../../shared/HideableView";
-import dateFormat from "dateformat"
+import dateFormat from "dateformat";
 
-
-
-const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEndDate }) => {
-
+const SubGoalForm = ({
+  addSubGoal,
+  setShowSubGoalDetails,
+  goalStartDate,
+  goalEndDate,
+}) => {
   const [hideProgressOptions, setHideProgressOptions] = useState(true);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
@@ -30,8 +32,21 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEnd
 
   const ReviewSchema = yup.object({
     objective: yup.string().required("Objective is a required field"),
-    start_date: yup.date().min(goalStartDate, "Subgoal start date can't be earlier than goal start date").max(goalEndDate, "Subgoal start date can't be later than goal end date"),
-    end_date: yup.date().max(goalEndDate, "Subgoal end date can't be later than goal end date").min(goalStartDate, "Subgoal end date can't be earlier than goal start date").required("Please select an end date for this subgoal"),
+    start_date: yup
+      .date()
+      .min(
+        goalStartDate,
+        "Subgoal start date can't be earlier than goal start date"
+      )
+      .max(goalEndDate, "Subgoal start date can't be later than goal end date"),
+    end_date: yup
+      .date()
+      .max(goalEndDate, "Subgoal end date can't be later than goal end date")
+      .min(
+        goalStartDate,
+        "Subgoal end date can't be earlier than goal start date"
+      )
+      .required("Please select an end date for this subgoal"),
     target_value: yup.number(),
     unit: yup.string(),
   });
@@ -55,11 +70,11 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEnd
         {(props) => (
           <ScrollView>
             <View style={styles.container}>
-
-              <Text>Objective</Text>
+              <Text style={styles.header}>Set Subgoal</Text>
+              <Text style={styles.text_footer}>Objective</Text>
 
               <TextInput
-                style={styles.objectiveinput}
+                style={styles.textInput}
                 multiline
                 placeholder="Objective"
                 onChangeText={props.handleChange("objective")}
@@ -81,21 +96,22 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEnd
                 type={"End"}
                 style={styles.datepicker}
               />
-              
-              <Text style={styles.leftlabel}>{dateFormat(props.values.end_date, "dd/mm/yyyy")}</Text>
+
+              <Text style={styles.text_footer}>
+                {dateFormat(props.values.end_date, "dd/mm/yyyy")}
+              </Text>
             </View>
             <Text style={styles.errorText}>
               {props.touched.end_date && props.errors.end_date}
             </Text>
-            <View style={styles.switchcontainer}>
-              <Text style={styles.header}>
+            <View style={styles.goalContainer}>
+              <Text style={styles.text_footer_small}>
                 If this subgoal has a numerical target value associated with it,
                 let us know and we'll help you track your progress.
               </Text>
               <Switch
                 trackColor={{ false: "#767577", true: "#81b0ff" }}
-                thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                ios_backgroundColor="#3e3e3e"
+                thumbColor={isEnabled ? "#3e4d6e" : "#f4f3f4"}
                 onValueChange={toggleSwitch}
                 value={isEnabled}
                 style={styles.switch}
@@ -112,34 +128,32 @@ const SubGoalForm = ({ addSubGoal, setShowSubGoalDetails, goalStartDate, goalEnd
                   type={"Start"}
                   style={styles.datepicker}
                 />
-                <Text style={styles.leftlabel}>{dateFormat(props.values.start_date, "dd/mm/yyyy")}</Text>
+                <Text style={styles.text_footer}>
+                  {dateFormat(props.values.start_date, "dd/mm/yyyy")}
+                </Text>
               </View>
 
               <Text style={styles.errorText}>
                 {props.touched.start_date && props.errors.start_date}
               </Text>
-              <View style={styles.switchcontainer}>
-                <Text style={styles.leftlabel}>Target Value</Text>
-                <TextInput
-                  style={styles.valueinput}
-                  multiline
-                  placeholder="Target Value"
-                  type="number"
-                  onChangeText={props.handleChange("target_value")}
-                  value={props.values.target_value}
-                  keyboardType="numeric"
-                />
-              </View>
-              <View style={styles.switchcontainer}>
-                <Text style={styles.leftlabel}>Units</Text>
-                <TextInput
-                  style={styles.valueinput}
-                  multiline
-                  placeholder="Units"
-                  onChangeText={props.handleChange("unit")}
-                  value={props.values.unit}
-                />
-              </View>
+              <Text style={styles.text_footer}>Target Value</Text>
+              <TextInput
+                style={styles.textInput}
+                multiline
+                placeholder="Target Value"
+                type="number"
+                onChangeText={props.handleChange("target_value")}
+                value={props.values.target_value}
+                keyboardType="numeric"
+              />
+              <Text style={styles.text_footer}>Units</Text>
+              <TextInput
+                style={styles.textInput}
+                multiline
+                placeholder="Units"
+                onChangeText={props.handleChange("unit")}
+                value={props.values.unit}
+              />
             </HideableView>
 
             <TouchableOpacity
@@ -188,8 +202,7 @@ const styles = StyleSheet.create({
     padding: 3,
     backgroundColor: "white",
     borderWidth: 1,
-    borderCOlor: "black"
-
+    borderColor: "black",
   },
   switchcontainer: {
     // flex: 1,
@@ -198,8 +211,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     justifyContent: "space-between",
     backgroundColor: "white",
-    padding: 5
-
+    padding: 5,
   },
   switch: {
     marginLeft: 180,
@@ -239,13 +251,69 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "white",
     borderWidth: 1,
-    borderCOlor: "black",
+    borderColor: "black",
     padding: 5,
-    borderRadius: 3
+    borderRadius: 3,
   },
   leftlabel: {
     // fontWeight: "bold",
     textAlignVertical: "center",
+  },
+  text_footer: {
+    color: "#05375a",
+    fontSize: 17,
+  },
+  text_footer_small: {
+    color: "#05375a",
+    fontSize: 15,
+    marginBottom: 15,
+  },
+  textInput: {
+    padding: 5,
+    color: "black",
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: "white",
+    marginBottom: 15,
+    marginTop: 5,
+  },
+  header: {
+    color: "#3e4d6e",
+    fontSize: 25,
+    fontWeight: "bold",
+    paddingTop: 20,
+    marginBottom: 10,
+    marginLeft: 10,
+    alignSelf: "center",
+    marginTop: 0,
+  },
+  goalContainer: {
+    padding: 15,
+    backgroundColor: "white",
+    borderRadius: 10,
+    margin: 10,
+    marginTop: 5,
+    paddingBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 3.84,
+    marginBottom: 20,
+    elevation: 5,
+    alignItems: "flex-end",
+  },
+  switchcontainer: {
+    marginTop: 0,
+    marginBottom: 20,
+    justifyContent: "center",
+    backgroundColor: "white",
+    padding: 5,
+    textAlign: "center",
+    borderRadius: 5,
+    paddingBottom: 10,
   },
 });
 

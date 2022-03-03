@@ -64,28 +64,31 @@ const SubGoalDetails = ({
       <View style={styles.fieldcontainer}>
         <Text style={styles.title}>End date</Text>
         <Text style={styles.value}>
-          {dateFormat(item.end_date, "dd/mm/yyyy")}
+          {dateFormat(item.end_date, "dddd dS mmmm yyyy")}
         </Text>
       </View>
       <View>
         {item.target_value != null && item.unit != null ? (
           <View style={styles.fieldcontainer}>
-            <Text>Target</Text>
+            <Text style={styles.title}>Target</Text>
             <Text style={styles.value}>
               {item.target_value} {item.unit}
             </Text>
           </View>
         ) : null}
       </View>
-      <View>
-        <TouchableOpacity
-         style={styles.deleteSubGoal}
-          onPress={() => {
-            deleteSubGoal(item.objective);
-          }}
-        ><Text style={styles.deleteSubGoalText}>Delete Subgoal</Text></TouchableOpacity>
-
-      </View>
+      {item.core ? null : (
+        <View>
+          <TouchableOpacity
+            style={styles.deleteSubGoal}
+            onPress={() => {
+              deleteSubGoal(item.objective);
+            }}
+          >
+            <Text style={styles.deleteSubGoalText}>Delete Subgoal</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
     // </KeyboardAvoidingView>
   );
@@ -103,14 +106,15 @@ const styles = StyleSheet.create({
     marginRight: 5,
     backgroundColor: "white",
     borderRadius: 5,
-   
+
     padding: 5,
   },
   value: {
-    marginLeft: 100,
+    width: "60%",
   },
   title: {
     fontWeight: "bold",
+    width: "40%",
   },
   deleteSubGoal: {
     margin: 10,
@@ -134,6 +138,6 @@ const styles = StyleSheet.create({
   },
   deleteSubGoalText: {
     color: "white",
-    fontWeight: "bold"
-  }
+    fontWeight: "bold",
+  },
 });
