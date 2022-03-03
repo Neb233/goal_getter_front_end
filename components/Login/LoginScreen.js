@@ -111,7 +111,7 @@ const LoginScreen = () => {
           </View>
 
           <View style={styles.action}>
-            <Text style={styles.action}>Password</Text>
+            <Text style={styles.text_footer}>Password</Text>
             <TextInput
               id="password"
               name="password"
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#3e4d6e",
     alignItems: "flex-start",
-    marginTop: 40,
+    marginTop: 30,
     padding: 15,
     borderRadius: 10,
     marginBottom: 60,
@@ -224,5 +224,6 @@ const styles = StyleSheet.create({
   },
   register_text: {
     marginTop: 20,
+    marginBottom: -10,
   },
 });
