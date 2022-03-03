@@ -73,39 +73,36 @@ const App = () => {
         <FeedStack.Screen
           name="Feed"
           component={Feed}
-          options={
-            {
-              // title:
-              //   <View
-              //     style={{
-              //       display: "flex",
-              //       flexDirection: "row",
-              //       alignItems: "center",
-              //       justifyContent: "space-between",
-              //       width: "100vw",
-              //       textAlign: "right",
-              //     }}
-              //   >
-              //     <Image
-              //       style={{
-              //         width: 60,
-              //         height: 60,
-              //       }}
-              //       source={require("./components/GoalGetterLogo.png")}
-              //     />
-              //     <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-              //       GoalGetter
-              //     </Text>
-              //     <Text
-              //       style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-              //     >
-              //       Home
-              //     </Text>
-              //   </View>
-              //     {},
-              //   headerLeft: () => null,
-            }
-          }
+          // options={{
+          //   title: <View></View>"GoalGetter",
+          // <View
+          //   style={{
+          //     display: "flex",
+          //     flexDirection: "row",
+          //     alignItems: "center",
+          //     justifyContent: "space-between",
+          //     width: "100vw",
+          //     textAlign: "right",
+          //   }}
+          // >
+          //   <Image
+          //     style={{
+          //       width: 60,
+          //       height: 60,
+          //     }}
+          //     source={require("./components/GoalGetterLogo.png")}
+          //   />
+          //   <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
+          //     GoalGetter
+          //   </Text>
+          //   <Text
+          //     style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
+          //   >
+          //     Home
+          //   </Text>
+          // </View>
+          //   headerLeft: () => null,
+          // }}
         />
         <FeedStack.Screen name="Calendar" component={GoalCalendar} />
         <FeedStack.Screen name="Profile" component={Profile} />

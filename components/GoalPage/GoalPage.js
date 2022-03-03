@@ -249,7 +249,9 @@ const GoalPage = ({ navigation, route }) => {
                     textStyle={styles.duedate}
                     style={styles.checkBox}
                     onPress={() => handleCheckBoxClick(item)}
-                    fillColor={"#015c53"}
+                    fillColor="#7FAF50"
+                    unfillColor="#FFFFFF"
+                    iconStyle={{ borderColor: "#7FAF50" }}
                   />
                   <PostStatus
                     goal={item}
