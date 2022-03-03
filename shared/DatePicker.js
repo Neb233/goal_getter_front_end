@@ -67,7 +67,7 @@ const DatePicker = ({ ...props }) => {
 };
 
 const styles = StyleSheet.create({
-  button: { width: "100%" },
+  button: { width: "80%", backgroundColor: "#3e4d6e", margin: "auto" },
 });
 
 export default DatePicker;

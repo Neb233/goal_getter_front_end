@@ -164,7 +164,7 @@ export const deleteSocialMediaPost = (post_id) => {
   });
 };
 
-export const postGoal = (goalProperties, owner = "jeff") => {
+export const postGoal = (goalProperties, owner) => {
   goalProperties.owner = owner;
   goalProperties.start_date = new Date(goalProperties.start_date);
   goalProperties.end_date = new Date(goalProperties.end_date);
@@ -190,7 +190,7 @@ export const getPostsByUser = (user) => {
   });
 };
 
-export const postSubgoal = (subgoal, goal_id, owner = "jeff") => {
+export const postSubgoal = (subgoal, goal_id, owner) => {
   subgoal.owner = owner;
   if (subgoal.target_value === "") {
     subgoal.target_value = null;
@@ -293,11 +293,9 @@ export const postComment = (post_id, owner, message) => {
     });
 };
 
-
-
 export const patchAvatar = (username, url) => {
-  const patchObject = {username: username, avatar_url: url};
-  return goalgetterApi.patch('/users', patchObject).then(({data}) => {
-    return data
-  })
-}
+  const patchObject = { username: username, avatar_url: url };
+  return goalgetterApi.patch("/users", patchObject).then(({ data }) => {
+    return data;
+  });
+};
