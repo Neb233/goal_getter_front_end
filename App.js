@@ -1,5 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  LogBox,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./components/Login/LoginScreen";
@@ -23,6 +30,8 @@ import GoalPage from "./components/GoalPage/GoalPage";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 import RootStack from "./components/RootStack/RootStack";
+
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -61,7 +70,43 @@ const App = () => {
         }}
         options={{ title: "Test" }}
       >
-        <FeedStack.Screen name="Feed" component={Feed} />
+        <FeedStack.Screen
+          name="Feed"
+          component={Feed}
+          options={
+            {
+              // title:
+              //   <View
+              //     style={{
+              //       display: "flex",
+              //       flexDirection: "row",
+              //       alignItems: "center",
+              //       justifyContent: "space-between",
+              //       width: "100vw",
+              //       textAlign: "right",
+              //     }}
+              //   >
+              //     <Image
+              //       style={{
+              //         width: 60,
+              //         height: 60,
+              //       }}
+              //       source={require("./components/GoalGetterLogo.png")}
+              //     />
+              //     <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
+              //       GoalGetter
+              //     </Text>
+              //     <Text
+              //       style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
+              //     >
+              //       Home
+              //     </Text>
+              //   </View>
+              //     {},
+              //   headerLeft: () => null,
+            }
+          }
+        />
         <FeedStack.Screen name="Calendar" component={GoalCalendar} />
         <FeedStack.Screen name="Profile" component={Profile} />
         <FeedStack.Screen name="GoalPage" component={GoalPage} />
