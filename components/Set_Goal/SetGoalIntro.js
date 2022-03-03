@@ -247,6 +247,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                       placeholder="Units"
                       onChangeText={props.handleChange("unit")}
                       value={props.values.unit}
+                      autoCapitalize="none"
                     />
                     <Text style={styles.text_footer}>
                       We'll break this goal up into subgoals with shorter
@@ -362,6 +363,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginBottom: 15,
     marginTop: 5,
+    paddingLeft: 10,
   },
   header: {
     color: "#3e4d6e",
@@ -396,7 +398,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     marginBottom: 20,
     elevation: 5,
-    alignItems: "flex-end",
   },
   switchcontainer: {
     marginTop: 20,

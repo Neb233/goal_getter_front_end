@@ -66,6 +66,7 @@ const App = () => {
         <FeedStack.Screen name="Profile" component={Profile} />
         <FeedStack.Screen name="GoalPage" component={GoalPage} />
         <FeedStack.Screen name="UserPage" component={Goals} />
+        <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} />
       </FeedStack.Navigator>
     );
   }
