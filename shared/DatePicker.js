@@ -33,7 +33,12 @@ const DatePicker = ({ ...props }) => {
   };
 
   return (
-    <View>
+    <View
+      style={{
+        alignItems: "center",
+        width: "100%",
+      }}
+    >
       <View style={{ margin: 20 }}>
         <Button
           mode="contained"
@@ -51,11 +56,16 @@ const DatePicker = ({ ...props }) => {
           {...props}
           value={date}
           mode="date"
+          style={{
+            color: "white",
+            marginBottom: 20,
+            width: 200,
+            marginLeft: 86,
+          }}
           display="default"
           onChange={(event, selectedDate) => {
             const currentDate = selectedDate || date;
 
-            setShow(Platform.OS === "ios");
             setStartDate(currentDate);
             setDate(currentDate);
             setFieldValue(field.name, currentDate);

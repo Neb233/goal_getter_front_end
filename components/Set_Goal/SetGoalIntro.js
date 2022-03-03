@@ -167,7 +167,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                       color="#5b72a4"
                       name="start_date"
                       type={"Start"}
-                      value={props.values.end_date}
+                      value={props.values.start_date}
                       style={styles.addgoalbutton}
                     />
                     <Text style={styles.text_footer}>
@@ -181,7 +181,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                     <DatePicker
                       name="end_date"
                       type={"End"}
-                      value={props.values.start_date}
+                      value={props.values.end_date}
                       style={styles.addgoalbutton}
                     />
                     <Text style={styles.text_footer}>
