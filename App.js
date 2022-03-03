@@ -134,12 +134,59 @@ const App = () => {
   return (
     <NavigationContainer>
       {profile ? (
-        <Tab.Navigator screenOptions={{ headerShown: false }}>
-          <Tab.Screen name="Home" component={FeedStackScreen} />
-          <Tab.Screen name="Set Goals" component={GoalStackScreen} />
-          <Tab.Screen name="Profile" component={UserStackScreen} />
+        <Tab.Navigator
+          screenOptions={{
+            headerShown: false,
+            tabBarStyle: { backgroundColor: "#5B72A4" },
+            tabBarLabelStyle: { color: "#fdf9e6", fontSize: 13 },
+            tabBarActiveBackgroundColor: "#3e4d6e",
+          }}
+        >
+          <Tab.Screen
+            name="Home"
+            component={FeedStackScreen}
+            options={{
+              tabBarIcon: () => (
+                <MaterialIcons name="dynamic-feed" color="#fdf9e6" size={25} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Set Goals"
+            component={GoalStackScreen}
+            options={{
+              tabBarIcon: () => (
+                <MaterialCommunityIcons
+                  name="trophy"
+                  color="#fdf9e6"
+                  size={25}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={UserStackScreen}
+            options={{
+              tabBarIcon: () => (
+                <MaterialCommunityIcons
+                  name="account"
+                  color="#fdf9e6"
+                  size={25}
+                />
+              ),
+            }}
+          />
 
-          <Tab.Screen name="Search Users" component={SearchStackScreen} />
+          <Tab.Screen
+            name="Search Users"
+            component={SearchStackScreen}
+            options={{
+              tabBarIcon: () => (
+                <MaterialIcons name="search" color="#fdf9e6" size={25} />
+              ),
+            }}
+          />
         </Tab.Navigator>
       ) : (
         <RootStack />

@@ -311,9 +311,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "white",
     padding: 5,
+    paddingBottom: 15,
     textAlign: "center",
     borderRadius: 5,
     paddingBottom: 10,
+    alignItems: "center",
   },
 });
 

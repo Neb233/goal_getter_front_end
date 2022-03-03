@@ -320,7 +320,7 @@ const SetGoal = ({ navigation, route }) => {
                     />
                   </ScrollView>
                 </Modal>
-                <View style={{ width: "90%", margin: "auto" }}>
+                <View style={{ marginLeft: 10, marginRight: 10 }}>
                   <Card>
                     <Text style={styles.text}>{item.objective}</Text>
                   </Card>
@@ -507,7 +507,6 @@ const styles = StyleSheet.create({
     flex: 1,
 
     backgroundColor: "white",
-    height: 300,
     margin: 5,
     padding: 5,
     borderRadius: 10,

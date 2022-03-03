@@ -61,12 +61,7 @@ const SetGoalIntro = ({ navigation, route }) => {
           </View>
         </Modal>
         <View>
-          <View
-            style={[
-              styles.goalContainer,
-              { marginTop: 15, width: "90%", margin: "auto", marginBottom: 15 },
-            ]}
-          >
+          <View style={[styles.goalContainer, { margin: 15 }]}>
             <Text style={styles.text_footer_small}>
               Tell us what you'd like to achieve it by filling out the form
               below.
@@ -330,8 +325,8 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    width: "90%",
-    margin: "auto",
+    marginLeft: 20,
+    marginRight: 20,
   },
   addgoalbutton: {
     margin: 10,
@@ -411,6 +406,8 @@ const styles = StyleSheet.create({
     padding: 5,
     textAlign: "center",
     borderRadius: 5,
+    alignItems: "center",
+    paddingBottom: 15,
   },
   error: {
     color: "crimson",
