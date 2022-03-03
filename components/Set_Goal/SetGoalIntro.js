@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   FlatList,
   TouchableOpacity,
   Modal,
@@ -14,6 +13,7 @@ import {
   ScrollView,
   Switch,
 } from "react-native";
+import { Button, IconButton } from "react-native-paper";
 import React, { useState } from "react";
 import SetGoalGuide from "./SetGoalGuide";
 import { Formik, ErrorMessage } from "formik";
@@ -21,6 +21,7 @@ import * as yup from "yup";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { HideableView } from "../../shared/HideableView";
 import DatePicker from "../../shared/DatePicker";
+import dateFormat from "dateformat";
 
 const GoalSchema = yup.object({
   objective: yup.string().required(),
@@ -44,44 +45,49 @@ const SetGoalIntro = ({ navigation, route }) => {
     console.log(route.params.goalProperties.target_value);
   }
   return (
-    <ScrollView>
+    <ScrollView style={styles.page}>
       <SafeAreaView>
-        <Modal visible={modalOpen} animationType="slide">
-          <View style={styles.modalContainer}>
-            <Button
-              title="Close"
+        <Modal visible={modalOpen} animationType="slide" style={styles.page}>
+          <View style={styles.page}>
+            <IconButton
+              icon="close"
+              color="black"
+              size={20}
               onPress={() => {
                 setModalOpen(false);
               }}
-            ></Button>
+            ></IconButton>
             <SetGoalGuide />
           </View>
         </Modal>
-
-        <Text>Set Goal</Text>
         <View>
-          <Text>
-            Tell us what you'd like to achieve it by filling out the form below.
-          </Text>
-          <Text>
-            You'll be able to break this task down into smaller sub-goals later
-            on. Here, try to think of the bigger picture.
-          </Text>
-          <Text>
-            Good goals should follow the SMART principle. Please make what you
-            are aiming for specific and measurable, and set a date you'd like to
-            achieve it by.
-          </Text>
-          <Text>
-            You can find some ideas for goals, and get some more info about the
-            SMART principle, by pressing the button below.
-          </Text>
-          <Button
-            title="Get More Info"
+          <View
+            style={[
+              styles.goalContainer,
+              { marginTop: 15, width: "90%", margin: "auto", marginBottom: 15 },
+            ]}
+          >
+            <Text style={styles.text_footer_small}>
+              Tell us what you'd like to achieve it by filling out the form
+              below.
+            </Text>
+            <Text style={styles.text_footer_small}>
+              You'll be able to break this task down into smaller subgoals later
+              on. Here, try to think of the bigger picture.
+            </Text>
+            <Text style={styles.text_footer_small}>
+              Good goals should follow the SMART principle: they should be
+              specific, measurable, achievable, relevant, and time-restricted.
+            </Text>
+          </View>
+          {/* <TouchableOpacity
             onPress={() => {
               setModalOpen(true);
             }}
-          ></Button>
+            style={[styles.addgoalbutton, { marginTop: 15 }]}
+          >
+            <Text style={styles.buttontext}>Get More Info</Text>
+          </TouchableOpacity> */}
           <Formik
             initialValues={{
               objective: route.params
@@ -132,9 +138,11 @@ const SetGoalIntro = ({ navigation, route }) => {
             {(props) => (
               <View>
                 <View style={styles.container}>
-                  <Text>What is your final objective?</Text>
+                  <Text style={[styles.text_footer, { marginTop: 15 }]}>
+                    What is your final objective?
+                  </Text>
                   <TextInput
-                    style={styles.input}
+                    style={styles.textInput}
                     multiline
                     placeholder="Objective"
                     onChangeText={props.handleChange("objective")}
@@ -143,66 +151,82 @@ const SetGoalIntro = ({ navigation, route }) => {
                   />
                   <ErrorMessage name="objective">
                     {() => {
-                      return <Text>Objective is required</Text>;
+                      return (
+                        <Text style={styles.error}>Objective is required</Text>
+                      );
                     }}
                   </ErrorMessage>
-                  <Text>Enter a description</Text>
+                  <Text style={styles.text_footer}>Enter a description</Text>
                   <TextInput
-                    style={styles.input}
+                    style={styles.textInput}
                     multiline
                     placeholder="Description"
                     onChangeText={props.handleChange("description")}
                     value={props.values.description}
                   />
-                  <Text>
+                  <Text style={styles.text_footer}>
                     When do you plan on starting working towards you goal?
                   </Text>
-                  <DatePicker
-                    name="start_date"
-                    type={"Start"}
-                    value={props.values.end_date}
-                  />
-                  <Text>
-                    {` ${new Date(props.values.start_date).getFullYear()}-${
-                      new Date(props.values.start_date).getMonth() + 1
-                    }-${new Date(props.values.start_date).getDate()}`}
+                  <View style={styles.switchcontainer}>
+                    <DatePicker
+                      color="#5b72a4"
+                      name="start_date"
+                      type={"Start"}
+                      value={props.values.end_date}
+                      style={styles.addgoalbutton}
+                    />
+                    <Text style={styles.text_footer}>
+                      {dateFormat(props.values.start_date, "dd/mm/yyyy")}
+                    </Text>
+                  </View>
+                  <Text style={styles.text_footer}>
+                    When do you aim to complete your goal by?
                   </Text>
-                  <Text>When do you aim to complete your goal by?</Text>
-                  <DatePicker
-                    name="end_date"
-                    type={"End"}
-                    value={props.values.start_date}
-                  />
-                  <Text>
-                    {` ${new Date(props.values.end_date).getFullYear()}-${
-                      new Date(props.values.end_date).getMonth() + 1
-                    }-${new Date(props.values.end_date).getDate()}`}
-                  </Text>
-                  <Text>
-                    If your final goal has a numeric target value attached to
-                    it, that you plan to contribute to gradually (e.g. saving
-                    money, or running a total distance over a long period), then
-                    check the box below. This will help us give you a wider
-                    range of tools to track and keep on top of your goals, such
-                    as graphing progress, and making smaller milestones.
-                  </Text>
-                  <Switch
-                    onValueChange={(isChecked) => {
-                      setIsEnabled((previousState) => !previousState);
-                      handleCheckboxCheck(isChecked);
-                    }}
-                    disabled={
-                      (props.values.target_value !== "" ||
-                        props.values.unit !== "" ||
-                        props.values.subgoalPeriod !== "") &&
-                      !hideProgressOptions
-                    }
-                    value={isEnabled}
-                  />
+                  <View style={styles.switchcontainer}>
+                    <DatePicker
+                      name="end_date"
+                      type={"End"}
+                      value={props.values.start_date}
+                      style={styles.addgoalbutton}
+                    />
+                    <Text style={styles.text_footer}>
+                      {dateFormat(props.values.end_date, "dd/mm/yyyy")}
+                    </Text>
+                  </View>
+                  <View style={styles.goalContainer}>
+                    <Text style={styles.text_footer_small}>
+                      If your final goal has a numeric target value attached to
+                      it, that you plan to contribute to gradually (e.g. saving
+                      money, or running a total distance over a long period),
+                      then flick the switch below. This will help us give you a
+                      wider range of tools to track and keep on top of your
+                      goals, such as progress bars to see progress, and making
+                      smaller milestones.
+                    </Text>
+
+                    <Switch
+                      onValueChange={(isChecked) => {
+                        setIsEnabled((previousState) => !previousState);
+                        handleCheckboxCheck(isChecked);
+                      }}
+                      trackColor={{ false: "#767577", true: "#81b0ff" }}
+                      thumbColor={isEnabled ? "#3e4d6e" : "#f4f3f4"}
+                      disabled={
+                        (props.values.target_value !== "" ||
+                          props.values.unit !== "" ||
+                          props.values.subgoalPeriod !== "") &&
+                        !hideProgressOptions
+                      }
+                      value={isEnabled}
+                      style={{ marginBottom: 15, marginRight: 15 }}
+                    />
+                  </View>
                   <HideableView hidden={hideProgressOptions}>
-                    <Text>What final value are you aiming for?</Text>
+                    <Text style={styles.text_footer}>
+                      What final value are you aiming for?
+                    </Text>
                     <TextInput
-                      style={styles.input}
+                      style={styles.textInput}
                       multiline
                       placeholder="Target Value"
                       onChangeText={props.handleChange("target_value")}
@@ -212,44 +236,65 @@ const SetGoalIntro = ({ navigation, route }) => {
                     />
                     <ErrorMessage name="target_value">
                       {() => {
-                        return <Text>Target value must be a number</Text>;
+                        return (
+                          <Text style={styles.error}>
+                            Target value must be a number
+                          </Text>
+                        );
                       }}
                     </ErrorMessage>
-                    <Text>What units are the above values measured in?</Text>
+                    <Text style={styles.text_footer}>
+                      What units are the above values measured in?
+                    </Text>
                     <TextInput
-                      style={styles.input}
+                      style={styles.textInput}
                       multiline
                       placeholder="Units"
                       onChangeText={props.handleChange("unit")}
                       value={props.values.unit}
                     />
-                    <Text>
+                    <Text style={styles.text_footer}>
                       We'll break this goal up into subgoals with shorter
                       periods? How many days long would you like these periods
                       to be?
                     </Text>
-                    <TextInput
-                      style={styles.input}
-                      multiline
-                      placeholder="Subgoal Period"
-                      onChangeText={props.handleChange("subgoalPeriod")}
-                      value={props.values.subgoalPeriod}
-                      keyboardType="numeric"
-                      name="subgoalPeriod"
-                    />
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
+                      <TextInput
+                        style={[
+                          styles.textInput,
+                          { width: "40%", marginTop: 15 },
+                        ]}
+                        multiline
+                        placeholder="Subgoal Period"
+                        onChangeText={props.handleChange("subgoalPeriod")}
+                        value={props.values.subgoalPeriod}
+                        keyboardType="numeric"
+                        name="subgoalPeriod"
+                      />
+                      <Text style={[styles.text_footer, { marginLeft: 15 }]}>
+                        days
+                      </Text>
+                    </View>
                     <ErrorMessage name="subgoalPeriod">
                       {() => {
-                        return <Text>Subgoal period must be a number</Text>;
+                        return (
+                          <Text style={styles.error}>
+                            Subgoal period must be a number
+                          </Text>
+                        );
                       }}
                     </ErrorMessage>
-                    <Text>days</Text>
                   </HideableView>
                 </View>
-                <Button
+                <TouchableOpacity
                   title="Add SubGoals"
-                  color="maroon"
                   onPress={props.handleSubmit}
-                />
+                  style={styles.addgoalbutton}
+                >
+                  <Text style={styles.buttontext}>Add Subgoals</Text>
+                </TouchableOpacity>
               </View>
             )}
           </Formik>
@@ -270,6 +315,107 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
+  },
+  text_footer: {
+    color: "#05375a",
+    fontSize: 17,
+  },
+  text_footer_small: {
+    color: "#05375a",
+    fontSize: 15,
+    marginBottom: 15,
+  },
+  page: {
+    backgroundColor: "#FDF9E6",
+  },
+
+  container: {
+    width: "90%",
+    margin: "auto",
+  },
+  addgoalbutton: {
+    margin: 10,
+    padding: 10,
+    height: 50,
+    // width: "100%",
+    backgroundColor: "#5b72a4",
+    marginTop: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+    fontFamily: "Helvetica",
+    elevation: 5,
+  },
+  buttontext: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+  textInput: {
+    padding: 5,
+    color: "black",
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: "white",
+    marginBottom: 15,
+    marginTop: 5,
+  },
+  header: {
+    color: "#3e4d6e",
+    fontSize: 25,
+    fontWeight: "bold",
+    paddingTop: 20,
+    marginBottom: 10,
+    marginLeft: 10,
+    alignSelf: "center",
+  },
+  modalToggle: {
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#f2f2f2",
+    borderRadius: 10,
+    flex: 1,
+    flexDirection: "row",
+  },
+  goalContainer: {
+    padding: 15,
+    backgroundColor: "white",
+    borderRadius: 10,
+    margin: 10,
+    marginTop: 5,
+    paddingBottom: 0,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 3.84,
+    marginBottom: 20,
+    elevation: 5,
+    alignItems: "flex-end",
+  },
+  switchcontainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    justifyContent: "center",
+    backgroundColor: "white",
+    padding: 5,
+    textAlign: "center",
+    borderRadius: 5,
+  },
+  error: {
+    color: "crimson",
+    fontWeight: "bold",
+    marginBottom: 20,
   },
 });
 
