@@ -183,12 +183,12 @@ const styles = StyleSheet.create({
     color: "white",
   },
   update: {
-    backgroundColor: "#c68df7",
     borderRadius: 8,
     padding: 5,
     margin: 15,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#5b72a4",
     // position: "relative",
   },
   updateText: {

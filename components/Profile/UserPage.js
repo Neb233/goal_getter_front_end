@@ -98,7 +98,11 @@ const Goals = ({ navigation, route }) => {
     getUser(user.displayName).then((userDetails) => {
       setUserDetails(userDetails[0]);
 
-      SetProfPic(userDetails[0].avatar_url);
+      if (userDetails[0].avatar_url !== null) {
+        setAvatarUrl(userDetails[0].avatar_url);
+      } else {
+        setAvatarUrl(default_url);
+      }
     });
   }, []);
 
@@ -188,7 +192,7 @@ const Goals = ({ navigation, route }) => {
             <Pressable onPress={() => setImageModaVisible(true)}>
               <Image
                 source={{
-                  uri: profPic,
+                  uri: avatarUrl,
                   headers: {
                     Accept: "*/*",
                   },
@@ -212,7 +216,7 @@ const Goals = ({ navigation, route }) => {
         ) : (
           <Image
             source={{
-              uri: profPic,
+              uri: avatarUrl,
               headers: {
                 Accept: "*/*",
               },

@@ -248,14 +248,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   submitAndShareButton: {
-    backgroundColor: "#1fe398",
     borderRadius: 8,
     padding: 5,
     marginLeft: 10,
     marginBottom: 8,
+    marginTop: -3,
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
+    backgroundColor: "#7FAF50",
   },
   submitAndShare: {
     // padding: 2,
