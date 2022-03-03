@@ -48,16 +48,8 @@ const App = () => {
   const GoalStack = createNativeStackNavigator();
   const SearchStack = createNativeStackNavigator();
 
- function Logo() {
-  return (<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%'}}>
-<Image
-source={require('./components/Profile/blank_avatar.png')}
-resizeMode="contain"
-style={{ width: 98 }}
-/>
-</View>
-  )
-  }
+ 
+  
 
 
   function FeedStackScreen() {
@@ -66,11 +58,11 @@ style={{ width: 98 }}
       headerStyle: {
         backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
         }} options={{title: 'Test'}}>
-        <FeedStack.Screen name="Feed" component={Feed} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
-        <FeedStack.Screen name="Calendar" component={GoalCalendar} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
-        <FeedStack.Screen name="Profile" component={Profile} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
-        <FeedStack.Screen name="GoalPage" component={GoalPage} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
-        <FeedStack.Screen name="UserPage" component={Goals} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
+        <FeedStack.Screen name="Feed" component={Feed} />
+        <FeedStack.Screen name="Calendar" component={GoalCalendar} />
+        <FeedStack.Screen name="Profile" component={Profile} />
+        <FeedStack.Screen name="GoalPage" component={GoalPage} />
+        <FeedStack.Screen name="UserPage" component={Goals} />
       </FeedStack.Navigator>
     );
   }
@@ -82,8 +74,8 @@ style={{ width: 98 }}
         backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold', textAlign: "center", alignSelf: "center"},
         }}>
 
-        <UserStack.Screen name="Your Profile" component={Goals} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
-        <UserStack.Screen name="GoalPage" component={GoalPage} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
+        <UserStack.Screen name="Your Profile" component={Goals} />
+        <UserStack.Screen name="GoalPage" component={GoalPage} />
         {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
       </UserStack.Navigator>
     );
@@ -95,8 +87,8 @@ style={{ width: 98 }}
       headerStyle: {
         backgroundColor: '#5B72A4', paddingHorizontal: 80  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold'},
         }}>
-        <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
-        <GoalStack.Screen name="SetGoal" component={SetGoal} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
+        <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} />
+        <GoalStack.Screen name="SetGoal" component={SetGoal} />
         {/* <GoalStack.Screen name="" component={} /> */}
       </GoalStack.Navigator>
     );
@@ -108,10 +100,10 @@ style={{ width: 98 }}
       headerStyle: {
         backgroundColor: '#5B72A4',  }, headerTintColor: '#fff', headerTitleStyle: {fontWeight: 'bold'},
         }}>
-        <SearchStack.Screen name="Search" component={SearchUsers} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
-        <SearchStack.Screen name="Calendar" component={GoalCalendar} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
-        <SearchStack.Screen name="GoalPage" component={GoalPage} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
-        <SearchStack.Screen name="UserPage" component={Goals} options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}/>
+        <SearchStack.Screen name="Search" component={SearchUsers} />
+        <SearchStack.Screen name="Calendar" component={GoalCalendar} />
+        <SearchStack.Screen name="GoalPage" component={GoalPage} />
+        <SearchStack.Screen name="UserPage" component={Goals} />
         {/* <SearchStack.Screen name="" component={} /> */}
       </SearchStack.Navigator>
     );
@@ -121,11 +113,11 @@ style={{ width: 98 }}
     <NavigationContainer>
       {profile ? (
         <Tab.Navigator screenOptions={{ headerShown: false }}>
-          <Tab.Screen name="Home" component={FeedStackScreen} options={{tabBarIcon: () => (<MaterialIcons name="dynamic-feed" color='black' size='2'/>)}}/>
-          <Tab.Screen name="Set Goals" component={GoalStackScreen} options={{tabBarIcon: () => (<MaterialCommunityIcons name="trophy" color='black' size='10'/>)}}/>
-          <Tab.Screen name="Profile" component={UserStackScreen} options={{tabBarIcon: () => (<MaterialCommunityIcons name="account" color='black' size='10'/>)}}/>
+          <Tab.Screen name="Home" component={FeedStackScreen} />
+          <Tab.Screen name="Set Goals" component={GoalStackScreen} />
+          <Tab.Screen name="Profile" component={UserStackScreen}/>
 
-          <Tab.Screen name="Search Users" component={SearchStackScreen} options={{tabBarIcon: () => (<MaterialIcons name="search" color='black' size='5'/>)}}/>
+          <Tab.Screen name="Search Users" component={SearchStackScreen} />
         </Tab.Navigator>
       ) : (
         <RootStack />
@@ -144,6 +136,31 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+
+
+// options={{tabBarIcon: () => (<MaterialIcons name="dynamic-feed" color='black' size='2'/>)}}
+// options={{tabBarIcon: () => (<MaterialCommunityIcons name="trophy" color='black' size='10'/>)}}
+// options={{tabBarIcon: () => (<MaterialCommunityIcons name="account" color='black' size='10'/>)}}
+// options={{tabBarIcon: () => (<MaterialIcons name="search" color='black' size='5'/>)}}
+
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+
+
+
+
 
 
 {/* <Stack.Navigator>
