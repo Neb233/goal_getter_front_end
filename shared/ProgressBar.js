@@ -15,7 +15,7 @@ const ProgressBar = ({ progress, target_value, subgoals, color }) => {
           style={styles.flex}
           progress={progressRatio}
           width={250}
-          height={15}
+          height={20}
           color={color}
         />
         <Text style={{ color: color, marginLeft: 10 }}>
@@ -35,7 +35,7 @@ const ProgressBar = ({ progress, target_value, subgoals, color }) => {
           style={styles.flex}
           progress={progressRatio}
           width={250}
-          height={15}
+          height={20}
           color={color}
         />
         <Text style={{ color: color, marginLeft: 10 }}>
