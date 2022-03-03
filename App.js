@@ -73,45 +73,97 @@ const App = () => {
         <FeedStack.Screen
           name="Feed"
           component={Feed}
-          // options={{
-          //   title: () => {
-          //     <View>
-          //       <Text> GoalGetter </Text>
-          //     </View>;
-          //   },
-          //   headerLeft: () => null,
-          // }}
-
-          // <View
-          //   style={{
-          //     display: "flex",
-          //     flexDirection: "row",
-          //     alignItems: "center",
-          //     justifyContent: "space-between",
-          //     width: "100vw",
-          //     textAlign: "right",
-          //   }}
-          // >
-          //   <Image
-          //     style={{
-          //       width: 60,
-          //       height: 60,
-          //     }}
-          //     source={require("./components/GoalGetterLogo.png")}
-          //   />
-          //   <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-          //     GoalGetter
-          //   </Text>
-          //   <Text
-          //     style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-          //   >
-          //     Home
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Home</Text>
+            ),
+          }}
         />
-        <FeedStack.Screen name="Calendar" component={GoalCalendar} />
-        <FeedStack.Screen name="Profile" component={Profile} />
-        <FeedStack.Screen name="GoalPage" component={GoalPage} />
-        <FeedStack.Screen name="UserPage" component={Goals} />
-        <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} />
+
+        <FeedStack.Screen
+          name="Calendar"
+          component={GoalCalendar}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Calendar</Text>
+            ),
+          }}
+        />
+        <FeedStack.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            title: "GoalGetter",
+            headerLeft: () => null,
+          }}
+        />
+        <FeedStack.Screen
+          name="GoalPage"
+          component={GoalPage}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Goal</Text>
+            ),
+          }}
+        />
+        <FeedStack.Screen
+          name="UserPage"
+          component={Goals}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Profile</Text>
+            ),
+          }}
+        />
+        <GoalStack.Screen
+          name="SetGoalIntro"
+          component={SetGoalIntro}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Set Goal</Text>
+            ),
+          }}
+        />
       </FeedStack.Navigator>
     );
   }
@@ -131,8 +183,40 @@ const App = () => {
           },
         }}
       >
-        <UserStack.Screen name="Your Profile" component={Goals} />
-        <UserStack.Screen name="GoalPage" component={GoalPage} />
+        <UserStack.Screen
+          name="Your Profile"
+          component={Goals}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Profile</Text>
+            ),
+          }}
+        />
+        <UserStack.Screen
+          name="GoalPage"
+          component={GoalPage}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Goal</Text>
+            ),
+          }}
+        />
         {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
       </UserStack.Navigator>
     );
@@ -150,8 +234,42 @@ const App = () => {
           headerTitleStyle: { fontWeight: "bold" },
         }}
       >
-        <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} />
-        <GoalStack.Screen name="SetGoal" component={SetGoal} />
+        <GoalStack.Screen
+          name="SetGoalIntro"
+          component={SetGoalIntro}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Set Goal</Text>
+            ),
+          }}
+        />
+        <GoalStack.Screen
+          name="SetGoal"
+          component={SetGoal}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>
+                Set Subgoal
+              </Text>
+            ),
+          }}
+        />
         {/* <GoalStack.Screen name="" component={} /> */}
       </GoalStack.Navigator>
     );
@@ -168,10 +286,76 @@ const App = () => {
           headerTitleStyle: { fontWeight: "bold" },
         }}
       >
-        <SearchStack.Screen name="Search" component={SearchUsers} />
-        <SearchStack.Screen name="Calendar" component={GoalCalendar} />
-        <SearchStack.Screen name="GoalPage" component={GoalPage} />
-        <SearchStack.Screen name="UserPage" component={Goals} />
+        <SearchStack.Screen
+          name="Search"
+          component={SearchUsers}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>
+                Search Users
+              </Text>
+            ),
+          }}
+        />
+        <SearchStack.Screen
+          name="Calendar"
+          component={GoalCalendar}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Calendar</Text>
+            ),
+          }}
+        />
+        <SearchStack.Screen
+          name="GoalPage"
+          component={GoalPage}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Goal</Text>
+            ),
+          }}
+        />
+        <SearchStack.Screen
+          name="UserPage"
+          component={Goals}
+          options={{
+            title: "GoalGetter",
+            headerTitleStyle: { color: "#fdf9e6" },
+            headerLeft: () => (
+              <Image
+                style={{ width: 60, height: 60, marginRight: 10 }}
+                source={require("./components/GoalGetterLogo.png")}
+              />
+            ),
+            headerRight: () => (
+              <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Profile</Text>
+            ),
+          }}
+        />
         {/* <SearchStack.Screen name="" component={} /> */}
       </SearchStack.Navigator>
     );
