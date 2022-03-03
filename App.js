@@ -78,7 +78,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -96,7 +96,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -121,7 +121,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -138,7 +138,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -155,7 +155,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -191,7 +191,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -208,7 +208,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -242,7 +242,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -259,7 +259,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -294,7 +294,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -313,7 +313,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -330,7 +330,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
@@ -347,7 +347,7 @@ const App = () => {
             headerTitleStyle: { color: "#fdf9e6" },
             headerLeft: () => (
               <Image
-                style={{ width: 60, height: 60, marginRight: 10 }}
+                style={{ width: 40, height: 40, marginRight: 10 }}
                 source={require("./components/GoalGetterLogo.png")}
               />
             ),
