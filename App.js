@@ -74,7 +74,14 @@ const App = () => {
           name="Feed"
           component={Feed}
           // options={{
-          //   title: <View></View>"GoalGetter",
+          //   title: () => {
+          //     <View>
+          //       <Text> GoalGetter </Text>
+          //     </View>;
+          //   },
+          //   headerLeft: () => null,
+          // }}
+
           // <View
           //   style={{
           //     display: "flex",
@@ -99,10 +106,6 @@ const App = () => {
           //     style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
           //   >
           //     Home
-          //   </Text>
-          // </View>
-          //   headerLeft: () => null,
-          // }}
         />
         <FeedStack.Screen name="Calendar" component={GoalCalendar} />
         <FeedStack.Screen name="Profile" component={Profile} />

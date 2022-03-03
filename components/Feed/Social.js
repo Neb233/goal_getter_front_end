@@ -371,7 +371,7 @@ const Social = (props) => {
                 paddingBottom: 30,
               }}
             >
-              <Menu onSelect={handlePostReaction}>
+              <Menu style={{ paddingBottom: 10 }} onSelect={handlePostReaction}>
                 <MenuTrigger style={styles.react}>
                   <Text style={{ color: "white" }}>React</Text>
                 </MenuTrigger>
@@ -561,7 +561,7 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     borderRadius: 8,
     marginTop: 40,
-    marginBottom: 30,
+    marginBottom: 39,
     padding: 5,
     flex: 1,
     alignItems: "center",
@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
 
     marginTop: 40,
     marginLeft: 10,
-    marginBottom: 30,
+    marginBottom: 39,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
