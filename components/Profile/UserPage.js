@@ -101,7 +101,9 @@ const Goals = ({ navigation, route }) => {
       if (userDetails[0].avatar_url !== null) {
         setAvatarUrl(userDetails[0].avatar_url);
       } else {
-        setAvatarUrl(default_url);
+        setAvatarUrl(
+          "https://firebasestorage.googleapis.com/v0/b/goalgetter-4937c.appspot.com/o/blank%20avatar.png?alt=media&token=b003fca8-e6ca-4c55-a378-3ead9db94f0d"
+        );
       }
     });
   }, []);
