@@ -3,12 +3,11 @@ import { View, Text, StyleSheet } from "react-native";
 import * as Progress from "react-native-progress";
 import { getSubgoalsByGoalId } from "../utils/api";
 const ProgressBar = ({ progress, target_value, subgoals, color }) => {
-  console.log(progress, target_value);
+  console.log(progress);
   if (target_value) {
     const progressRatio = Math.min(
       1,
-      (progress[0].length !== 2 ? 0 : progress[progress.length - 1][1]) /
-        target_value
+      (!progress[0] ? 0 : progress[progress.length - 1][1]) / target_value
     );
     return (
       <View style={{ flexDirection: "row", marginTop: 15 }}>

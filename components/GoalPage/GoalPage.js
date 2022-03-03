@@ -196,7 +196,7 @@ const GoalPage = ({ navigation, route }) => {
                   <Text style={styles.duedate}>
                     Current Progress:{" "}
                     {`${
-                      item.progress[0].length !== 2
+                      !item.progress[0]
                         ? 0
                         : Math.round(
                             100 * item.progress[item.progress.length - 1][1]
