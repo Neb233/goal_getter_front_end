@@ -180,9 +180,9 @@ const Subgoals = ({ setFriendPosts }) => {
                         <BouncyCheckbox
                           text={goal.objective}
                           size={30}
-                          fillColor="#19e63b"
+                          fillColor="#7FAF50"
                           unfillColor="#FFFFFF"
-                          iconStyle={{ borderColor: "blue" }}
+                          iconStyle={{ borderColor: "#7FAF50" }}
                           textStyle={{
                             color: "white",
                             fontSize: 18,

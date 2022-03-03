@@ -102,7 +102,7 @@ const RegisterScreen = () => {
   });
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <KeyboardAvoidingView behaviour="padding">
         <View style={styles.header}>
           <Text style={styles.title_text}>Register Your Account</Text>
@@ -182,7 +182,7 @@ const RegisterScreen = () => {
           </View>
         </Animatable.View>
       </KeyboardAvoidingView>
-    </View>
+    </ScrollView>
   );
 };
 
