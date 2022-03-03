@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     padding: 3,
     backgroundColor: "white",
     borderWidth: 1,
-    borderCOlor: "black"
+    borderColor: "black"
 
   },
   switchcontainer: {
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "white",
     borderWidth: 1,
-    borderCOlor: "black",
+    borderColor: "black",
     padding: 5,
     borderRadius: 3
   },
