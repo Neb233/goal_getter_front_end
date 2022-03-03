@@ -5,7 +5,7 @@ import { getCurrentStatus } from "../../utils/api";
 const GoalStatus = () => {
   const [status, SetStatus] = useState({});
 
-  const ownerP = "jeff";
+  const ownerP = auth.currentUser.displayName;
 
   useEffect(() => {
     getCurrentStatus(ownerP).then((res) => {
