@@ -153,6 +153,7 @@ const SubGoalForm = ({
                 placeholder="Units"
                 onChangeText={props.handleChange("unit")}
                 value={props.values.unit}
+                autoCapitalize="none"
               />
             </HideableView>
 
@@ -276,6 +277,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginBottom: 15,
     marginTop: 5,
+    paddingLeft: 10,
   },
   header: {
     color: "#3e4d6e",
@@ -311,9 +313,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "white",
     padding: 5,
+    paddingBottom: 15,
     textAlign: "center",
     borderRadius: 5,
-    paddingBottom: 10,
+    paddingBottom: 20,
+    alignItems: "center",
   },
 });
 

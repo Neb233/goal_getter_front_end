@@ -45,25 +45,6 @@ const App = () => {
   const GoalStack = createNativeStackNavigator();
   const SearchStack = createNativeStackNavigator();
 
-  function Logo() {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          width: "100%",
-        }}
-      >
-        <Image
-          source={require("./components/Profile/blank_avatar.png")}
-          resizeMode="contain"
-          style={{ width: 98 }}
-        />
-      </View>
-    );
-  }
-
   function FeedStackScreen() {
     return (
       <FeedStack.Navigator
@@ -80,181 +61,12 @@ const App = () => {
         }}
         options={{ title: "Test" }}
       >
-        <FeedStack.Screen
-          name="Feed"
-          component={Feed}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Home
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
-        <FeedStack.Screen
-          name="Calendar"
-          component={GoalCalendar}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Calendar
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
-        <FeedStack.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Profile
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
-        <FeedStack.Screen
-          name="GoalPage"
-          component={GoalPage}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Goal
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
-        <FeedStack.Screen
-          name="UserPage"
-          component={Goals}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Profile
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
+        <FeedStack.Screen name="Feed" component={Feed} />
+        <FeedStack.Screen name="Calendar" component={GoalCalendar} />
+        <FeedStack.Screen name="Profile" component={Profile} />
+        <FeedStack.Screen name="GoalPage" component={GoalPage} />
+        <FeedStack.Screen name="UserPage" component={Goals} />
+        <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} />
       </FeedStack.Navigator>
     );
   }
@@ -274,76 +86,8 @@ const App = () => {
           },
         }}
       >
-        <UserStack.Screen
-          name="Your Profile"
-          component={Goals}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Profile
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
-        <UserStack.Screen
-          name="GoalPage"
-          component={GoalPage}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Goal
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
+        <UserStack.Screen name="Your Profile" component={Goals} />
+        <UserStack.Screen name="GoalPage" component={GoalPage} />
         {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
       </UserStack.Navigator>
     );
@@ -361,76 +105,8 @@ const App = () => {
           headerTitleStyle: { fontWeight: "bold" },
         }}
       >
-        <GoalStack.Screen
-          name="SetGoalIntro"
-          component={SetGoalIntro}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Set Goal
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
-        <GoalStack.Screen
-          name="SetGoal"
-          component={SetGoal}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Set Subgoals
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
+        <GoalStack.Screen name="SetGoalIntro" component={SetGoalIntro} />
+        <GoalStack.Screen name="SetGoal" component={SetGoal} />
         {/* <GoalStack.Screen name="" component={} /> */}
       </GoalStack.Navigator>
     );
@@ -447,146 +123,10 @@ const App = () => {
           headerTitleStyle: { fontWeight: "bold" },
         }}
       >
-        <SearchStack.Screen
-          name="Search"
-          component={SearchUsers}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Search Users
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
-        <SearchStack.Screen
-          name="Calendar"
-          component={GoalCalendar}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Calendar
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
-        <SearchStack.Screen
-          name="GoalPage"
-          component={GoalPage}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Goal
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
-        <SearchStack.Screen
-          name="UserPage"
-          component={Goals}
-          options={{
-            title: (
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100vw",
-                  textAlign: "right",
-                }}
-              >
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                  source={require("./components/GoalGetterLogo.png")}
-                />
-                <Text style={{ fontSize: 22, color: "#fdf9e6" }}>
-                  GoalGetter
-                </Text>
-                <Text
-                  style={{ fontSize: 18, color: "#fdf9e6", marginRight: 40 }}
-                >
-                  Profile
-                </Text>
-              </View>
-            ),
-            headerLeft: () => null,
-          }}
-        />
+        <SearchStack.Screen name="Search" component={SearchUsers} />
+        <SearchStack.Screen name="Calendar" component={GoalCalendar} />
+        <SearchStack.Screen name="GoalPage" component={GoalPage} />
+        <SearchStack.Screen name="UserPage" component={Goals} />
         {/* <SearchStack.Screen name="" component={} /> */}
       </SearchStack.Navigator>
     );
@@ -676,12 +216,45 @@ const styles = StyleSheet.create({
 //     options={{ headerShown: false }}
 //   />
 
+// options={{tabBarIcon: () => (<MaterialIcons name="dynamic-feed" color='black' size='2'/>)}}
+// options={{tabBarIcon: () => (<MaterialCommunityIcons name="trophy" color='black' size='10'/>)}}
+// options={{tabBarIcon: () => (<MaterialCommunityIcons name="account" color='black' size='10'/>)}}
+// options={{tabBarIcon: () => (<MaterialIcons name="search" color='black' size='5'/>)}}
+
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
+
+{
+  /* <Stack.Navigator>
+        //   <Stack.Screen */
+}
+//     name="Nav"
+//     component={Nav}
+//     options={{ headerShown: false }}
+//   />
+
 //   <Stack.Screen name="Feed" component={Feed} />
 //   <Stack.Screen name="SetGoal" component={SetGoal} />
 //   <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
 //   <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
 //   <Stack.Screen name="Profile" component={Profile} />
 //   <Stack.Screen name="SearchUsers" component={SearchUsers} />
+
+//   <Stack.Screen name="Login" component={LoginScreen} />
+
+//   <Stack.Screen name="UserPage" component={Goals} />
+//   <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
 
 //   <Stack.Screen name="Login" component={LoginScreen} />
 

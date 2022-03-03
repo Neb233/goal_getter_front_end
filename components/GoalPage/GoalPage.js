@@ -139,7 +139,7 @@ const GoalPage = ({ navigation, route }) => {
                   <Text style={styles.duedate}>
                     Current Progress:{" "}
                     {`${
-                      goal.progress.length === 0
+                      goal.progress[0].length !== 2
                         ? 0
                         : Math.round(
                             100 * goal.progress[goal.progress.length - 1][1]
@@ -196,7 +196,7 @@ const GoalPage = ({ navigation, route }) => {
                   <Text style={styles.duedate}>
                     Current Progress:{" "}
                     {`${
-                      item.progress.length === 0
+                      !item.progress[0]
                         ? 0
                         : Math.round(
                             100 * item.progress[item.progress.length - 1][1]
@@ -218,7 +218,7 @@ const GoalPage = ({ navigation, route }) => {
                         new Date(item.end_date).getDate() + 1
                       )
                     ).getTime() ? (
-                    <View style={{ marginTop: 15 }}>
+                    <View style={{ marginTop: 15, marginBottom: 0 }}>
                       {/* <Text style={styles.unit}>Made progress?</Text> */}
                       <PatchSubGoal
                         goal={item}

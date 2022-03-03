@@ -28,6 +28,7 @@ export const getSubGoalsByUser = (username) => {
 
 export const patchSubGoalbyId = (subgoal_id, patchObject) => {
   patchObject.date = new Date(patchObject.date);
+  console.log(patchObject, "patchSubgoal");
   return goalgetterApi
     .patch(`/subgoals/${subgoal_id}/progress`, patchObject)
     .then(({ data }) => {
@@ -40,6 +41,7 @@ export const patchSubGoalbyId = (subgoal_id, patchObject) => {
 
 export const patchGoalbyId = (goal_id, patchObject) => {
   patchObject.date = new Date(patchObject.date);
+  console.log(patchObject, "patchGoal");
   return goalgetterApi
     .patch(`/goals/${goal_id}/progress`, patchObject)
     .then(({ data }) => {

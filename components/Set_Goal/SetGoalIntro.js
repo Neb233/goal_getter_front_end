@@ -61,12 +61,7 @@ const SetGoalIntro = ({ navigation, route }) => {
           </View>
         </Modal>
         <View>
-          <View
-            style={[
-              styles.goalContainer,
-              { marginTop: 15, width: "90%", margin: "auto", marginBottom: 15 },
-            ]}
-          >
+          <View style={[styles.goalContainer, { margin: 15 }]}>
             <Text style={styles.text_footer_small}>
               Tell us what you'd like to achieve it by filling out the form
               below.
@@ -252,6 +247,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                       placeholder="Units"
                       onChangeText={props.handleChange("unit")}
                       value={props.values.unit}
+                      autoCapitalize="none"
                     />
                     <Text style={styles.text_footer}>
                       We'll break this goal up into subgoals with shorter
@@ -330,8 +326,8 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    width: "90%",
-    margin: "auto",
+    marginLeft: 20,
+    marginRight: 20,
   },
   addgoalbutton: {
     margin: 10,
@@ -367,6 +363,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginBottom: 15,
     marginTop: 5,
+    paddingLeft: 10,
   },
   header: {
     color: "#3e4d6e",
@@ -401,7 +398,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     marginBottom: 20,
     elevation: 5,
-    alignItems: "flex-end",
   },
   switchcontainer: {
     marginTop: 20,
@@ -411,6 +407,8 @@ const styles = StyleSheet.create({
     padding: 5,
     textAlign: "center",
     borderRadius: 5,
+    alignItems: "center",
+    paddingBottom: 15,
   },
   error: {
     color: "crimson",

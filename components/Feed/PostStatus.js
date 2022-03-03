@@ -92,7 +92,7 @@ const PostStatus = ({
             associated_id: subgoal,
             owner: ownerP,
             datetime: new Date(Date.now()),
-            progress_point: goal.progress.length,
+            progress_point: goal.progress ? goal.progress.length : 0,
             message: message,
           }).then(() => {
             return patchedGoal;
@@ -168,7 +168,7 @@ const PostStatus = ({
           <View style={styles.modalView}>
             <TextInput
               style={styles.modalText}
-              placeholder="enter your message here"
+              placeholder="Enter your message here"
               value={message}
               onChangeText={setMessage}
             />
@@ -292,6 +292,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "grey",
     borderRadius: 50,
-    width: 200
+    width: 200,
+    paddingLeft: 10,
   },
 });

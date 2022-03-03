@@ -168,6 +168,7 @@ const SearchUsers = () => {
     <ScrollView>
       <View>
         <Searchbar
+          autoCapitalize="none"
           placeholder="Search"
           onChangeText={(query) => {
             setQueryState({ query: query });
@@ -188,7 +189,6 @@ const SearchUsers = () => {
                   <List.Item
                     style={styles.listItem}
                     key={item.username}
-                    title={item.username}
                     color="#fdf9e6"
                     onPress={() => {
                       navigation.navigate("UserPage", {
@@ -216,7 +216,7 @@ const SearchUsers = () => {
                       );
                     }}
                   />
-
+                  <Text style={styles.userName}>{item.username}</Text>
                   <Button
                     style={styles.button}
                     mode="contained"
@@ -235,7 +235,6 @@ const SearchUsers = () => {
                   <List.Item
                     style={styles.listItem}
                     key={item.username}
-                    title={item.username}
                     color="#fdf9e6"
                     left={(props) => {
                       return (
@@ -264,7 +263,7 @@ const SearchUsers = () => {
                       });
                     }}
                   />
-
+                  <Text style={styles.userName}>{item.username}</Text>
                   <Button
                     mode="contained"
                     color="red"
@@ -296,7 +295,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#fdf9e6",
     justifyContent: "center",
   },
-  viewStyle: { padding: 25 },
+  viewStyle: { padding: 25, alignItems: "center" },
+  userName: {
+    fontSize: 18,
+    color: "#5B72A4",
+    fontWeight: "bold",
+    marginBottom: 15,
+    marginTop: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    padding: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
+    backgroundColor: "white",
+    borderRadius: 5,
+  },
   listItem: { backgroundColor: "#fdf9e6", alignSelf: "center" },
   button: { width: "50%", alignSelf: "center" },
 });

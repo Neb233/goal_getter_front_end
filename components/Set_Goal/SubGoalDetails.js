@@ -58,7 +58,7 @@ const SubGoalDetails = ({
           <Text style={styles.title}>Start date</Text>
           <Text style={styles.value}>
             {dateFormat(item.start_date, "dddd dS mmmm yyyy")}
-          </Text>{" "}
+          </Text>
         </View>
       ) : null}
       <View style={styles.fieldcontainer}>
