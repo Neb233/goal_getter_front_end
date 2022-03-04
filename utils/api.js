@@ -16,13 +16,13 @@ export const getGoalsByUser = (username) => {
   });
 };
 
-export const getSubGoalsByUser = (username) => {
+export const getSubgoalsByUser = (username) => {
   return goalgetterApi.get(`/users/${username}/subgoals`).then(({ data }) => {
     return data.subgoals;
   });
 };
 
-export const patchSubGoalbyId = (subgoal_id, patchObject) => {
+export const patchSubgoalbyId = (subgoal_id, patchObject) => {
   patchObject.date = new Date(patchObject.date);
   return goalgetterApi
     .patch(`/subgoals/${subgoal_id}/progress`, patchObject)
@@ -82,13 +82,13 @@ export const getUser = (username) => {
   });
 };
 
-export const postStatus = (body) => {
+export const postPost = (body) => {
   return goalgetterApi.post(`/posts`, body).then(({ data }) => {
     return data;
   });
 };
 
-export const getCurrentStatus = (owner) => {
+export const getCurrentPost = (owner) => {
   return goalgetterApi.get(`/posts/${owner}`).then(({ data }) => {
     return data.posts;
   });
@@ -142,7 +142,7 @@ export const getFriends = (user) => {
   });
 };
 
-export const deleteSocialMediaPost = (post_id) => {
+export const deletePost = (post_id) => {
   return goalgetterApi.delete(`/post/${post_id}`).then(({ data }) => {
     return data;
   });

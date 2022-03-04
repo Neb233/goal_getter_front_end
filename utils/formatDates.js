@@ -60,13 +60,17 @@ const formatGoalsForCalendar = (goals) => {
   const formattedGoals = {};
 
   goals.forEach((goal) => {
-    const startDate = formatDate(goal.start_date)
-    const endDate = formatDate(goal.end_date)
+    const startDate = formatDate(goal.start_date);
+    const endDate = formatDate(goal.end_date);
 
-    formattedGoals[startDate] = [{ name: `🟢🟢 FIRST DAY of ${goal.objective} 🟢🟢` }];
-    formattedGoals[endDate] = [{ name: `🎉🎉 LAST DAY of ${goal.objective} 🎉🎉` }];
-  })
+    formattedGoals[startDate] = [
+      { name: `🟢🟢 FIRST DAY of ${goal.objective} 🟢🟢` },
+    ];
+    formattedGoals[endDate] = [
+      { name: `🎉🎉 LAST DAY of ${goal.objective} 🎉🎉` },
+    ];
+  });
 
   return formattedGoals;
-}
+};
 export { formatSubgoalsForCalendar, formatGoalsForCalendar };

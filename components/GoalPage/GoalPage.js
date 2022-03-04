@@ -17,9 +17,9 @@ import {
   patchGoalStatusById,
 } from "../../utils/api";
 import ProgressBar from "../../shared/ProgressBar";
-import PatchSubGoal from "../Feed/PatchSubgoals";
+import PatchS from "../Feed/PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import PostStatus from "../Feed/PostStatus";
+import PostPost from "../Feed/PostPost";
 import { useFocusEffect } from "@react-navigation/native";
 import { auth } from "../../firebase";
 
@@ -77,7 +77,7 @@ const GoalPage = ({ navigation, route }) => {
           })
           .then((patchedGoal) => {
             if (!patchedGoal) {
-              navigation.navigate("SetGoalIntro");
+              navigation.navigate("SetGoal");
               navigation.navigate("GoalPage", { goal_id: goal.goal_id });
             }
           });
@@ -86,7 +86,7 @@ const GoalPage = ({ navigation, route }) => {
 
   const handleCongratsMessageSubmit = () => {
     setCongratsModalVisible(!congratsModalVisible);
-    navigation.navigate("SetGoalIntro");
+    navigation.navigate("SetGoal");
     navigation.navigate("GoalPage", { goal_id: goal.goal_id });
   };
   return (
@@ -165,7 +165,7 @@ const GoalPage = ({ navigation, route }) => {
         </View>
       </View>
       <View style={styles.goalContainer}>
-        <Text style={styles.subGoalTitle}>Your goal break down:</Text>
+        <Text style={styles.sTitle}>Your goal break down:</Text>
         <FlatList
           data={subgoals}
           renderItem={({ item }) => (
@@ -214,7 +214,7 @@ const GoalPage = ({ navigation, route }) => {
                       )
                     ).getTime() ? (
                     <View style={{ marginTop: 15, marginBottom: 0 }}>
-                      <PatchSubGoal
+                      <PatchS
                         goal={item}
                         goalUnit={item.unit}
                         goalPageId={item.goal_id}
@@ -246,7 +246,7 @@ const GoalPage = ({ navigation, route }) => {
                     unfillColor="#FFFFFF"
                     iconStyle={{ borderColor: "#7FAF50" }}
                   />
-                  <PostStatus
+                  <PostPost
                     goal={item}
                     subgoal={item.subgoal_id}
                     ownerP={item.owner}
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
 
-  subGoalTitle: {
+  sTitle: {
     fontSize: 20,
     fontWeight: "bold",
     padding: 10,

@@ -5,7 +5,6 @@ import Subgoals from "./Subgoals";
 import { TouchableOpacity, FlatList } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { auth } from "../../firebase";
-
 import { getFriends, getPostsByUser } from "../../utils/api";
 
 const Feed = ({ navigation }) => {

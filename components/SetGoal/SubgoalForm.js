@@ -14,12 +14,7 @@ import DatePicker from "../../shared/DatePicker";
 import { HideableView } from "../../shared/HideableView";
 import dateFormat from "dateformat";
 
-const SubGoalForm = ({
-  addSubGoal,
-  setShowSubGoalDetails,
-  goalStartDate,
-  goalEndDate,
-}) => {
+const SubgoalForm = ({ addSubgoal, goalStartDate, goalEndDate }) => {
   const [hideProgressOptions, setHideProgressOptions] = useState(true);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
@@ -60,7 +55,7 @@ const SubGoalForm = ({
           unit: "",
         }}
         onSubmit={(values) => {
-          addSubGoal(values);
+          addSubgoal(values);
         }}
         validationSchema={ReviewSchema}
       >
@@ -309,4 +304,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SubGoalForm;
+export default SubgoalForm;

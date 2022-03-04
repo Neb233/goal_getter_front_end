@@ -1,11 +1,11 @@
 import { StyleSheet, Text, Image, LogBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SetGoal from "./components/Set_Goal/SetGoal";
+import SetSubgoals from "./components/SetGoal/SetSubgoals";
 import SearchUsers from "./components/Social/SearchUsers";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Feed from "./components/Feed/Feed";
-import SetGoalIntro from "./components/Set_Goal/SetGoalIntro";
+import SetGoal from "./components/SetGoal/SetGoal";
 import GoalCalendar from "./components/Calendar/GoalCalendar";
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -125,8 +125,8 @@ const App = () => {
           }}
         />
         <GoalStack.Screen
-          name="SetGoalIntro"
-          component={SetGoalIntro}
+          name="SetGoal"
+          component={SetGoal}
           options={{
             title: "GoalGetter",
             headerTitleStyle: { color: "#fdf9e6" },
@@ -211,8 +211,8 @@ const App = () => {
         }}
       >
         <GoalStack.Screen
-          name="SetGoalIntro"
-          component={SetGoalIntro}
+          name="SetGoal"
+          component={SetGoal}
           options={{
             title: "GoalGetter",
             headerTitleStyle: { color: "#fdf9e6" },
@@ -228,8 +228,8 @@ const App = () => {
           }}
         />
         <GoalStack.Screen
-          name="SetGoal"
-          component={SetGoal}
+          name="SetSubgoals"
+          component={SetSubgoals}
           options={{
             title: "GoalGetter",
             headerTitleStyle: { color: "#fdf9e6" },

@@ -8,24 +8,24 @@ import {
 import React from "react";
 import dateFormat from "dateformat";
 
-const SubGoalDetails = ({
-  subGoals,
-  setSubGoals,
+const SubgoalDetails = ({
+  subgoals,
+  setSubgoals,
   item,
-  setShowSubGoalDetails,
+  setShowSubgoalDetails,
 }) => {
-  const deleteSubGoal = (objective) => {
-    const newSubGoals = subGoals.map((subgoal) => {
+  const deleteS = (objective) => {
+    const newSubgoals = subgoals.map((subgoal) => {
       return { ...subgoal };
     });
 
-    setSubGoals(
-      newSubGoals.filter((subgoal) => {
+    setSubgoals(
+      newSubgoals.filter((subgoal) => {
         return subgoal.objective != objective;
       })
     );
-    setShowSubGoalDetails((showSubGoalDetails) => {
-      const newState = showSubGoalDetails.map(() => {
+    setShowSubgoalDetails((showSubgoalDetails) => {
+      const newState = showSubgoalDetails.map(() => {
         return false;
       });
       return newState;
@@ -65,12 +65,12 @@ const SubGoalDetails = ({
       {item.core ? null : (
         <View>
           <TouchableOpacity
-            style={styles.deleteSubGoal}
+            style={styles.deleteS}
             onPress={() => {
-              deleteSubGoal(item.objective);
+              deleteS(item.objective);
             }}
           >
-            <Text style={styles.deleteSubGoalText}>Delete Subgoal</Text>
+            <Text style={styles.deleteSText}>Delete Subgoal</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -78,7 +78,7 @@ const SubGoalDetails = ({
   );
 };
 
-export default SubGoalDetails;
+export default SubgoalDetails;
 
 const styles = StyleSheet.create({
   fieldcontainer: {
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     width: "40%",
   },
-  deleteSubGoal: {
+  deleteS: {
     margin: 10,
     padding: 10,
     height: 50,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
-  deleteSubGoalText: {
+  deleteSText: {
     color: "white",
     fontWeight: "bold",
   },

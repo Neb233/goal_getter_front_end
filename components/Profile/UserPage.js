@@ -27,7 +27,7 @@ import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { signOut } from "firebase/auth";
 
-const Goals = ({ navigation, route }) => {
+const UserPage = ({ navigation, route }) => {
   const [goals, setGoals] = useState([]);
   const [oldGoals, setOldGoals] = useState();
   const [futureGoals, setFutureGoals] = useState();
@@ -490,7 +490,7 @@ const Goals = ({ navigation, route }) => {
     </ScrollView>
   );
 };
-export default Goals;
+export default UserPage;
 
 const styles = StyleSheet.create({
   goalContainer: {

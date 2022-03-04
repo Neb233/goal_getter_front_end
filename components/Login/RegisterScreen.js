@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { updateProfile } from "firebase/auth";
 import * as Animatable from "react-native-animatable";
-
 import * as Yup from "yup";
 
 const RegisterScreen = () => {

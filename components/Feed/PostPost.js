@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import {
-  patchSubGoalbyId,
-  postStatus,
+  patchSubgoalbyId,
+  postPost,
   patchGoalbyId,
   patchSubgoalStatusById,
   getGoalByGoalId,
@@ -18,14 +18,7 @@ import {
 } from "../../utils/api";
 import { useNavigation } from "@react-navigation/native";
 
-const PostStatus = ({
-  goal,
-  subgoal,
-  ownerP,
-  progress,
-  goalUnit,
-  setFriendPosts,
-}) => {
+const PostPost = ({ goal, subgoal, ownerP, progress }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [congratsModalVisible, setCongratsModalVisible] = useState(false);
@@ -53,7 +46,7 @@ const PostStatus = ({
         ),
         value: parseFloat(progress),
       };
-      patchSubGoalbyId(goal.subgoal_id, patchObject)
+      patchSubgoalbyId(goal.subgoal_id, patchObject)
         .then((subgoal) => {
           if (
             subgoal.progress[subgoal.progress.length - 1][1] >=
@@ -86,7 +79,7 @@ const PostStatus = ({
           return;
         })
         .then((patchedGoal) => {
-          return postStatus({
+          return postPost({
             associated_data_type: "subgoal",
             associated_id: subgoal,
             owner: ownerP,
@@ -99,7 +92,7 @@ const PostStatus = ({
         })
         .then((patchedGoal) => {
           if (!patchedGoal) {
-            navigation.navigate("SetGoalIntro");
+            navigation.navigate("SetGoal");
             navigation.navigate("Feed");
           }
         });
@@ -124,7 +117,7 @@ const PostStatus = ({
           return null;
         })
         .then((patchedGoal) => {
-          return postStatus({
+          return postPost({
             associated_data_type: "subgoal",
             associated_id: subgoal,
             owner: ownerP,
@@ -136,7 +129,7 @@ const PostStatus = ({
         })
         .then((patchedGoal) => {
           if (!patchedGoal) {
-            navigation.navigate("SetGoalIntro");
+            navigation.navigate("SetGoal");
             navigation.navigate("Feed");
           }
         });
@@ -145,7 +138,7 @@ const PostStatus = ({
   };
 
   const handleCongratsMessageSubmit = () => {
-    navigation.navigate("SetGoalIntro");
+    navigation.navigate("SetGoal");
     setCongratsModalVisible(!congratsModalVisible);
     navigation.navigate("Feed");
   };
@@ -213,7 +206,7 @@ const PostStatus = ({
   );
 };
 
-export default PostStatus;
+export default PostPost;
 
 const styles = StyleSheet.create({
   centeredView: {

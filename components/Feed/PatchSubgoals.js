@@ -11,14 +11,14 @@ import {
 import {
   getGoalByGoalId,
   patchSubgoalStatusById,
-  patchSubGoalbyId,
+  patchSubgoalbyId,
   patchGoalStatusById,
   patchGoalbyId,
 } from "../../utils/api";
 import { useNavigation } from "@react-navigation/native";
 
-import PostStatus from "./PostStatus";
-const PatchSubGoal = ({ goal, goalUnit, setFriendPosts, goalPageId }) => {
+import PostStatus from "./PostPost";
+const PatchS = ({ goal, goalUnit, setFriendPosts, goalPageId }) => {
   const [progress, setProgress] = useState(0);
   const [congratsModalVisible, setCongratsModalVisible] = useState(false);
   const [goalObjective, setGoalObjective] = useState("");
@@ -58,7 +58,7 @@ const PatchSubGoal = ({ goal, goalUnit, setFriendPosts, goalPageId }) => {
         ),
         value: parseFloat(progress),
       };
-      patchSubGoalbyId(goal.subgoal_id, patchObject)
+      patchSubgoalbyId(goal.subgoal_id, patchObject)
         .then((subgoal) => {
           if (
             subgoal.progress[subgoal.progress.length - 1][1] >=
@@ -93,7 +93,7 @@ const PatchSubGoal = ({ goal, goalUnit, setFriendPosts, goalPageId }) => {
         })
         .then(() => {
           if (goalPageId) {
-            navigation.navigate("SetGoalIntro");
+            navigation.navigate("SetGoal");
             navigation.navigate("GoalPage", { goal_id: goalPageId });
           }
         });
@@ -157,10 +157,10 @@ const PatchSubGoal = ({ goal, goalUnit, setFriendPosts, goalPageId }) => {
   );
 };
 
-export default PatchSubGoal;
+export default PatchS;
 
 const styles = StyleSheet.create({
-  subGoal: {},
+  s: {},
   madeProgress: {
     marginLeft: 5,
     padding: 3,

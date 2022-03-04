@@ -4,7 +4,7 @@ import { TouchableOpacity, FlatList } from "react-native";
 import { useState, useEffect } from "react";
 import { KeyboardAvoidingView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Card from "../../shared/card";
+import Card from "../../shared/Card";
 import {
   getCommentsByPost,
   getSubgoalBySubgoalId,

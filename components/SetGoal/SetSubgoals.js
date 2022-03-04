@@ -8,14 +8,14 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import Card from "../../shared/card";
-import SubGoalForm from "./SubGoalForm";
+import Card from "../../shared/Card";
+import SubgoalForm from "./SubgoalForm";
 import { postGoal, postSubgoal } from "../../utils/api";
-import SubGoalDetails from "./SubGoalDetails";
+import SubgoalDetails from "./SubgoalDetails";
 import { IconButton } from "react-native-paper";
 import { auth } from "../../firebase";
 
-const SetGoal = ({ navigation, route }) => {
+const SetSubgoals = ({ navigation, route }) => {
   const currentUser = auth.currentUser.displayName;
   if (!route.params) {
     route.params = { goalProperties: {}, clickCounter: 0 };
@@ -23,11 +23,11 @@ const SetGoal = ({ navigation, route }) => {
 
   let { goalProperties } = route.params;
 
-  const [addSubGoalModalOpen, setAddSubGoalModalOpen] = useState(false);
+  const [addSubgoalModalOpen, setAddSModalOpen] = useState(false);
 
-  const [subGoals, setSubGoals] = useState([]);
-  const [showSubGoalDetails, setShowSubGoalDetails] = useState(
-    subGoals.map(() => {
+  const [subgoals, setSubgoals] = useState([]);
+  const [showSubgoalDetails, setShowSubgoalDetails] = useState(
+    subgoals.map(() => {
       return false;
     })
   );
@@ -52,7 +52,7 @@ const SetGoal = ({ navigation, route }) => {
       }
     }
     goalProperties = route.params.goalProperties;
-    setSubGoals([]);
+    setSubgoals([]);
     if (goalProperties.target_value) {
       const goalNumberOfDays =
         Math.round(
@@ -72,7 +72,7 @@ const SetGoal = ({ navigation, route }) => {
             (100 * (goalProperties.target_value * subgoalPeriod)) /
               goalNumberOfDays
           ) / 100;
-        setSubGoals((oldSubgoals) => {
+        setSubgoals((oldSubgoals) => {
           const newSubgoals = [...oldSubgoals];
           const newSubgoal = {
             start_date: new Date(goalProperties.start_date).setDate(
@@ -110,7 +110,7 @@ const SetGoal = ({ navigation, route }) => {
             (100 * goalProperties.target_value * finalSubgoalPeriod) /
               goalNumberOfDays
           ) / 100;
-        setSubGoals((oldSubgoals) => {
+        setSubgoals((oldSubgoals) => {
           const newSubgoals = [...oldSubgoals];
           const newSubgoal = {
             start_date: new Date(goalProperties.start_date).setDate(
@@ -141,7 +141,7 @@ const SetGoal = ({ navigation, route }) => {
         });
       }
     } else {
-      setSubGoals([
+      setSubgoals([
         {
           objective: goalProperties.objective,
           end_date: goalProperties.end_date,
@@ -153,35 +153,35 @@ const SetGoal = ({ navigation, route }) => {
   }, [route.params.clickCounter]);
 
   useEffect(() => {
-    setShowSubGoalDetails(
-      subGoals.map(() => {
+    setShowSubgoalDetails(
+      subgoals.map(() => {
         return false;
       })
     );
-  }, [subGoals]);
+  }, [subgoals]);
 
-  const addSubGoal = (subGoal) => {
-    setSubGoals((currentSubGoals) => {
-      return [...currentSubGoals, subGoal];
+  const addSubgoal = (s) => {
+    setSubgoals((currentSubgoals) => {
+      return [...currentSubgoals, s];
     });
-    setAddSubGoalModalOpen(false);
+    setAddSModalOpen(false);
   };
 
   const handleAddGoal = () => {
     postGoal(goalProperties, auth.currentUser.displayName).then((goal_id) => {
-      subGoals.forEach((subgoal) => {
+      subgoals.forEach((subgoal) => {
         postSubgoal(subgoal, goal_id, auth.currentUser.displayName);
       });
     });
 
-    navigation.navigate("SetGoalIntro");
+    navigation.navigate("SetGoal");
     navigation.navigate("Feed");
   };
 
   return (
     <ScrollView style={styles.container}>
       <Modal
-        visible={addSubGoalModalOpen}
+        visible={addSubgoalModalOpen}
         animationType="slide"
         style={styles.subgoalformmodal}
       >
@@ -191,14 +191,14 @@ const SetGoal = ({ navigation, route }) => {
             color="black"
             size={20}
             onPress={() => {
-              setAddSubGoalModalOpen(false);
+              setAddSModalOpen(false);
             }}
           ></IconButton>
-          <SubGoalForm
+          <SubgoalForm
             goalEndDate={route.params.goalProperties.end_date}
             goalStartDate={route.params.goalProperties.start_date}
-            addSubGoal={addSubGoal}
-            setShowSubGoalDetails={setShowSubGoalDetails}
+            addSubgoal={addSubgoal}
+            setShowSubgoalDetails={setShowSubgoalDetails}
             goalEndDate={goalProperties.end_date}
           />
         </ScrollView>
@@ -209,7 +209,7 @@ const SetGoal = ({ navigation, route }) => {
           goalProperties.target_value = "";
           goalProperties.unit = "";
           goalProperties.subgoalPeriod = "";
-          navigation.navigate("SetGoalIntro", {
+          navigation.navigate("SetGoal", {
             goalProperties,
           });
         }}
@@ -247,21 +247,21 @@ const SetGoal = ({ navigation, route }) => {
       </View>
       <Text style={styles.header}>Subgoals</Text>
 
-      {subGoals.length === 0 ? (
+      {subgoals.length === 0 ? (
         <View>
           <Text>Add some Subgoals!</Text>
         </View>
       ) : (
         <View>
           <FlatList
-            data={subGoals}
+            data={subgoals}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
-                  setShowSubGoalDetails((showSubGoalDetails) => {
-                    const newState = showSubGoalDetails.map(
+                  setShowSubgoalDetails((showSubgoalDetails) => {
+                    const newState = showSubgoalDetails.map(
                       (boolean, index) => {
-                        return subGoals.indexOf(item) === index;
+                        return subgoals.indexOf(item) === index;
                       }
                     );
                     return newState;
@@ -269,7 +269,7 @@ const SetGoal = ({ navigation, route }) => {
                 }}
               >
                 <Modal
-                  visible={showSubGoalDetails[subGoals.indexOf(item)] === true}
+                  visible={showSubgoalDetails[subgoals.indexOf(item)] === true}
                   animationType="fade"
                 >
                   <ScrollView style={styles.modalContainer}>
@@ -278,19 +278,19 @@ const SetGoal = ({ navigation, route }) => {
                       color="black"
                       size={20}
                       onPress={() => {
-                        setShowSubGoalDetails((showSubGoalDetails) => {
-                          const newState = showSubGoalDetails.map(() => {
+                        setShowSubgoalDetails((showSubgoalDetails) => {
+                          const newState = showSubgoalDetails.map(() => {
                             return false;
                           });
                           return newState;
                         });
                       }}
                     />
-                    <SubGoalDetails
-                      setSubGoals={setSubGoals}
-                      setShowSubGoalDetails={setShowSubGoalDetails}
-                      showSubGoalDetails={showSubGoalDetails}
-                      subGoals={subGoals}
+                    <SubgoalDetails
+                      setSubgoals={setSubgoals}
+                      setShowSubgoalDetails={setShowSubgoalDetails}
+                      showSubgoalDetails={showSubgoalDetails}
+                      subgoals={subgoals}
                       item={item}
                     />
                   </ScrollView>
@@ -310,7 +310,7 @@ const SetGoal = ({ navigation, route }) => {
         <TouchableOpacity
           style={styles.addsubgoalbutton}
           onPress={() => {
-            setAddSubGoalModalOpen(true);
+            setAddSModalOpen(true);
           }}
         >
           <Text style={styles.buttontext}>Add Subgoal</Text>
@@ -455,4 +455,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SetGoal;
+export default SetSubgoals;

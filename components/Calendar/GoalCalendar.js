@@ -1,23 +1,21 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { useState, useEffect } from "react";
 import { Card } from "react-native-paper";
 import { auth } from "../../firebase";
-import { getGoalsByUser, getSubGoalsByUser } from "../../utils/api";
+import { getGoalsByUser, getSubgoalsByUser } from "../../utils/api";
 import {
   formatGoalsForCalendar,
   formatSubgoalsForCalendar,
-} from "../../utils/FormatDates";
+} from "../../utils/formatDates";
 
 const GoalCalendar = () => {
   let user = auth.currentUser;
   const [items, setItems] = useState({});
 
-  const [goals, setGoals] = useState({});
-
   useEffect(() => {
-    getSubGoalsByUser(user.displayName)
+    getSubgoalsByUser(user.displayName)
       .then((subgoals) => {
         const formattedSubgoals = formatSubgoalsForCalendar(subgoals);
         setItems(formattedSubgoals);
@@ -77,7 +75,7 @@ const styles = StyleSheet.create({
   calendar: {
     marginTop: 15,
   },
-  subGoalDetails: {
+  sDetails: {
     height: 100,
     width: "95%",
     padding: 10,
