@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet, TextInput, Image } from "react-native";
-
 import { TouchableOpacity, FlatList } from "react-native";
 import { useState, useEffect } from "react";
 import { KeyboardAvoidingView } from "react-native";
@@ -26,9 +25,6 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 import ProgressBar from "../../shared/ProgressBar";
-import { matchRoutes } from "react-router-dom";
-import { Avatar } from "react-native-paper";
-import { auth } from "../../firebase";
 
 let friendPosts = [];
 
@@ -294,7 +290,6 @@ const Social = (props) => {
         <View style={styles.flexRow}>
           {reactionCount.awesome > 0 ? (
             <View style={styles.reaction}>
-              {/* <View style={styles.awesome} /> */}
               <Text style={styles.awesome}>⭐</Text>
               {currentUserReaction && currentUserReaction[0] === "awesome" ? (
                 <View style={styles.redCircle}>
@@ -309,7 +304,6 @@ const Social = (props) => {
           ) : null}
           {reactionCount.congrats > 0 ? (
             <View style={styles.reaction}>
-              {/* <View style={styles.congrats} /> */}
               <Text style={styles.congrats}>🥳</Text>
               {currentUserReaction && currentUserReaction[0] === "congrats" ? (
                 <View style={styles.redCircle}>
@@ -324,7 +318,6 @@ const Social = (props) => {
           ) : null}
           {reactionCount.encourage > 0 ? (
             <View style={styles.reaction}>
-              {/* <View style={styles.encourage} /> */}
               <Text style={styles.encourage}>🏆</Text>
               {currentUserReaction && currentUserReaction[0] === "encourage" ? (
                 <View style={styles.redCircle}>
@@ -339,7 +332,6 @@ const Social = (props) => {
           ) : null}
           {reactionCount.proud > 0 ? (
             <View style={styles.reaction}>
-              {/* <View style={styles.proud} /> */}
               <Text style={styles.proud}>👏</Text>
               {currentUserReaction && currentUserReaction[0] === "proud" ? (
                 <View style={styles.redCircle}>
@@ -473,7 +465,6 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 15,
     fontWeight: "bold",
-    // margin: 10,
   },
   postUsername: {
     color: "black",
@@ -495,35 +486,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   awesome: {
-    // height: 30,
-    // width: 30,
-    // backgroundColor: "blue",
     borderRadius: 15,
     marginRight: 2,
     fontSize: 35,
   },
   congrats: {
-    // height: 30,
-    // width: 30,
-    // backgroundColor: "yellow",
-    // borderRadius: 15,
-    // marginRight: 8,
     fontSize: 35,
   },
   encourage: {
-    // height: 30,
-    // width: 30,
-    // backgroundColor: "green",
-    // borderRadius: 15,
-    // marginRight: 8,
     fontSize: 35,
   },
   proud: {
-    // height: 30,
-    // width: 30,
-    // backgroundColor: "pink",
-    // borderRadius: 15,
-    // marginRight: 8,
     fontSize: 35,
   },
 
@@ -601,30 +574,12 @@ const styles = StyleSheet.create({
     borderColor: "grey",
     borderRadius: 50,
   },
-
-  redText: {
-    //   color: "red",
-    // },
-    // blueText: {
-    //   color: "blue",
-    //   fontWeight: "bold",
-  },
-  boxed: {
-    // borderWidth: 1,
-    // borderColor: "black",
-  },
   objective: {
     fontWeight: "bold",
     color: "#00b12c",
     fontSize: 18,
     marginBottom: 8,
     alignSelf: "center",
-  },
-  reaction: {
-    // paddingLeft: 5,
-    // paddingRight: 5,
-    // flexDirection: "row",
-    // alignItems: "center",
   },
   redCircle: {
     height: 18,

@@ -3,16 +3,13 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   FlatList,
-  TouchableOpacity,
-  Image,
   ScrollView,
   Modal,
   Pressable,
 } from "react-native";
-import { useState, useEffect } from "react";
-import dateFormat, { masks } from "dateformat";
+import { useState } from "react";
+import dateFormat from "dateformat";
 import {
   getGoalByGoalId,
   getSubgoalsByGoalId,
@@ -53,7 +50,6 @@ const GoalPage = ({ navigation, route }) => {
   );
 
   const handleCheckBoxClick = (subgoal) => {
-    console.log(subgoal);
     setIsChecked((currVal) => !currVal);
     getGoalByGoalId(subgoal.goal_id)
       .then((supergoal) => {
@@ -74,7 +70,6 @@ const GoalPage = ({ navigation, route }) => {
               }
             }
             if (allSubgoalsCompleted && supergoal.type === "boolean") {
-              console.log("adsadsdasads");
               setCongratsModalVisible(true);
               return patchGoalStatusById(supergoal.goal_id, "completed");
             }
@@ -219,13 +214,11 @@ const GoalPage = ({ navigation, route }) => {
                       )
                     ).getTime() ? (
                     <View style={{ marginTop: 15, marginBottom: 0 }}>
-                      {/* <Text style={styles.unit}>Made progress?</Text> */}
                       <PatchSubGoal
                         goal={item}
                         goalUnit={item.unit}
                         goalPageId={item.goal_id}
                       />
-                      {/* <Text style={styles.unit}>{item.unit}</Text> */}
                     </View>
                   ) : null}
                 </View>

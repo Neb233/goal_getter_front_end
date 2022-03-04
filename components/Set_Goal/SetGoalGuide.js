@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Button,
-  TextInput,
-  View,
-  Text,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, ScrollView } from "react-native";
 
 const SetGoalGuide = () => {
   return (

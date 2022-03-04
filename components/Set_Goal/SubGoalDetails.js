@@ -2,13 +2,10 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
-  KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { Formik, useField } from "formik";
 import dateFormat from "dateformat";
 
 const SubGoalDetails = ({
@@ -16,7 +13,6 @@ const SubGoalDetails = ({
   setSubGoals,
   item,
   setShowSubGoalDetails,
-  showSubGoalDetails,
 }) => {
   const deleteSubGoal = (objective) => {
     const newSubGoals = subGoals.map((subgoal) => {
@@ -37,17 +33,6 @@ const SubGoalDetails = ({
   };
 
   return (
-    // <KeyboardAvoidingView
-    //   style={{
-    //     flex: 1,
-    //     flexDirection: "column",
-    //     marginTop: 20,
-    //     marginBottom: 20,
-    //   }}
-    //   behavior="padding"
-    //   enabled
-    //   keyboardVerticalOffset={100}
-    // >
     <ScrollView>
       <View style={styles.fieldcontainer}>
         <Text style={styles.title}>Objective</Text>
@@ -90,7 +75,6 @@ const SubGoalDetails = ({
         </View>
       )}
     </ScrollView>
-    // </KeyboardAvoidingView>
   );
 };
 
@@ -120,7 +104,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     height: 50,
-    // width: "100%",
     backgroundColor: "red",
     marginTop: 10,
     borderRadius: 5,

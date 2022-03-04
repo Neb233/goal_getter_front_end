@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import * as Progress from "react-native-progress";
-import { getSubgoalsByGoalId } from "../utils/api";
+
 const ProgressBar = ({ progress, target_value, subgoals, color }) => {
-  console.log(progress);
   if (target_value) {
     const progressRatio = Math.min(
       1,
@@ -45,6 +43,7 @@ const ProgressBar = ({ progress, target_value, subgoals, color }) => {
     );
   }
 };
+
 export default ProgressBar;
 
 const styles = StyleSheet.create({

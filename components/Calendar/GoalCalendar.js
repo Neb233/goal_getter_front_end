@@ -4,13 +4,11 @@ import { Agenda } from "react-native-calendars";
 import { useState, useEffect } from "react";
 import { Card } from "react-native-paper";
 import { auth } from "../../firebase";
-
 import { getGoalsByUser, getSubGoalsByUser } from "../../utils/api";
 import {
   formatGoalsForCalendar,
   formatSubgoalsForCalendar,
 } from "../../utils/FormatDates";
-import Nav from "../Nav/Nav";
 
 const GoalCalendar = () => {
   let user = auth.currentUser;
@@ -24,7 +22,6 @@ const GoalCalendar = () => {
         const formattedSubgoals = formatSubgoalsForCalendar(subgoals);
         setItems(formattedSubgoals);
         return getGoalsByUser(user.displayName);
-        // console.warn(formattedSubgoals)
       })
       .then((goals) => {
         const formattedGoals = formatGoalsForCalendar(goals);
@@ -38,7 +35,6 @@ const GoalCalendar = () => {
               combinedGoalsObject[date] = formattedGoals[date];
             }
           });
-
           return combinedGoalsObject;
         });
       });

@@ -4,12 +4,10 @@ import {
   View,
   Text,
   TextInput,
-  ScrollView,
   TouchableOpacity,
   Modal,
   Pressable,
 } from "react-native";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {
   getGoalByGoalId,
   patchSubgoalStatusById,
@@ -20,13 +18,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import PostStatus from "./PostStatus";
-const PatchSubGoal = ({
-  goal,
-  goals,
-  goalUnit,
-  setFriendPosts,
-  goalPageId,
-}) => {
+const PatchSubGoal = ({ goal, goalUnit, setFriendPosts, goalPageId }) => {
   const [progress, setProgress] = useState(0);
   const [congratsModalVisible, setCongratsModalVisible] = useState(false);
   const [goalObjective, setGoalObjective] = useState("");
@@ -94,7 +86,6 @@ const PatchSubGoal = ({
               patchedGoal.target_value &&
             patchedGoal.status === "active"
           ) {
-            console.log("hello");
             setCongratsModalVisible(true);
             return patchGoalStatusById(patchedGoal.goal_id, "completed");
           }
@@ -189,7 +180,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#5b72a4",
-    // position: "relative",
   },
   updateText: {
     alignItems: "center",

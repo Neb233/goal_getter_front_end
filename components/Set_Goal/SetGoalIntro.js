@@ -2,23 +2,18 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
   TouchableOpacity,
   Modal,
   SafeAreaView,
   TextInput,
-  Pressable,
-  TouchableWithoutFeedBack,
-  Keyboard,
   ScrollView,
   Switch,
 } from "react-native";
-import { Button, IconButton } from "react-native-paper";
+import { IconButton } from "react-native-paper";
 import React, { useState } from "react";
 import SetGoalGuide from "./SetGoalGuide";
 import { Formik, ErrorMessage } from "formik";
 import * as yup from "yup";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { HideableView } from "../../shared/HideableView";
 import DatePicker from "../../shared/DatePicker";
 import dateFormat from "dateformat";
@@ -41,9 +36,6 @@ const SetGoalIntro = ({ navigation, route }) => {
     setHideProgressOptions(!isChecked);
   };
 
-  if (route.params) {
-    console.log(route.params.goalProperties.target_value);
-  }
   return (
     <ScrollView style={styles.page}>
       <SafeAreaView>
@@ -60,7 +52,7 @@ const SetGoalIntro = ({ navigation, route }) => {
             <SetGoalGuide />
           </View>
         </Modal>
-        <View>
+        <View style={{ paddingTop: 15 }}>
           <View style={[styles.goalContainer, { margin: 15 }]}>
             <Text style={styles.text_footer_small}>
               Tell us what you'd like to achieve it by filling out the form
@@ -75,14 +67,6 @@ const SetGoalIntro = ({ navigation, route }) => {
               specific, measurable, achievable, relevant, and time-restricted.
             </Text>
           </View>
-          {/* <TouchableOpacity
-            onPress={() => {
-              setModalOpen(true);
-            }}
-            style={[styles.addgoalbutton, { marginTop: 15 }]}
-          >
-            <Text style={styles.buttontext}>Get More Info</Text>
-          </TouchableOpacity> */}
           <Formik
             initialValues={{
               objective: route.params
@@ -110,15 +94,6 @@ const SetGoalIntro = ({ navigation, route }) => {
               subgoalPeriod: "",
             }}
             onSubmit={(values) => {
-              console.log(values.target_value);
-              console.warn(values);
-              // values.start_date = new Date(2022, 0, 1);
-              // values.end_date = new Date(2022, 11, 31);
-              // const goalProperties = { ...values };
-              // goalProperties.subgoals = [];
-              // if (route.params && route.params.subgoals) {
-              //   goalProperties.subgoals = route.params.subgoals;
-              // }
               setClickCounter((oldClickCounter) => {
                 return oldClickCounter + 1;
               });
@@ -333,7 +308,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     height: 50,
-    // width: "100%",
     backgroundColor: "#5b72a4",
     marginTop: 10,
     marginBottom: 20,

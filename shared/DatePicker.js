@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  SafeAreaView,
-  Platform,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
 import { useField, useFormikContext } from "formik";
@@ -16,17 +9,7 @@ const DatePicker = ({ ...props }) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
   const [date, setDate] = useState(new Date());
-  const [startDate, setStartDate] = useState(new Date());
   const [show, setShow] = useState(false);
-
-  const onDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-
-    setShow(Platform.OS === "ios");
-    setStartDate(currentDate);
-    setDate(currentDate);
-    setFieldValue(field.name, currentDate);
-  };
 
   const showDatePicker = (event) => {
     setShow(true);
@@ -65,8 +48,6 @@ const DatePicker = ({ ...props }) => {
           display="default"
           onChange={(event, selectedDate) => {
             const currentDate = selectedDate || date;
-
-            setStartDate(currentDate);
             setDate(currentDate);
             setFieldValue(field.name, currentDate);
           }}

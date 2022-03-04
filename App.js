@@ -1,30 +1,15 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  LogBox,
-} from "react-native";
+import { StyleSheet, Text, Image, LogBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "./components/Login/LoginScreen";
-import RegisterScreen from "./components/Login/RegisterScreen";
 import SetGoal from "./components/Set_Goal/SetGoal";
-import SubGoalForm from "./components/Set_Goal/SubGoalForm";
 import SearchUsers from "./components/Social/SearchUsers";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Feed from "./components/Feed/Feed";
-import Social from "./components/Feed/Social";
-import Nav from "./components/Nav/Nav";
-import Profile from "./components/Profile/Profile";
 import SetGoalIntro from "./components/Set_Goal/SetGoalIntro";
 import GoalCalendar from "./components/Calendar/GoalCalendar";
-import React, { useEffect, useState, useContext } from "react";
-import { onAuthStateChanged, getAuth } from "firebase/auth";
+import React, { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
-import { UserContext, UserProvider } from "./context/user";
 import Goals from "./components/Profile/UserPage";
 import GoalPage from "./components/GoalPage/GoalPage";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -103,14 +88,6 @@ const App = () => {
             headerRight: () => (
               <Text style={{ color: "#fdf9e6", fontSize: 18 }}>Calendar</Text>
             ),
-          }}
-        />
-        <FeedStack.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            title: "GoalGetter",
-            headerLeft: () => null,
           }}
         />
         <FeedStack.Screen
@@ -217,7 +194,6 @@ const App = () => {
             ),
           }}
         />
-        {/* <UserStack.Screen name="Test" component={SetGoalIntro} /> */}
       </UserStack.Navigator>
     );
   }
@@ -270,7 +246,6 @@ const App = () => {
             ),
           }}
         />
-        {/* <GoalStack.Screen name="" component={} /> */}
       </GoalStack.Navigator>
     );
   }
@@ -356,7 +331,6 @@ const App = () => {
             ),
           }}
         />
-        {/* <SearchStack.Screen name="" component={} /> */}
       </SearchStack.Navigator>
     );
   }
@@ -435,60 +409,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-{
-  /* <Stack.Navigator>
-        //   <Stack.Screen */
-}
-//     name="Nav"
-//     component={Nav}
-//     options={{ headerShown: false }}
-//   />
-
-// options={{tabBarIcon: () => (<MaterialIcons name="dynamic-feed" color='black' size='2'/>)}}
-// options={{tabBarIcon: () => (<MaterialCommunityIcons name="trophy" color='black' size='10'/>)}}
-// options={{tabBarIcon: () => (<MaterialCommunityIcons name="account" color='black' size='10'/>)}}
-// options={{tabBarIcon: () => (<MaterialIcons name="search" color='black' size='5'/>)}}
-
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-// options={{title: <Image style={{width: 40, height: 40, marginLeft: 225, marginTop: 5}} source={require('./components/Profile/blank_avatar.png')}/>}}
-
-{
-  /* <Stack.Navigator>
-        //   <Stack.Screen */
-}
-//     name="Nav"
-//     component={Nav}
-//     options={{ headerShown: false }}
-//   />
-
-//   <Stack.Screen name="Feed" component={Feed} />
-//   <Stack.Screen name="SetGoal" component={SetGoal} />
-//   <Stack.Screen name="GoalCalendar" component={GoalCalendar} />
-//   <Stack.Screen name="SubGoalForm" component={SubGoalForm} />
-//   <Stack.Screen name="Profile" component={Profile} />
-//   <Stack.Screen name="SearchUsers" component={SearchUsers} />
-
-//   <Stack.Screen name="Login" component={LoginScreen} />
-
-//   <Stack.Screen name="UserPage" component={Goals} />
-//   <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
-
-//   <Stack.Screen name="Login" component={LoginScreen} />
-
-//   <Stack.Screen name="UserPage" component={Goals} />
-//   <Stack.Screen name="SetGoalIntro" component={SetGoalIntro} />
-
-//   <Stack.Screen name="Register" component={RegisterScreen} />
-// </Stack.Navigator>

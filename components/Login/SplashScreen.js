@@ -5,11 +5,9 @@ import {
   TouchableOpacity,
   Dimensions,
   StatusBar,
-  Image,
 } from "react-native";
 import React from "react";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-// import LinearGradient from 'react-native-linear-gradient'
+import { useNavigation } from "@react-navigation/native";
 import * as Animatable from "react-native-animatable";
 
 const SplashScreen = () => {
