@@ -3,9 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   ScrollView,
-  TouchableOpacity,
   Modal,
   Pressable,
   Dimensions,
@@ -23,7 +21,6 @@ import PatchSubGoal from "./PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import PostStatus from "./PostStatus";
 import { useNavigation } from "@react-navigation/native";
-import ProgressBar from "../../shared/ProgressBar";
 import dateFormat from "dateformat";
 import { auth } from "../../firebase";
 
@@ -33,8 +30,6 @@ const Subgoals = ({ setFriendPosts }) => {
   const [loggedInUser, setLoggedInUser] = useState(
     auth.currentUser.displayName
   );
-  const { owner } = useParams();
-  const [isChecked, setIsChecked] = useState(false);
   const [congratsModalVisible, setCongratsModalVisible] = useState(false);
   const [goalObjective, setGoalObjective] = useState("");
 
@@ -86,7 +81,6 @@ const Subgoals = ({ setFriendPosts }) => {
               }
             }
             if (allSubgoalsCompleted) {
-              console.log("adsadsdasads");
               setCongratsModalVisible(true);
               return patchGoalStatusById(supergoal.goal_id, "completed");
             }
@@ -100,7 +94,6 @@ const Subgoals = ({ setFriendPosts }) => {
   };
 
   return (
-    // style={styles.cont}
     <View>
       <Modal
         animaitonType="slide"
@@ -156,12 +149,7 @@ const Subgoals = ({ setFriendPosts }) => {
                         End date:{" "}
                         {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
                       </Text>
-                      {/* <ProgressBar
-                        progress={goal.progress}
-                        target_value={goal.target_value}
-                      /> */}
                       <View style={styles.progress}>
-                        {/* <Text style={styles.unit}>Made progress?</Text> */}
                         <PatchSubGoal
                           goals={goals}
                           setGoals={setGoals}
@@ -169,14 +157,11 @@ const Subgoals = ({ setFriendPosts }) => {
                           goalUnit={goal.unit}
                           setFriendPosts={setFriendPosts}
                         />
-                        {/* <Text style={styles.unit}>{goal.unit}</Text> */}
                       </View>
                     </View>
                   ) : (
-                    // <View style={[styles.progress, styles.checkBox]}>
                     <View>
                       <View style={{ flexDirection: "column" }}>
-                        {/* <Text>Complete?</Text> */}
                         <BouncyCheckbox
                           text={goal.objective}
                           size={30}
@@ -189,7 +174,6 @@ const Subgoals = ({ setFriendPosts }) => {
                             fontWeight: "bold",
                           }}
                           style={{ marginBottom: 30, flexDirection: "row" }}
-                          // style={styles.checkBox}
                           onPress={() => handleCheckBoxClick(goal)}
                         />
                       </View>
@@ -230,8 +214,6 @@ const styles = StyleSheet.create({
     padding: 20,
     width: subgoalWidth,
     backgroundColor: "#3e4d6e",
-    // borderRadius: 10,
-    // marginRight: 1
   },
   pageContent: {
     marginTop: 10,

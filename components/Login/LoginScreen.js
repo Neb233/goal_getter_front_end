@@ -7,18 +7,13 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "../../context/user";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 
 import { auth } from "../../firebase";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from "@firebase/auth";
+import { signInWithEmailAndPassword } from "@firebase/auth";
 
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { Formik } from "formik";
+import { useNavigation } from "@react-navigation/native";
 
 import * as Yup from "yup";
 import * as Animatable from "react-native-animatable";
@@ -37,23 +32,16 @@ const LoginScreen = () => {
       })
       .then((valid) => {
         if (valid) {
-          signInWithEmailAndPassword(auth, email, password)
-            .then((userCredentials) => {
+          signInWithEmailAndPassword(auth, email, password).then(
+            (userCredentials) => {
               const user = userCredentials.user;
               navigation.navigate("Feed");
               return user;
-            })
-            .catch((error) => {
-              console.warn(error.message);
-            });
+            }
+          );
         }
       });
   };
-
-  // // const handleTest = (values) => {
-  // //   navigation.navigate("Profile")
-
-  // // }
 
   const valSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
@@ -69,27 +57,6 @@ const LoginScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light" />
-
-      {/* <Formik
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        validationSchema={valSchema}
-        onSubmit={(values) => {
-          signInWithEmailAndPassword(auth, values.email, values.password)
-            .then((userCredential) => {
-              const user = userCredential.user;
-              return user;
-            })
-
-            .catch((error) => {
-              const errorCode = error.code;
-              const errorMessage = error.message;
-            });
-        }}
-      >
-        {({ values, handleChange, handleSubmit, errors, touched }) => ( */}
       <KeyboardAvoidingView behaviour="padding">
         <View style={styles.header}>
           <Text style={styles.text_header}>Welcome Back</Text>
@@ -105,9 +72,6 @@ const LoginScreen = () => {
               onChangeText={(text) => SetEmail(text)}
               style={styles.textInput}
             />
-            {/* <Text style={styles.errorMsg}>
-                  {touched.email && errors.email}
-                </Text> */}
           </View>
 
           <View style={styles.action}>
@@ -120,9 +84,6 @@ const LoginScreen = () => {
               style={styles.textInput}
               secureTextEntry
             />
-            {/* <Text style={styles.errorMsg}>
-                  {touched.password && touched.email}
-                </Text> */}
           </View>
 
           <View style={styles.buttonContainer}>
@@ -143,8 +104,6 @@ const LoginScreen = () => {
           </View>
         </Animatable.View>
       </KeyboardAvoidingView>
-      {/* )}
-      </Formik> */}
     </ScrollView>
   );
 };
@@ -157,7 +116,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fdf9e6",
   },
   header: {
-    // flex: 1,
     justifyContent: "flex-end",
     paddingHorizontal: 20,
     paddingBottom: 50,
@@ -165,7 +123,6 @@ const styles = StyleSheet.create({
     color: "#5b72a4",
   },
   footer: {
-    // flex: 3,
     backgroundColor: "#fff",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -175,7 +132,6 @@ const styles = StyleSheet.create({
   },
   text_header: {
     color: "#3e4d6e",
-    // color: "#fff",
     fontWeight: "bold",
     fontSize: 30,
   },

@@ -4,10 +4,6 @@ const goalgetterApi = axios.create({
   baseURL: "https://goalgetter-backend.herokuapp.com/api",
 });
 
-/*
-Drafted endpoints may not match back end so change where needed
-*/
-
 export const getGoals = () => {
   return goalgetterApi.get("/goals").then(({ data }) => {
     return data.goals;
@@ -28,27 +24,19 @@ export const getSubGoalsByUser = (username) => {
 
 export const patchSubGoalbyId = (subgoal_id, patchObject) => {
   patchObject.date = new Date(patchObject.date);
-  console.log(patchObject, "patchSubgoal");
   return goalgetterApi
     .patch(`/subgoals/${subgoal_id}/progress`, patchObject)
     .then(({ data }) => {
       return data.subgoal;
-    })
-    .catch((err) => {
-      console.log(err.response);
     });
 };
 
 export const patchGoalbyId = (goal_id, patchObject) => {
   patchObject.date = new Date(patchObject.date);
-  console.log(patchObject, "patchGoal");
   return goalgetterApi
     .patch(`/goals/${goal_id}/progress`, patchObject)
     .then(({ data }) => {
       return data.goal;
-    })
-    .catch((err) => {
-      console.log(err.response);
     });
 };
 
@@ -116,18 +104,14 @@ export const addFriend = (loggedInUser, userToAdd) => {
   return goalgetterApi
     .post(`/friendships`, { user_1: loggedInUser, user_2: userToAdd })
     .then((res) => {
-      console.log("API", res.data);
       return res.data;
     });
 };
 
 export const deleteFriendship = (loggedInUser, userToDelete) => {
-  console.log("DELETEPARAMs", loggedInUser, userToDelete);
-  //FRIENDSHIPS ARE STORED AS IDs
   return goalgetterApi
     .get(`/users/${loggedInUser}/friendships`)
     .then((friendships) => {
-      console.log("HERE", friendships.data.friendships[0]["user_1"]);
       for (let i = 0; friendships.data.friendships.length; i++) {
         if (
           friendships.data.friendships[i]["user_1"] === userToDelete ||
@@ -138,11 +122,9 @@ export const deleteFriendship = (loggedInUser, userToDelete) => {
       }
     })
     .then((friendship_id) => {
-      console.log(friendship_id, "friendship id to delete");
       return goalgetterApi.delete(`/friendships/${friendship_id}`);
     })
     .then((res) => {
-      console.log(res.data);
       return res.data;
     });
 };
@@ -176,14 +158,9 @@ export const postGoal = (goalProperties, owner) => {
   if (goalProperties.unit === "") {
     goalProperties.unit = null;
   }
-  return goalgetterApi
-    .post("/goals", goalProperties)
-    .then(({ data }) => {
-      return data.goal.goal_id;
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
+  return goalgetterApi.post("/goals", goalProperties).then(({ data }) => {
+    return data.goal.goal_id;
+  });
 };
 
 export const getPostsByUser = (user) => {
@@ -216,9 +193,6 @@ export const postSubgoal = (subgoal, goal_id, owner) => {
     .post(`/goals/${goal_id}/subgoals`, subgoal)
     .then(({ data }) => {
       return data;
-    })
-    .catch((err) => {
-      console.log(err.response);
     });
 };
 
@@ -289,9 +263,6 @@ export const postComment = (post_id, owner, message) => {
     .post(`/posts/${post_id}/comments`, postObject)
     .then(({ data }) => {
       return data.comment[0];
-    })
-    .catch((err) => {
-      console.log(err.response.data);
     });
 };
 

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   FlatList,
   TouchableOpacity,
   Image,
@@ -19,14 +18,13 @@ import {
   getUser,
   patchAvatar,
 } from "../../utils/api";
-import dateFormat, { masks } from "dateformat";
+import dateFormat from "dateformat";
 import Social from "../Feed/Social";
 import ProgressBar from "../../shared/ProgressBar";
 import { auth } from "../../firebase";
 import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
 
 const Goals = ({ navigation, route }) => {
@@ -38,7 +36,6 @@ const Goals = ({ navigation, route }) => {
   const [showGoals, setShowGoals] = useState(false);
   const [subgoals, setSubgoals] = useState({});
   const [imagemodalVisible, setImageModaVisible] = useState("");
-  const [profPic, SetProfPic] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
 
   let user = auth.currentUser;
@@ -61,7 +58,6 @@ const Goals = ({ navigation, route }) => {
     setShowGoals(false);
 
     getGoalsByUser(user.displayName).then((goals) => {
-      console.log("USERS GOALS", goals);
       goals.forEach((goal) => {
         getSubgoalsByGoalId(goal.goal_id).then((subgoals) => {
           setSubgoals((oldSubgoals) => {
@@ -92,7 +88,6 @@ const Goals = ({ navigation, route }) => {
       );
     });
     getPostsByUser(user.displayName).then((posts) => {
-      console.log("USERS POSTS", posts);
       setUserPosts(posts);
     });
     getUser(user.displayName).then((userDetails) => {
@@ -132,23 +127,14 @@ const Goals = ({ navigation, route }) => {
     const storage = getStorage();
     getDownloadURL(ref(storage, `${user.displayName}: Profile Picture`)).then(
       (url) => {
-        console.log(url);
-        patchAvatar(user.displayName, url).then((res) => {
-          console.log(res);
-        });
+        patchAvatar(user.displayName, url);
       }
     );
     setImageModaVisible(!imagemodalVisible);
   };
 
   const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("signed out");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    signOut(auth);
   };
 
   return (
@@ -535,18 +521,12 @@ const styles = StyleSheet.create({
   },
   duedate: {
     color: "white",
-    // marginLeft: 130,
-    // marginRight: 5,
     fontSize: 12,
     marginBottom: 8,
   },
   currentgoals: {
     fontWeight: "bold",
     margin: 5,
-  },
-  header: {
-    // backgroundColor: "#5df542",
-    // height: 100,
   },
   profPic: {
     width: 130,
@@ -577,23 +557,13 @@ const styles = StyleSheet.create({
   body: {
     marginTop: 170,
     alignItems: "center",
-    // fontWeight: 'bold'
-    // justifyContent: 'center',
-    // alignSelf: 'center'
-  },
-  bodyContent: {
-    // flex: 1,
-    // alignItems: "center",
-    // padding: 30,
   },
   button: {
     backgroundColor: "#5B72A4",
-    // width: "90%",
     padding: 15,
     borderRadius: 10,
     alignSelf: "center",
     alignItems: "center",
-    // margin: 20,
     marginTop: 20,
     marginBottom: 20,
   },

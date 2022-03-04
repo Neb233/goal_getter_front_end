@@ -1,17 +1,8 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Alert,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, Alert, ScrollView, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
-import { KeyboardAvoidingView } from "react-native";
-import { Searchbar, List, Button, Avatar } from "react-native-paper";
+import { Searchbar, List, Button } from "react-native-paper";
 import {
   searchUsers,
   addFriend,
@@ -21,14 +12,8 @@ import {
 } from "../../utils/api";
 import { auth } from "../../firebase";
 
-// const SearchUsers = ({ navigation, route }) => {
 const SearchUsers = () => {
   const currentUser = auth.currentUser;
-  // if (route.params) {
-  //   user.displayName = route.params.user;
-  // } else {
-  //   user.displayName = auth.currentUser.displayName;
-  // }
 
   const [queryState, setQueryState] = useState({
     query: "",
@@ -41,13 +26,11 @@ const SearchUsers = () => {
 
   const navigation = useNavigation();
 
-  //RUN WHEN PAGE IS FIRST LOADED
   useEffect(() => {
     searchUsers(queryState.query).then((results) => {
       const filteredResults = results.filter((user) => {
         return user.username !== currentUser.displayName;
       });
-      console.log(results);
       setResultState(filteredResults);
     });
 
@@ -62,13 +45,10 @@ const SearchUsers = () => {
         return !(friends.indexOf(user.username) === -1);
       })
     );
-
-    console.log(resultState);
     const userPromises = resultState.map((user) => {
       return getUser(user.username);
     });
     return Promise.all(userPromises).then((userArray) => {
-      console.log(userArray);
       userArray.forEach((user, index) => {
         setUserAvatars((oldUserAvatars) => {
           const newUserAvatars = [...oldUserAvatars];
@@ -87,7 +67,6 @@ const SearchUsers = () => {
     );
   }, [friends]);
 
-  //RUN WHEN SEARCH IS CHANGED
   useEffect(() => {
     return searchUsers(queryState.query).then((results) => {
       const filteredResults = results.filter((user) => {
@@ -98,9 +77,6 @@ const SearchUsers = () => {
   }, [queryState]);
 
   const addFriendClick = (userToAdd) => {
-    /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
-    return addFriend("loggedInUser", "usertoadd").catch((err) => {
-          */
     return addFriend(currentUser.displayName, userToAdd)
       .then(() => {
         const ind = resultState.findIndex(
@@ -115,19 +91,15 @@ const SearchUsers = () => {
             return !(friends.indexOf(user.username) === -1);
           })
         );
-        return Alert.alert("Friend Added", "", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        return Alert.alert("Friend Added", "", [{ text: "OK" }]);
       })
       .catch((err) => {
         return getFriends(currentUser.displayName).then((friends) => {
           if (friends.indexOf(userToAdd !== -1)) {
-            return Alert.alert("Error", "Already friends", [
-              { text: "OK", onPress: () => console.log("OK Pressed") },
-            ]);
+            return Alert.alert("Error", "Already friends", [{ text: "OK" }]);
           } else {
             return Alert.alert("Error", "Something went wrong", [
-              { text: "OK", onPress: () => console.log("OK Pressed") },
+              { text: "OK" },
             ]);
           }
         });
@@ -135,33 +107,22 @@ const SearchUsers = () => {
   };
 
   const removeFriendClick = (userToRemove) => {
-    /*WIP-ONCE CONTEXT IS INCORPORATED CHANGE MARTINA 
-    return RemoveFriend("loggedInUser", "usertoRemove").catch((err) => {
-          */
-    return deleteFriendship(currentUser.displayName, userToRemove)
-      .then(() => {
-        console.log("friend removed");
-
-        const ind = friends.indexOf(userToRemove);
-        setFriends((oldFriends) => {
-          const newFriends = [
-            ...oldFriends.slice(0, ind),
-            ...oldFriends.slice(ind + 1, oldFriends.length),
-          ];
-          return newFriends;
-        });
-        setIsFriend(
-          resultState.map((user) => {
-            return !(friends.indexOf(user.username) === -1);
-          })
-        );
-        return Alert.alert("Friend Removed", "", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
-      })
-      .catch((err) => {
-        console.log(err);
+    return deleteFriendship(currentUser.displayName, userToRemove).then(() => {
+      const ind = friends.indexOf(userToRemove);
+      setFriends((oldFriends) => {
+        const newFriends = [
+          ...oldFriends.slice(0, ind),
+          ...oldFriends.slice(ind + 1, oldFriends.length),
+        ];
+        return newFriends;
       });
+      setIsFriend(
+        resultState.map((user) => {
+          return !(friends.indexOf(user.username) === -1);
+        })
+      );
+      return Alert.alert("Friend Removed", "", [{ text: "OK" }]);
+    });
   };
 
   return (

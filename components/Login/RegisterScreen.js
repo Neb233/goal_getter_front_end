@@ -5,28 +5,17 @@ import {
   Text,
   View,
   TextInput,
-  Button,
-  Image,
   ScrollView,
 } from "react-native";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import { auth } from "../../firebase";
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  sendSignInLinkToEmail,
-} from "@firebase/auth";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import * as ImagePicker from "expo-image-picker";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { updateProfile } from "firebase/auth";
-import { UserContext } from "../../context/user";
 import * as Animatable from "react-native-animatable";
 
-import { Formik } from "formik";
 import * as Yup from "yup";
-import Feed from "../Feed/Feed";
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -59,8 +48,6 @@ const RegisterScreen = () => {
                 method: "post",
                 url: "https://goalgetter-backend.herokuapp.com/api/users",
                 data: body,
-              }).catch(function (error) {
-                console.log(error);
               });
               navigation.navigate("Feed");
               return user;
@@ -174,7 +161,6 @@ const RegisterScreen = () => {
         - At least 4 characters
         - At most 10 characters`}
           </Text>
-          {/* <Text>{touched.password && errors.password}</Text> */}
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={handleRegister} style={styles.button}>

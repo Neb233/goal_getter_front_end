@@ -5,19 +5,14 @@ import {
   FlatList,
   TouchableOpacity,
   Modal,
-  SafeAreaView,
-  Pressable,
-  TouchableWithoutFeedBack,
-  Keyboard,
   ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Card from "../../shared/card";
 import SubGoalForm from "./SubGoalForm";
-import { HideableView } from "../../shared/HideableView";
 import { postGoal, postSubgoal } from "../../utils/api";
 import SubGoalDetails from "./SubGoalDetails";
-import { Button, IconButton } from "react-native-paper";
+import { IconButton } from "react-native-paper";
 import { auth } from "../../firebase";
 
 const SetGoal = ({ navigation, route }) => {
@@ -41,8 +36,6 @@ const SetGoal = ({ navigation, route }) => {
     if (!route.params) {
       route.params = { goalProperties: {}, clickCounter: 0 };
     } else {
-      console.warn(route.params.goalProperties.target_value);
-
       if (route.params.goalProperties.target_value !== "") {
         route.params.goalProperties.target_value = parseFloat(
           route.params.goalProperties.target_value
@@ -59,7 +52,6 @@ const SetGoal = ({ navigation, route }) => {
       }
     }
     goalProperties = route.params.goalProperties;
-    console.log(goalProperties);
     setSubGoals([]);
     if (goalProperties.target_value) {
       const goalNumberOfDays =
@@ -176,17 +168,11 @@ const SetGoal = ({ navigation, route }) => {
   };
 
   const handleAddGoal = () => {
-    console.log(subGoals);
-    console.log(goalProperties);
-    postGoal(goalProperties, auth.currentUser.displayName)
-      .then((goal_id) => {
-        subGoals.forEach((subgoal) => {
-          postSubgoal(subgoal, goal_id, auth.currentUser.displayName);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+    postGoal(goalProperties, auth.currentUser.displayName).then((goal_id) => {
+      subGoals.forEach((subgoal) => {
+        postSubgoal(subgoal, goal_id, auth.currentUser.displayName);
       });
+    });
 
     navigation.navigate("SetGoalIntro");
     navigation.navigate("Feed");
@@ -259,17 +245,6 @@ const SetGoal = ({ navigation, route }) => {
           </View>
         ) : null}
       </View>
-      {/* <TouchableOpacity
-      style={styles.editgoalbutton}
-        onPress={() => {
-          goalProperties.target_value = "";
-          goalProperties.unit = "";
-          goalProperties.subgoalPeriod = "";
-          navigation.navigate("SetGoalIntro", {
-            goalProperties,
-          });
-        }}
-      ><Text style={styles.buttontext}>Edit Goal</Text></TouchableOpacity> */}
       <Text style={styles.header}>Subgoals</Text>
 
       {subGoals.length === 0 ? (
@@ -330,52 +305,6 @@ const SetGoal = ({ navigation, route }) => {
           />
         </View>
       )}
-      {/* <View>
-        <FlatList
-          data={subGoals}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => {
-                setShowSubGoalDetails((showSubGoalDetails) => {
-                  const newState = showSubGoalDetails.map((boolean, index) => {
-                    return subGoals.indexOf(item) === index;
-                  });
-                  return newState;
-                });
-              }}
-            >
-              <Modal
-                visible={showSubGoalDetails[subGoals.indexOf(item)] === true}
-                animationType="fade"
-              >
-                <View>
-                  <Button
-                    title="Close"
-                    onPress={() => {
-                      setShowSubGoalDetails((showSubGoalDetails) => {
-                        const newState = showSubGoalDetails.map(() => {
-                          return false;
-                        });
-                        return newState;
-                      });
-                    }}
-                  ></Button>
-                  <SubGoalDetails
-                    setSubGoals={setSubGoals}
-                    setShowSubGoalDetails={setShowSubGoalDetails}
-                    showSubGoalDetails={showSubGoalDetails}
-                    subGoals={subGoals}
-                    item={item}
-                  />
-                </View>
-              </Modal>
-              <Card>
-                <Text style={styles.text}>{item.objective}</Text>
-              </Card>
-            </TouchableOpacity>
-          )}
-        />
-      </View> */}
 
       <View>
         <TouchableOpacity
@@ -443,7 +372,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     height: 50,
-    // width: "100%",
     backgroundColor: "#5b72a4",
     marginTop: 10,
     borderRadius: 5,
@@ -463,7 +391,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     height: 50,
-    // width: "100%",
     backgroundColor: "#5b72a4",
     marginTop: 10,
     borderRadius: 5,
@@ -483,7 +410,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     height: 50,
-    // width: "100%",
     backgroundColor: "green",
     marginTop: 10,
     borderRadius: 5,

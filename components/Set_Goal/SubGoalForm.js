@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import {
   StyleSheet,
-  Button,
   TextInput,
   View,
   Text,
   Switch,
-  KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { ErrorMessage, Formik, useField } from "formik";
+import { ErrorMessage, Formik } from "formik";
 import * as yup from "yup";
 import DatePicker from "../../shared/DatePicker";
-import { prodErrorMap } from "firebase/auth";
 import { HideableView } from "../../shared/HideableView";
 import dateFormat from "dateformat";
 
@@ -171,12 +168,6 @@ const SubGoalForm = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // flexDirection: "row",
-    // padding: 5,
-  },
-
   errorText: {
     color: "crimson",
     fontWeight: "bold",
@@ -206,7 +197,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
   },
   switchcontainer: {
-    // flex: 1,
     flexDirection: "row",
     marginTop: 20,
     marginBottom: 20,
@@ -227,7 +217,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     height: 50,
-    // width: "100%",
     backgroundColor: "green",
     marginTop: 10,
     borderRadius: 5,
@@ -257,7 +246,6 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   leftlabel: {
-    // fontWeight: "bold",
     textAlignVertical: "center",
   },
   text_footer: {

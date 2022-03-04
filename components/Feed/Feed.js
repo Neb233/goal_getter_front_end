@@ -1,18 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Goals from "../Profile/UserPage";
+import React, { useState } from "react";
+import { StyleSheet, View, Text } from "react-native";
 import Social from "./Social";
 import Subgoals from "./Subgoals";
 import { TouchableOpacity, FlatList } from "react-native";
-import {
-  NavigationContainer,
-  useNavigation,
-  useFocusEffect,
-} from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SetGoal from "../Set_Goal/SetGoal";
-import GoalStatus from "./GoalStatus";
+import { useFocusEffect } from "@react-navigation/native";
 import { auth } from "../../firebase";
 
 import { getFriends, getPostsByUser } from "../../utils/api";
@@ -52,10 +43,6 @@ const Feed = ({ navigation }) => {
       <View>
         <Subgoals setFriendPosts={setFriendPosts} />
         <View>
-          {/* style={styles.personalWrapper} */}
-          {/* <Text style={styles.sectionTitle}>Goal Status:</Text>
-    <View style={styles.status}><GoalStatus /></View> */}
-
           <View>
             <TouchableOpacity
               style={styles.takeToCalendar}
@@ -94,19 +81,6 @@ const styles = StyleSheet.create({
   },
   personalWrapper: {
     borderRadius: 10,
-    // backgroundColor: "white",
-    // padding: 10,
-    // margin: 10,
-    // paddingHorizontal: 20,
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.6,
-    // shadowRadius: 3.84,
-
-    // elevation: 5,
   },
   sectionTitle: {
     color: "black",
@@ -133,7 +107,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     height: 50,
-    // width: "100%",
     backgroundColor: "#5b72a4",
     marginTop: 10,
     borderRadius: 5,

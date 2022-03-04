@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Alert,
   Modal,
   Pressable,
   TextInput,
@@ -119,7 +118,6 @@ const PostStatus = ({
             }
           }
           if (allSubgoalsCompleted && goal.type === "boolean") {
-            console.log("adsadsdasads");
             setCongratsModalVisible(true);
             return patchGoalStatusById(supergoal.goal_id, "completed");
           }
@@ -152,8 +150,6 @@ const PostStatus = ({
     navigation.navigate("Feed");
   };
 
-  //   ${ownerP} completed ${progress} ${goalUnit} of ${subgoal.objective}  ${message}`
-
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -172,11 +168,7 @@ const PostStatus = ({
               value={message}
               onChangeText={setMessage}
             />
-            <Pressable
-              // style={[styles.button, styles.buttonClose]}
-              style={styles.post}
-              onPress={handleSubmit}
-            >
+            <Pressable style={styles.post} onPress={handleSubmit}>
               <Text style={styles.post}>Post</Text>
             </Pressable>
             <Pressable
@@ -212,7 +204,6 @@ const PostStatus = ({
       </Modal>
 
       <Pressable
-        // style={[styles.button, styles.buttonOpen]}
         style={styles.submitAndShareButton}
         onPress={() => setModalVisible(true)}
       >
@@ -226,7 +217,6 @@ export default PostStatus;
 
 const styles = StyleSheet.create({
   centeredView: {
-    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
@@ -259,7 +249,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#7FAF50",
   },
   submitAndShare: {
-    // padding: 2,
     alignItems: "center",
     justifyContent: "center",
     color: "white",
@@ -281,12 +270,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   modalText: {
-    // marginBottom: 15,
-    // textAlign: "center",
-    // backgroundColor: "#f7f7fa",
-    // borderRadius: 20,
-    // padding: 10,
-    // width: 200,
     padding: 7,
     marginTop: 15,
     backgroundColor: "white",
