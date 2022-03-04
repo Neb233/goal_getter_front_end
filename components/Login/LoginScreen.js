@@ -9,12 +9,9 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
-
 import { useNavigation } from "@react-navigation/native";
-
 import * as Yup from "yup";
 import * as Animatable from "react-native-animatable";
 

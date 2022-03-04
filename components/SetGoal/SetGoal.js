@@ -3,15 +3,12 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Modal,
   SafeAreaView,
   TextInput,
   ScrollView,
   Switch,
 } from "react-native";
-import { IconButton } from "react-native-paper";
 import React, { useState } from "react";
-import SetGoalGuide from "./SetGoalGuide";
 import { Formik, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { HideableView } from "../../shared/HideableView";
@@ -26,8 +23,7 @@ const GoalSchema = yup.object({
   subgoalPeriod: yup.number().moreThan(0),
 });
 
-const SetGoalIntro = ({ navigation, route }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+const SetGoal = ({ navigation, route }) => {
   const [clickCounter, setClickCounter] = useState(0);
   const [isEnabled, setIsEnabled] = useState(false);
   const [hideProgressOptions, setHideProgressOptions] = useState(!isEnabled);
@@ -39,19 +35,6 @@ const SetGoalIntro = ({ navigation, route }) => {
   return (
     <ScrollView style={styles.page}>
       <SafeAreaView>
-        <Modal visible={modalOpen} animationType="slide" style={styles.page}>
-          <View style={styles.page}>
-            <IconButton
-              icon="close"
-              color="black"
-              size={20}
-              onPress={() => {
-                setModalOpen(false);
-              }}
-            ></IconButton>
-            <SetGoalGuide />
-          </View>
-        </Modal>
         <View style={{ paddingTop: 15 }}>
           <View style={[styles.goalContainer, { margin: 15 }]}>
             <Text style={styles.text_footer_small}>
@@ -97,7 +80,7 @@ const SetGoalIntro = ({ navigation, route }) => {
               setClickCounter((oldClickCounter) => {
                 return oldClickCounter + 1;
               });
-              navigation.navigate("SetGoal", {
+              navigation.navigate("SetSubgoals", {
                 goalProperties: values,
                 clickCounter,
               });
@@ -260,7 +243,7 @@ const SetGoalIntro = ({ navigation, route }) => {
                   </HideableView>
                 </View>
                 <TouchableOpacity
-                  title="Add SubGoals"
+                  title="Add Subgoals"
                   onPress={props.handleSubmit}
                   style={styles.addgoalbutton}
                 >
@@ -391,4 +374,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SetGoalIntro;
+export default SetGoal;

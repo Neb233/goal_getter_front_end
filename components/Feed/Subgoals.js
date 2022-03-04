@@ -9,17 +9,16 @@ import {
   Dimensions,
 } from "react-native";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import {
-  getSubGoalsByUser,
+  getSubgoalsByUser,
   getGoalByGoalId,
   getSubgoalsByGoalId,
   patchSubgoalStatusById,
   patchGoalStatusById,
 } from "../../utils/api";
-import PatchSubGoal from "./PatchSubgoals";
+import PatchS from "./PatchSubgoals";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import PostStatus from "./PostStatus";
+import PostPost from "./PostPost";
 import { useNavigation } from "@react-navigation/native";
 import dateFormat from "dateformat";
 import { auth } from "../../firebase";
@@ -34,7 +33,7 @@ const Subgoals = ({ setFriendPosts }) => {
   const [goalObjective, setGoalObjective] = useState("");
 
   useEffect(() => {
-    getSubGoalsByUser(loggedInUser).then((subgoals) => {
+    getSubgoalsByUser(loggedInUser).then((subgoals) => {
       const currentSubgoals = subgoals.filter((subgoal) => {
         const currentDate = new Date(Date.now());
         const endDate = new Date(subgoal.end_date);
@@ -127,7 +126,7 @@ const Subgoals = ({ setFriendPosts }) => {
           {goals.map((goal) => {
             const type = goal.type === "progress";
             return (
-              <View key={goal.subgoal_id} style={styles.subGoal}>
+              <View key={goal.subgoal_id} style={styles.s}>
                 <View style={styles.pageContent}>
                   {type ? (
                     <View style={styles.pageContent}>
@@ -150,7 +149,7 @@ const Subgoals = ({ setFriendPosts }) => {
                         {dateFormat(goal.end_date, "dddd, mmmm dS, yyyy")}
                       </Text>
                       <View style={styles.progress}>
-                        <PatchSubGoal
+                        <PatchS
                           goals={goals}
                           setGoals={setGoals}
                           goal={goal}
@@ -177,7 +176,7 @@ const Subgoals = ({ setFriendPosts }) => {
                           onPress={() => handleCheckBoxClick(goal)}
                         />
                       </View>
-                      <PostStatus
+                      <PostPost
                         goal={goal}
                         subgoal={goal.subgoal_id}
                         ownerP={goal.owner}
@@ -210,7 +209,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
   },
-  subGoal: {
+  s: {
     padding: 20,
     width: subgoalWidth,
     backgroundColor: "#3e4d6e",

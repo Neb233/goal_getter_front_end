@@ -2,7 +2,6 @@ import { StyleSheet, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
 import { useField, useFormikContext } from "formik";
-
 import { Button } from "react-native-paper";
 
 const DatePicker = ({ ...props }) => {
