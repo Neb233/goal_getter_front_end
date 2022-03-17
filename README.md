@@ -1,22 +1,19 @@
 # GoalGetter Front-End
 
-## Links
 
-An online hosted version of this project can be found at:
+## Link
 
-https://mah-games.netlify.app/
+The repository for the back-end of the project can be found at:
 
-The github repository for the back-end of this project can be found at:
+https://github.com/mhiggins285/goalgetter-back-end
 
-https://github.com/mhiggins285/mah-games-fe
+An online hosted version of the back-end of this repository can be found at:
 
-An online hosted version of the back-end of this project can be found at:
-
-https://mah-games.herokuapp.com/
+https://goalgetter-backend.herokuapp.com/
 
 ## About
 
-
+In this project we have created a goal-focused social mobile app. Using this app you can create accounts, log in and out, create goals and subgoals, track those goals, report progress towards them, share progress with friends, add friends, and react to the progress of friends.
 
 ## Set-up
 
